@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556A8B8E1F3A9C2800A24A7A /* Dog.swift */; };
 		557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557028DE1F33DF67007ADC87 /* AppDelegate.swift */; };
 		557028E11F33DF67007ADC87 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557028E01F33DF67007ADC87 /* ViewController.swift */; };
 		557028E41F33DF67007ADC87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E21F33DF67007ADC87 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		556A8B8E1F3A9C2800A24A7A /* Dog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 		557028DB1F33DF67007ADC87 /* DogSpotter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DogSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		557028DE1F33DF67007ADC87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		557028E01F33DF67007ADC87 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 				557028DE1F33DF67007ADC87 /* AppDelegate.swift */,
 				557028E01F33DF67007ADC87 /* ViewController.swift */,
 				557028E21F33DF67007ADC87 /* Main.storyboard */,
+				556A8B8E1F3A9C2800A24A7A /* Dog.swift */,
 				557028E51F33DF67007ADC87 /* Assets.xcassets */,
 				557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */,
 				557028EA1F33DF67007ADC87 /* Info.plist */,
@@ -139,6 +142,7 @@
 			files = (
 				557028E11F33DF67007ADC87 /* ViewController.swift in Sources */,
 				557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */,
+				556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +306,7 @@
 				557028EF1F33DF67007ADC87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

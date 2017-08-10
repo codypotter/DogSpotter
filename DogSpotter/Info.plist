@@ -34,5 +34,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Dog Spotter needs to use your camera to take dog photos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Dog Spotter needs to save photos to your Photo Library.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Dog Spotter needs your location to plot your dog photos on the map.</string>
 </dict>
 </plist>
