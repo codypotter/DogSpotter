@@ -9,10 +9,6 @@
 import UIKit
 import Photos
 import MapKit
-import AlertOnboarding
-import Spring
-
-
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
 
@@ -23,7 +19,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet var newDogButton: UIButton!
     @IBOutlet var newDogScore: UILabel!
     @IBOutlet var newDogName: UITextField!
-    @IBOutlet var newDogView: SpringView!
+    @IBOutlet var newDogView: UIView!
     @IBOutlet var preview: UIImageView!
     @IBOutlet var map: MKMapView!
     let locman = CLLocationManager()
@@ -43,15 +39,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         view.addSubview(newDogView)
         setupNewDogViewConstraints()
-        
-        // Onboarding Data
-//        let arrayOfOnboardingTitles = ["Welcome", "Take a Photo", "Complete the Card", "Look at all the dogs!"]
-//        let arrayOfOnboardingDescriptions = ["Dog Spotter is an app for saving every dog you meet!",
-//                                             "Tap the camera icon to take a new dog photo.",
-//                                             "Complete the info for the dog, and tap submit!",
-//                                             "The map will fill up with all your dog friends!"]
-//        let onboardingAlertView = AlertOnboarding(arrayOfImage: ["", "", ""], arrayOfTitle: arrayOfOnboardingTitles, arrayOfDescription: arrayOfOnboardingDescriptions)
-//        onboardingAlertView.show()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,8 +78,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         setupNewDogViewConstraints()
         newDogView.isHidden = false
         preview.image = self.image
-        newDogView.animation = "slideDown"
-        newDogView.animate()
     }
     
     func setupNewDogViewConstraints() {
@@ -128,8 +113,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             dogs.append(newDog)
             print(dogs.last!)
             
-            self.newDogView.animation = "fadeOut"
-            self.newDogView.animate()
             self.newDogName.text = ""
             self.map.isUserInteractionEnabled = true
             
