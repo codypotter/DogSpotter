@@ -9,27 +9,49 @@
 import UIKit
 import Photos
 import MapKit
+import AlertOnboarding
+import Spring
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate {
 
+
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
+
+    @IBOutlet var newDogViewVisualEffect: UIVisualEffectView!
     var image: UIImage?
     var location: CLLocation?
+    var dogs: [Dog] = []
+    @IBOutlet var newDogButton: UIButton!
     @IBOutlet var newDogScore: UILabel!
     @IBOutlet var newDogName: UITextField!
-    @IBOutlet var newDogView: UIView!
+    @IBOutlet var newDogView: SpringView!
     @IBOutlet var preview: UIImageView!
     @IBOutlet var map: MKMapView!
     let locman = CLLocationManager()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.locman.delegate = self
         self.locman.requestWhenInUseAuthorization()
+        self.locman.delegate = self
         self.locman.desiredAccuracy = kCLLocationAccuracyBest
-        self.map.mapType = .hybrid
+        self.map.mapType = .standard
         self.map.showsUserLocation = true
         self.map.userTrackingMode = .follow
+        self.map.delegate = self
+        self.newDogName.delegate = self
+        
+        view.addSubview(newDogView)
+        setupNewDogViewConstraints()
+        
+        // Onboarding Data
+//        let arrayOfOnboardingTitles = ["Welcome", "Take a Photo", "Complete the Card", "Look at all the dogs!"]
+//        let arrayOfOnboardingDescriptions = ["Dog Spotter is an app for saving every dog you meet!",
+//                                             "Tap the camera icon to take a new dog photo.",
+//                                             "Complete the info for the dog, and tap submit!",
+//                                             "The map will fill up with all your dog friends!"]
+//        let onboardingAlertView = AlertOnboarding(arrayOfImage: ["", "", ""], arrayOfTitle: arrayOfOnboardingTitles, arrayOfDescription: arrayOfOnboardingDescriptions)
+//        onboardingAlertView.show()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,28 +59,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
-    @IBAction func submitDog(_ sender: Any) {
-        let newDog = Dog(name: newDogName.text!, score: Int(newDogScore.text!)!, picture: image!, location: location!)
-        print(newDog)
-    }
-    
     @IBAction func newDogTapped(_ sender: Any) {
-        presentCamera()
-        getLocation()
-    }
-
-    func presentCamera() {
         let source = UIImagePickerControllerSourceType.camera
         guard UIImagePickerController.isSourceTypeAvailable(source)
-            else { return }
+            else {
+                let alert = UIAlertController(title: "Camera Error", message: "Oops! Looks like Dog Spotter doesn't have access to your camera! Please open Settings to give Dog Spotter permission to use the camera.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                present(alert, animated: true)
+                return
+        }
         let camera = UIImagePickerController()
         camera.sourceType = source
         camera.delegate = self
+        camera.allowsEditing = true
+        
         self.present(camera, animated: true)
-    }
-    
-    func getLocation() {
-        self.locman.requestLocation()
+        DispatchQueue.global(qos: .background).async {
+            self.locman.requestLocation()
+        }
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -68,17 +86,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         
         self.dismiss(animated: true, completion: nil)
-        
-        
-        self.newDogView.isHidden = true
-        self.view.addSubview(newDogView)
+        map.isUserInteractionEnabled = false
+        view.addSubview(newDogView)
+        setupNewDogViewConstraints()
+        newDogView.isHidden = false
+        preview.image = self.image
+        newDogView.animation = "slideDown"
+        newDogView.animate()
+    }
+    
+    func setupNewDogViewConstraints() {
+        newDogView.isHidden = true
         newDogView.translatesAutoresizingMaskIntoConstraints = false
         newDogView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1, constant: -50).isActive = true
         newDogView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1, constant: -50).isActive = true
         newDogView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         newDogView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        preview.image = image
-        self.newDogView.isHidden = false
+        
+        newDogView.layer.cornerRadius = 10
+        newDogViewVisualEffect.layer.cornerRadius = 10
+        newDogButton.layer.cornerRadius = 10
+        preview.layer.cornerRadius = 10
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -88,8 +116,79 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         print("You are at \(coord.latitude) \(coord.longitude)")
     }
     
+    @IBAction func submitDog(_ sender: Any) {
+        if newDogName.text == "" {
+            let alert = UIAlertController(title: "Woops", message: "Please enter a name for the dog.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alert, animated: true)
+            return
+        }
+        if location != nil {
+            let newDog = Dog(name: newDogName.text!, score: 11, picture: image!, location: location!)
+            dogs.append(newDog)
+            print(dogs.last!)
+            
+            self.newDogView.animation = "fadeOut"
+            self.newDogView.animate()
+            self.newDogName.text = ""
+            self.map.isUserInteractionEnabled = true
+            
+            dropNewPin(locatedAt: dogs.last!.location, name: dogs.last!.name, rate: dogs.last!.score)
+        }
+    }
+    
+    func dropNewPin(locatedAt: CLLocation, name: String, rate: Int) {
+        let annotation = Annotation(location: CLLocationCoordinate2D(latitude: locatedAt.coordinate.latitude, longitude: locatedAt.coordinate.longitude))
+        annotation.title = name
+        annotation.subtitle = "\(rate)/10"
+        self.map.addAnnotation(annotation)
+    }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         return
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        //to avoid make a custom Annotation view for your user location
+        if(annotation is MKUserLocation){
+            return nil
+        }
+        
+        let ident = "pin"
+        var v = mapView.dequeueReusableAnnotationView(withIdentifier: ident)
+        if v == nil {
+            v = MKAnnotationView(annotation: annotation, reuseIdentifier: ident) 
+            v?.image = UIImage(named: "pin")
+            v?.centerOffset = CGPoint(x: 0, y: -15)
+            v?.bounds.size.height /= 1.5
+            v?.bounds.size.width /= 1.5
+            v?.canShowCallout = true
+            
+        }
+        v?.annotation = annotation
+        return v
+    }
+    
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        for aView in views {
+            if aView.reuseIdentifier == "pin" {
+                aView.transform = CGAffineTransform(scaleX: 0, y: 0)
+                aView.alpha = 0
+                UIView.animate(withDuration:0.8) {
+                    aView.alpha = 1
+                    aView.transform = .identity
+                }
+            }
+        }
     }
 }
 

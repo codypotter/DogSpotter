@@ -13,9 +13,16 @@
 		557028E41F33DF67007ADC87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E21F33DF67007ADC87 /* Main.storyboard */; };
 		557028E61F33DF67007ADC87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 557028E51F33DF67007ADC87 /* Assets.xcassets */; };
 		557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */; };
+		55BB84271F429EC000D347E5 /* AlertOnboarding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55BB84261F429EC000D347E5 /* AlertOnboarding.framework */; };
+		55C9A22E1F3D3EAB00232476 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C9A22D1F3D3EAB00232476 /* MapKit.framework */; };
+		55D124F01F4F657C004D7C92 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D124EF1F4F657C004D7C92 /* Annotation.swift */; };
+		55D124F41F4F732F004D7C92 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D124F31F4F732F004D7C92 /* AnnotationView.swift */; };
+		DC02DEC66F16BCBFB992AA4A /* Pods_DogSpotter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB535B25C8A173D8C6470A20 /* Pods_DogSpotter.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5526A9A21F3D9B6400B5B905 /* Onboard.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Onboard.framework; path = "Pods/../build/Release-iphoneos/Onboard/Onboard.framework"; sourceTree = "<group>"; };
+		553C3C311F3D8EAD0016167D /* Onboard.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Onboard.framework; path = "Pods/../build/Debug-iphoneos/Onboard/Onboard.framework"; sourceTree = "<group>"; };
 		556A8B8E1F3A9C2800A24A7A /* Dog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 		557028DB1F33DF67007ADC87 /* DogSpotter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DogSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		557028DE1F33DF67007ADC87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +31,13 @@
 		557028E51F33DF67007ADC87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		557028E81F33DF67007ADC87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		557028EA1F33DF67007ADC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55BB84261F429EC000D347E5 /* AlertOnboarding.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlertOnboarding.framework; path = "../../../Library/Developer/Xcode/DerivedData/DogSpotter-duugoqyscsbdgrbyztomtlgtjqcj/Build/Products/Debug-iphoneos/AlertOnboarding/AlertOnboarding.framework"; sourceTree = "<group>"; };
+		55C9A22D1F3D3EAB00232476 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		55D124EF1F4F657C004D7C92 /* Annotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
+		55D124F31F4F732F004D7C92 /* AnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		D5D7BF16280BED52C0358E4F /* Pods-DogSpotter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DogSpotter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DogSpotter/Pods-DogSpotter.debug.xcconfig"; sourceTree = "<group>"; };
+		DB535B25C8A173D8C6470A20 /* Pods_DogSpotter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DogSpotter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1AB53EB3B938C9600F26879 /* Pods-DogSpotter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DogSpotter.release.xcconfig"; path = "Pods/Target Support Files/Pods-DogSpotter/Pods-DogSpotter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +45,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55BB84271F429EC000D347E5 /* AlertOnboarding.framework in Frameworks */,
+				55C9A22E1F3D3EAB00232476 /* MapKit.framework in Frameworks */,
+				DC02DEC66F16BCBFB992AA4A /* Pods_DogSpotter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		15767676176F9FB36E2A6323 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D5D7BF16280BED52C0358E4F /* Pods-DogSpotter.debug.xcconfig */,
+				E1AB53EB3B938C9600F26879 /* Pods-DogSpotter.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		557028D21F33DF67007ADC87 = {
 			isa = PBXGroup;
 			children = (
 				557028DD1F33DF67007ADC87 /* DogSpotter */,
 				557028DC1F33DF67007ADC87 /* Products */,
+				55C9A22C1F3D3EAA00232476 /* Frameworks */,
+				15767676176F9FB36E2A6323 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +86,8 @@
 			children = (
 				557028DE1F33DF67007ADC87 /* AppDelegate.swift */,
 				557028E01F33DF67007ADC87 /* ViewController.swift */,
+				55D124EF1F4F657C004D7C92 /* Annotation.swift */,
+				55D124F31F4F732F004D7C92 /* AnnotationView.swift */,
 				557028E21F33DF67007ADC87 /* Main.storyboard */,
 				556A8B8E1F3A9C2800A24A7A /* Dog.swift */,
 				557028E51F33DF67007ADC87 /* Assets.xcassets */,
@@ -67,6 +97,18 @@
 			path = DogSpotter;
 			sourceTree = "<group>";
 		};
+		55C9A22C1F3D3EAA00232476 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				55BB84261F429EC000D347E5 /* AlertOnboarding.framework */,
+				5526A9A21F3D9B6400B5B905 /* Onboard.framework */,
+				553C3C311F3D8EAD0016167D /* Onboard.framework */,
+				55C9A22D1F3D3EAB00232476 /* MapKit.framework */,
+				DB535B25C8A173D8C6470A20 /* Pods_DogSpotter.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +116,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 557028ED1F33DF67007ADC87 /* Build configuration list for PBXNativeTarget "DogSpotter" */;
 			buildPhases = (
+				BC596A849C006D0F603F95C1 /* [CP] Check Pods Manifest.lock */,
 				557028D71F33DF67007ADC87 /* Sources */,
 				557028D81F33DF67007ADC87 /* Frameworks */,
 				557028D91F33DF67007ADC87 /* Resources */,
+				7AEE6EAF30A5130004AB06EE /* [CP] Embed Pods Frameworks */,
+				775A5A9F45C91CC14ADA397D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -99,7 +144,7 @@
 				TargetAttributes = {
 					557028DA1F33DF67007ADC87 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = FB5JTSFFP4;
+						DevelopmentTeam = Y3NDKYS5ZP;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -135,6 +180,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		775A5A9F45C91CC14ADA397D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DogSpotter/Pods-DogSpotter-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7AEE6EAF30A5130004AB06EE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DogSpotter/Pods-DogSpotter-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BC596A849C006D0F603F95C1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		557028D71F33DF67007ADC87 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -142,6 +235,8 @@
 			files = (
 				557028E11F33DF67007ADC87 /* ViewController.swift in Sources */,
 				557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */,
+				55D124F41F4F732F004D7C92 /* AnnotationView.swift in Sources */,
+				55D124F01F4F657C004D7C92 /* Annotation.swift in Sources */,
 				556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -263,9 +358,10 @@
 		};
 		557028EE1F33DF67007ADC87 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D5D7BF16280BED52C0358E4F /* Pods-DogSpotter.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = FB5JTSFFP4;
+				DEVELOPMENT_TEAM = Y3NDKYS5ZP;
 				INFOPLIST_FILE = DogSpotter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codypotter.DogSpotter;
@@ -276,9 +372,10 @@
 		};
 		557028EF1F33DF67007ADC87 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1AB53EB3B938C9600F26879 /* Pods-DogSpotter.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = FB5JTSFFP4;
+				DEVELOPMENT_TEAM = Y3NDKYS5ZP;
 				INFOPLIST_FILE = DogSpotter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codypotter.DogSpotter;

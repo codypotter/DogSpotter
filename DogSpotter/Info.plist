@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Dog Spotter</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,6 +22,12 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Dog Spotter needs to use your camera to take dog photos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Dog Spotter needs your location to plot your dog photos on the map.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Dog Spotter needs to save photos to your Photo Library.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -31,14 +39,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Dog Spotter needs to use your camera to take dog photos.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Dog Spotter needs to save photos to your Photo Library.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Dog Spotter needs your location to plot your dog photos on the map.</string>
 </dict>
 </plist>
