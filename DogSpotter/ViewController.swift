@@ -38,6 +38,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.newDogName.delegate = self
         
         view.addSubview(newDogView)
+        newDogView.isHidden = true
         setupNewDogViewConstraints()
     }
     
@@ -47,6 +48,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @IBAction func newDogTapped(_ sender: Any) {
+        // Get current location
+        DispatchQueue.global(qos: .background).async {
+            self.locman.requestLocation()
+        }
+        
+        // Setup Camera and present it
         let source = UIImagePickerControllerSourceType.camera
         guard UIImagePickerController.isSourceTypeAvailable(source)
             else {
@@ -59,11 +66,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         camera.sourceType = source
         camera.delegate = self
         camera.allowsEditing = true
-        
         self.present(camera, animated: true)
-        DispatchQueue.global(qos: .background).async {
-            self.locman.requestLocation()
-        }
+        
+        // Add newDogView and show it
+        map.isUserInteractionEnabled = false
+        newDogView.isHidden = false
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -71,17 +78,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             image = editedImage
         }
-        
-        self.dismiss(animated: true, completion: nil)
-        map.isUserInteractionEnabled = false
-        view.addSubview(newDogView)
-        setupNewDogViewConstraints()
-        newDogView.isHidden = false
-        preview.image = self.image
+        self.dismiss(animated: true, completion: {
+            self.preview.image = self.image
+            self.preview.layer.cornerRadius = 10
+        })
     }
     
     func setupNewDogViewConstraints() {
-        newDogView.isHidden = true
         newDogView.translatesAutoresizingMaskIntoConstraints = false
         newDogView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1, constant: -50).isActive = true
         newDogView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1, constant: -50).isActive = true
@@ -91,7 +94,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         newDogView.layer.cornerRadius = 10
         newDogViewVisualEffect.layer.cornerRadius = 10
         newDogButton.layer.cornerRadius = 10
-        preview.layer.cornerRadius = 10
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -113,6 +115,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             dogs.append(newDog)
             print(dogs.last!)
             
+            self.newDogView.isHidden = true
             self.newDogName.text = ""
             self.map.isUserInteractionEnabled = true
             
@@ -141,7 +144,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        //to avoid make a custom Annotation view for your user location
+        
         if(annotation is MKUserLocation){
             return nil
         }

@@ -14,6 +14,7 @@
 		557028E61F33DF67007ADC87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 557028E51F33DF67007ADC87 /* Assets.xcassets */; };
 		557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */; };
 		55C9A22E1F3D3EAB00232476 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C9A22D1F3D3EAB00232476 /* MapKit.framework */; };
+		55CEF8BD1F524EB1001F1C85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CEF8BC1F524EB1001F1C85 /* Foundation.framework */; };
 		55D124F01F4F657C004D7C92 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D124EF1F4F657C004D7C92 /* Annotation.swift */; };
 		55D124F41F4F732F004D7C92 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D124F31F4F732F004D7C92 /* AnnotationView.swift */; };
 		DC02DEC66F16BCBFB992AA4A /* Pods_DogSpotter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB535B25C8A173D8C6470A20 /* Pods_DogSpotter.framework */; };
@@ -29,6 +30,7 @@
 		557028E81F33DF67007ADC87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		557028EA1F33DF67007ADC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55C9A22D1F3D3EAB00232476 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		55CEF8BC1F524EB1001F1C85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		55D124EF1F4F657C004D7C92 /* Annotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
 		55D124F31F4F732F004D7C92 /* AnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		D5D7BF16280BED52C0358E4F /* Pods-DogSpotter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DogSpotter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DogSpotter/Pods-DogSpotter.debug.xcconfig"; sourceTree = "<group>"; };
@@ -41,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55CEF8BD1F524EB1001F1C85 /* Foundation.framework in Frameworks */,
 				55C9A22E1F3D3EAB00232476 /* MapKit.framework in Frameworks */,
 				DC02DEC66F16BCBFB992AA4A /* Pods_DogSpotter.framework in Frameworks */,
 			);
@@ -95,6 +98,7 @@
 		55C9A22C1F3D3EAA00232476 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55CEF8BC1F524EB1001F1C85 /* Foundation.framework */,
 				55C9A22D1F3D3EAB00232476 /* MapKit.framework */,
 				DB535B25C8A173D8C6470A20 /* Pods_DogSpotter.framework */,
 			);
