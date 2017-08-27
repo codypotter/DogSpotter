@@ -12,7 +12,8 @@ import MapKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
 
-    @IBOutlet var newDogViewVisualEffect: UIVisualEffectView!
+    
+    @IBOutlet var visualEffectView: UIVisualEffectView!
     var image: UIImage?
     var location: CLLocation?
     var dogs: [Dog] = []
@@ -70,7 +71,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         // Add newDogView and show it
         map.isUserInteractionEnabled = false
-        newDogView.isHidden = false
+        
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -81,19 +82,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.dismiss(animated: true, completion: {
             self.preview.image = self.image
             self.preview.layer.cornerRadius = 10
+            self.newDogView.isHidden = false
         })
     }
     
     func setupNewDogViewConstraints() {
-        newDogView.translatesAutoresizingMaskIntoConstraints = false
-        newDogView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1, constant: -50).isActive = true
-        newDogView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1, constant: -50).isActive = true
-        newDogView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        newDogView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        
-        newDogView.layer.cornerRadius = 10
-        newDogViewVisualEffect.layer.cornerRadius = 10
-        newDogButton.layer.cornerRadius = 10
+
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
