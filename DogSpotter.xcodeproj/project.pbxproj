@@ -15,6 +15,7 @@
 		557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */; };
 		55C9A22E1F3D3EAB00232476 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C9A22D1F3D3EAB00232476 /* MapKit.framework */; };
 		55CEF8BD1F524EB1001F1C85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CEF8BC1F524EB1001F1C85 /* Foundation.framework */; };
+		55CEF8C11F5732D1001F1C85 /* NewDogView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55CEF8C01F5732D1001F1C85 /* NewDogView.xib */; };
 		DC02DEC66F16BCBFB992AA4A /* Pods_DogSpotter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB535B25C8A173D8C6470A20 /* Pods_DogSpotter.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		557028EA1F33DF67007ADC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55C9A22D1F3D3EAB00232476 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		55CEF8BC1F524EB1001F1C85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		55CEF8C01F5732D1001F1C85 /* NewDogView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewDogView.xib; sourceTree = "<group>"; };
 		D5D7BF16280BED52C0358E4F /* Pods-DogSpotter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DogSpotter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DogSpotter/Pods-DogSpotter.debug.xcconfig"; sourceTree = "<group>"; };
 		DB535B25C8A173D8C6470A20 /* Pods_DogSpotter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DogSpotter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1AB53EB3B938C9600F26879 /* Pods-DogSpotter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DogSpotter.release.xcconfig"; path = "Pods/Target Support Files/Pods-DogSpotter/Pods-DogSpotter.release.xcconfig"; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				557028E51F33DF67007ADC87 /* Assets.xcassets */,
 				557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */,
 				557028EA1F33DF67007ADC87 /* Info.plist */,
+				55CEF8C01F5732D1001F1C85 /* NewDogView.xib */,
 			);
 			path = DogSpotter;
 			sourceTree = "<group>";
@@ -165,6 +168,7 @@
 			files = (
 				557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */,
 				557028E61F33DF67007ADC87 /* Assets.xcassets in Resources */,
+				55CEF8C11F5732D1001F1C85 /* NewDogView.xib in Resources */,
 				557028E41F33DF67007ADC87 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -367,7 +371,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codypotter.DogSpotter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -382,7 +386,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codypotter.DogSpotter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

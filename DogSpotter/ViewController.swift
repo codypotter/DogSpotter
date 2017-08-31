@@ -12,7 +12,7 @@ import MapKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
 
-    
+    @IBOutlet var newDogScrollView: UIScrollView!
     @IBOutlet var visualEffectView: UIVisualEffectView!
     var image: UIImage?
     var location: CLLocation?
@@ -29,6 +29,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.visualEffectView.isHidden = true
         self.locman.requestWhenInUseAuthorization()
         self.locman.delegate = self
         self.locman.desiredAccuracy = kCLLocationAccuracyBest
@@ -38,9 +39,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.map.delegate = self
         self.newDogName.delegate = self
         
+        
         view.addSubview(newDogView)
         newDogView.isHidden = true
-        setupNewDogViewConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,6 +75,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
+    override func viewWillLayoutSubviews() {
+        newDogView.translatesAutoresizingMaskIntoConstraints = false
+        newDogView.heightAnchor.constraint(equalToConstant: 320.0).isActive = true
+        newDogView.widthAnchor.constraint(equalToConstant: 960.0).isActive = true
+        newDogView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        newDogView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+    }
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         image = info[UIImagePickerControllerOriginalImage] as? UIImage
         if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
@@ -84,10 +94,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.preview.layer.cornerRadius = 10
             self.newDogView.isHidden = false
         })
-    }
-    
-    func setupNewDogViewConstraints() {
-
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -118,10 +124,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func dropNewPin(locatedAt: CLLocation, name: String, rate: Int) {
-        let annotation = Annotation(location: CLLocationCoordinate2D(latitude: locatedAt.coordinate.latitude, longitude: locatedAt.coordinate.longitude))
-        annotation.title = name
-        annotation.subtitle = "\(rate)/10"
-        self.map.addAnnotation(annotation)
+        //let annotation =
+        //let annotation = MKAnnotation(location: CLLocationCoordinate2D(latitude: locatedAt.coordinate.latitude, longitude: locatedAt.coordinate.longitude))
+        //annotation.title = name
+        //annotation.subtitle = "\(rate)/10"
+        //self.map.addAnnotation(annotation)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
