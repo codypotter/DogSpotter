@@ -30,7 +30,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.visualEffectView.isHidden = true
+        self.visualEffectView.alpha = 0
         self.locman.requestWhenInUseAuthorization()
         self.locman.delegate = self
         self.locman.desiredAccuracy = kCLLocationAccuracyBest
@@ -42,7 +42,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         
         view.addSubview(newDogView)
-        newDogView.isHidden = true
+        newDogView.alpha = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,6 +86,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         newDogView.widthAnchor.constraint(equalToConstant: 320.0).isActive = true
         newDogView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         newDogView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        self.preview.layer.cornerRadius = 10
+        self.newDogView.layer.cornerRadius = 10
+        self.newDogScrollView.layer.cornerRadius = 10
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -95,8 +98,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         self.dismiss(animated: true, completion: {
             self.preview.image = self.image
-            self.preview.layer.cornerRadius = 10
-            self.newDogView.isHidden = false
+            self.visualEffectView.alpha = 1
+            self.newDogView.alpha = 1
         })
     }
     
