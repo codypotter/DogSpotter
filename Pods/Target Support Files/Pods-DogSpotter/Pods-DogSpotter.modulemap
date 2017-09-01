@@ -1,0 +1,6 @@
+framework module Pods_DogSpotter {
+  umbrella header "Pods-DogSpotter-umbrella.h"
+
+  export *
+  module * { export * }
+}
