@@ -68,10 +68,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let camera = UIImagePickerController()
         camera.sourceType = source
         camera.delegate = self
-        camera.allowsEditing = true
         self.present(camera, animated: true)
-        
-        // Add newDogView and show it
         map.isUserInteractionEnabled = false
         
     }
@@ -122,7 +119,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             dogs.append(newDog)
             print(dogs.last!)
             
-            self.newDogView.isHidden = true
+            self.newDogView.alpha = 0
+            self.visualEffectView.alpha = 0
             self.newDogName.text = ""
             self.map.isUserInteractionEnabled = true
             
