@@ -12,7 +12,8 @@ import MapKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
 
-    @IBOutlet var newDogScrollView: UIScrollView!
+    
+    //@IBOutlet var newDogScrollView: UIScrollView!
     @IBOutlet var visualEffectView: UIVisualEffectView!
     var image: UIImage?
     var location: CLLocation?
@@ -42,6 +43,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         view.addSubview(newDogView)
         newDogView.isHidden = true
+        //newDogScrollView.contentSize = CGSize(width: 320, height: 320)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,8 +79,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewWillLayoutSubviews() {
         newDogView.translatesAutoresizingMaskIntoConstraints = false
-        newDogView.heightAnchor.constraint(equalToConstant: 320.0).isActive = true
-        newDogView.widthAnchor.constraint(equalToConstant: 960.0).isActive = true
+        //newDogView.heightAnchor.constraint(equalToConstant: 320.0).isActive = true
+        //newDogView.widthAnchor.constraint(equalToConstant: 960.0).isActive = true
         newDogView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         newDogView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
@@ -124,11 +126,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func dropNewPin(locatedAt: CLLocation, name: String, rate: Int) {
-        //let annotation =
-        //let annotation = MKAnnotation(location: CLLocationCoordinate2D(latitude: locatedAt.coordinate.latitude, longitude: locatedAt.coordinate.longitude))
-        //annotation.title = name
-        //annotation.subtitle = "\(rate)/10"
-        //self.map.addAnnotation(annotation)
+        let annotation = Annotation(location: CLLocationCoordinate2D(latitude: locatedAt.coordinate.latitude, longitude: locatedAt.coordinate.longitude))
+        annotation.title = name
+        annotation.subtitle = "\(rate)/10"
+        self.map.addAnnotation(annotation)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
