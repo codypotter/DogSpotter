@@ -80,8 +80,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         newDogView.translatesAutoresizingMaskIntoConstraints = false
         newDogScrollView.translatesAutoresizingMaskIntoConstraints = false
         newDogScrollView.heightAnchor.constraint(equalToConstant: 320.0).isActive = true
-        newDogScrollView.widthAnchor.constraint(equalToConstant: 960.0).isActive = true
-        newDogScrollView.contentSize = CGSize(width: 320, height: 320)
+        //newDogScrollView.widthAnchor.constraint(equalToConstant: 960.0).isActive = true
+        newDogScrollView.contentSize = CGSize(width: 960, height: 320)
         newDogView.heightAnchor.constraint(equalToConstant: 320.0).isActive = true
         newDogView.widthAnchor.constraint(equalToConstant: 320.0).isActive = true
         newDogView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
