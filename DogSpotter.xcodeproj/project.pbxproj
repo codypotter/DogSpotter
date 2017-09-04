@@ -19,7 +19,11 @@
 		55CEF8C31F57BF0F001F1C85 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CEF8C21F57BF0F001F1C85 /* Annotation.swift */; };
 		55D8E5841F5B38D400FD6A3A /* NewDogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D8E5831F5B38D400FD6A3A /* NewDogViewController.swift */; };
 		55D8E58C1F5B3C1F00FD6A3A /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D8E58B1F5B3C1F00FD6A3A /* DesignableView.swift */; };
-		55D8E5901F5B44A600FD6A3A /* DesignableSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D8E58F1F5B44A600FD6A3A /* DesignableSegmentedControl.swift */; };
+		55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D8E5911F5CF25300FD6A3A /* DesignableButton.swift */; };
+		55D8E5931F5CFC2F00FD6A3A /* PT_Serif-Web-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55D8E5871F5B39A500FD6A3A /* PT_Serif-Web-Bold.ttf */; };
+		55D8E5941F5CFC2F00FD6A3A /* PT_Serif-Web-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55D8E5881F5B39A500FD6A3A /* PT_Serif-Web-BoldItalic.ttf */; };
+		55D8E5951F5CFC2F00FD6A3A /* PT_Serif-Web-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55D8E5891F5B39A500FD6A3A /* PT_Serif-Web-Regular.ttf */; };
+		55D8E5961F5CFC2F00FD6A3A /* PT_Sans-Web-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55D8E5861F5B398A00FD6A3A /* PT_Sans-Web-Regular.ttf */; };
 		DC02DEC66F16BCBFB992AA4A /* Pods_DogSpotter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB535B25C8A173D8C6470A20 /* Pods_DogSpotter.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,7 +47,7 @@
 		55D8E5891F5B39A500FD6A3A /* PT_Serif-Web-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PT_Serif-Web-Regular.ttf"; sourceTree = "<group>"; };
 		55D8E58B1F5B3C1F00FD6A3A /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		55D8E58E1F5B3E2900FD6A3A /* colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = colors.swift; sourceTree = "<group>"; };
-		55D8E58F1F5B44A600FD6A3A /* DesignableSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableSegmentedControl.swift; sourceTree = "<group>"; };
+		55D8E5911F5CF25300FD6A3A /* DesignableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableButton.swift; sourceTree = "<group>"; };
 		D5D7BF16280BED52C0358E4F /* Pods-DogSpotter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DogSpotter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DogSpotter/Pods-DogSpotter.debug.xcconfig"; sourceTree = "<group>"; };
 		DB535B25C8A173D8C6470A20 /* Pods_DogSpotter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DogSpotter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1AB53EB3B938C9600F26879 /* Pods-DogSpotter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DogSpotter.release.xcconfig"; path = "Pods/Target Support Files/Pods-DogSpotter/Pods-DogSpotter.release.xcconfig"; sourceTree = "<group>"; };
@@ -135,7 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				55D8E58B1F5B3C1F00FD6A3A /* DesignableView.swift */,
-				55D8E58F1F5B44A600FD6A3A /* DesignableSegmentedControl.swift */,
+				55D8E5911F5CF25300FD6A3A /* DesignableButton.swift */,
 			);
 			path = Designables;
 			sourceTree = "<group>";
@@ -212,6 +216,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55D8E5931F5CFC2F00FD6A3A /* PT_Serif-Web-Bold.ttf in Resources */,
+				55D8E5941F5CFC2F00FD6A3A /* PT_Serif-Web-BoldItalic.ttf in Resources */,
+				55D8E5951F5CFC2F00FD6A3A /* PT_Serif-Web-Regular.ttf in Resources */,
+				55D8E5961F5CFC2F00FD6A3A /* PT_Sans-Web-Regular.ttf in Resources */,
 				557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */,
 				557028E61F33DF67007ADC87 /* Assets.xcassets in Resources */,
 				55CEF8C11F5732D1001F1C85 /* NewDogView.xib in Resources */,
@@ -276,7 +284,7 @@
 			files = (
 				557028E11F33DF67007ADC87 /* ViewController.swift in Sources */,
 				557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */,
-				55D8E5901F5B44A600FD6A3A /* DesignableSegmentedControl.swift in Sources */,
+				55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */,
 				55D8E58C1F5B3C1F00FD6A3A /* DesignableView.swift in Sources */,
 				55CEF8C31F57BF0F001F1C85 /* Annotation.swift in Sources */,
 				556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */,

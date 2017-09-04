@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		22DE4AE7301C4C2A2488231DDE2FFA72 /* Pods-DogSpotter-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C19AF9E9EE1F6F680849B72323FFD6A6 /* Pods-DogSpotter-dummy.m */; };
 		A7D5E97B2928419B31CD582FAE6838D0 /* Pods-DogSpotter-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A080A5BA33F90710249B6FF728C1CF38 /* Pods-DogSpotter-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F62CB113C2189FEA0410DB72FBAEDE92 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		ACBFBB29795B2B4D0204408391239D90 /* Pods-DogSpotter-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-DogSpotter-frameworks.sh"; sourceTree = "<group>"; };
 		ADC035F041C9018046B246EFB735986D /* Pods-DogSpotter.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-DogSpotter.modulemap"; sourceTree = "<group>"; };
 		C19AF9E9EE1F6F680849B72323FFD6A6 /* Pods-DogSpotter-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-DogSpotter-dummy.m"; sourceTree = "<group>"; };
+		CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		E7A8A466ED56DD241F0889B64EB0DAF5 /* Pods-DogSpotter-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-DogSpotter-acknowledgements.markdown"; sourceTree = "<group>"; };
 		E98B52CBBB6EC1100A543BBD2D24BD79 /* Pods-DogSpotter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DogSpotter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -31,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F62CB113C2189FEA0410DB72FBAEDE92 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +51,7 @@
 		7531C8F8DE19F1AA3C8A7AC97A91DC29 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";

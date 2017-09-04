@@ -1,14 +1,14 @@
 //
-//  DesignableView.swift
+//  DesignableButton.swift
 //  DogSpotter
 //
-//  Created by Cody Potter on 9/2/17.
+//  Created by Cody Potter on 9/3/17.
 //  Copyright © 2017 Cody Potter. All rights reserved.
 //
 
 import UIKit
 
-@IBDesignable class DesignableView: UIView {
+class DesignableButton: UIButton {
 
     @IBInspectable var cornerRadius: CGFloat = 0.0 {
         didSet {

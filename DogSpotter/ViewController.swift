@@ -12,25 +12,23 @@ import MapKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
 
-    
-    @IBOutlet var newDogScrollView: UIScrollView!
-    @IBOutlet var visualEffectView: UIVisualEffectView!
-    var image: UIImage?
-    var location: CLLocation?
-    var dogs: [Dog] = []
     @IBOutlet var newDogButton: UIButton!
     @IBOutlet var newDogScore: UILabel!
     @IBOutlet var newDogName: UITextField!
     @IBOutlet var newDogView: UIView!
     @IBOutlet var preview: UIImageView!
     @IBOutlet var map: MKMapView!
+    @IBOutlet var newDogScrollView: UIScrollView!
+    
+    var image: UIImage?
+    var location: CLLocation?
+    var dogs: [Dog] = []
     let locman = CLLocationManager()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.visualEffectView.alpha = 0
         self.locman.requestWhenInUseAuthorization()
         self.locman.delegate = self
         self.locman.desiredAccuracy = kCLLocationAccuracyBest
@@ -38,6 +36,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.map.showsUserLocation = true
         self.map.userTrackingMode = .follow
         self.map.delegate = self
+        self.map.mapType = .satellite
         self.newDogName.delegate = self
         
         
@@ -68,7 +67,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let camera = UIImagePickerController()
         camera.sourceType = source
         camera.delegate = self
-        self.present(camera, animated: true)
+        //self.present(camera, animated: true)
         map.isUserInteractionEnabled = false
         
     }
@@ -95,7 +94,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         self.dismiss(animated: true, completion: {
             self.preview.image = self.image
-            self.visualEffectView.alpha = 1
             self.newDogView.alpha = 1
         })
     }
@@ -120,7 +118,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             print(dogs.last!)
             
             self.newDogView.alpha = 0
-            self.visualEffectView.alpha = 0
             self.newDogName.text = ""
             self.map.isUserInteractionEnabled = true
             
