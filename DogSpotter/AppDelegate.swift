@@ -7,17 +7,33 @@
 //
 
 import UIKit
-import CoreLocation
+import MapKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate, MKMapViewDelegate {
 
     var window: UIWindow?
-
+    let locationManager = CLLocationManager()
+    var location: CLLocation?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
         return true
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let loc = locations.last!
+        let coord = loc.coordinate
+        location = loc
+        print("You are at \(coord.latitude) \(coord.longitude)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        return
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -41,7 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
 
 }
 
