@@ -19,7 +19,7 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 	
     var dogScore: Int = 1
     var image: UIImage?
-    var dogs: [Dog] = []
+    
 	
 	@IBOutlet var dogRateSlider: UISlider!
 	@IBOutlet var dogScoreLabel: UILabel!

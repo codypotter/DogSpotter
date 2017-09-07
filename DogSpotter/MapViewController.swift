@@ -18,6 +18,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     var newDogName: String?
     var newDogBreed: String?
     var newDogScore: Int?
+    var dogs: [Dog] = []
     
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -28,7 +29,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.showsUserLocation = true
         self.map.userTrackingMode = .follow
         self.map.delegate = self
-        self.map.mapType = .satellite
+        self.map.mapType = .hybrid
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,6 +105,14 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.newDogBreed = breed
         self.newDogScore = score
         self.newDogImage = image
+        
+        if delegate.location != nil {
+            let newDog = Dog(name: name, score: score, picture: image, location: delegate.location!)
+            dogs.append(newDog)
+            print(dogs.last!)
+        
+            dropNewPin(locatedAt: dogs.last!.location, name: dogs.last!.name, rate: dogs.last!.score)
+        }
     }
 }
 
