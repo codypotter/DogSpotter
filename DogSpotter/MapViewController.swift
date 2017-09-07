@@ -10,11 +10,15 @@ import UIKit
 import Photos
 import MapKit
 
-class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
+class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate, NewDogInfo {
 
     @IBOutlet var map: MKMapView!
     
-    var image: UIImage?
+    var newDogImage: UIImage?
+    var newDogName: String?
+    var newDogBreed: String?
+    var newDogScore: Int?
+    
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
@@ -37,6 +41,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         DispatchQueue.global(qos: .background).async {
             self.delegate.locationManager.requestLocation()
         }
+        performSegue(withIdentifier: "showNewDogViewController", sender: self)
     }
     
     func dropNewPin(locatedAt: CLLocation, name: String, rate: Int) {
@@ -46,7 +51,12 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.addAnnotation(annotation)
     }
     
-
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showNewDogViewController" {
+            let newDogViewController = segue.destination as! NewDogViewController
+            newDogViewController.dogInfoDelegate = self
+        }
+    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -87,6 +97,13 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 }
             }
         }
+    }
+    
+    func dogDataReceived(name: String, breed: String, score: Int, image: UIImage) {
+        self.newDogName = name
+        self.newDogBreed = breed
+        self.newDogScore = score
+        self.newDogImage = image
     }
 }
 

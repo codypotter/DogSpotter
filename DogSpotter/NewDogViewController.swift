@@ -8,40 +8,30 @@
 
 import UIKit
 
-class NewDogViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+protocol NewDogInfo {
+	func dogDataReceived(name: String, breed: String, score: Int, image: UIImage)
+}
+
+class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     let delegate = UIApplication.shared.delegate as! AppDelegate
+	var dogInfoDelegate: NewDogInfo?
+	
     var dogScore: Int = 1
     var image: UIImage?
     var dogs: [Dog] = []
+	
+	@IBOutlet var dogRateSlider: UISlider!
+	@IBOutlet var dogScoreLabel: UILabel!
+	@IBOutlet var dogBreedTextField: UITextField!
+	@IBOutlet var dogNameTextField: UITextField!
     
-    @IBOutlet var dogRateSlider: UISlider!
-    @IBOutlet var dogScoreLabel: UILabel!
-    @IBOutlet var dogBreedTextField: UITextField!
-    @IBOutlet var dogNameTextField: UITextField!
     @IBOutlet var dogImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
-    }
-
-    @IBAction func dogRateChanged(_ sender: UISlider) {
-        var score = (Int(dogRateSlider.value * 10))
-        if score == 0 {
-            score = 1
-        }
-        var text = ""
-        for _ in 0..<score {
-            if text.isEmpty {
-                text = "🔥"
-            } else {
-                text += "🔥"
-            }
-        }
-        dogScoreLabel.text = text
-        dogScore = score
+		self.dogNameTextField.delegate = self
+		self.dogBreedTextField.delegate = self
     }
 
     @IBAction func newPhotoTapped(_ sender: UIButton) {
@@ -56,29 +46,11 @@ class NewDogViewController: UIViewController, UIImagePickerControllerDelegate, U
         }
         let camera = UIImagePickerController()
         camera.sourceType = source
+		camera.allowsEditing = true
         camera.delegate = self
 		present(camera, animated: true)
     }
-    
-    @IBAction func submitDog(_ sender: Any) {
-        if dogNameTextField.text == "" {
-            let alert = UIAlertController(title: "Woops", message: "Please enter a name for the dog.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            present(alert, animated: true)
-            return
-        }
-
-        if delegate.location != nil {
-            let newDog = Dog(name: dogNameTextField.text!, score: dogScore, picture: image!, location: delegate.location!)
-            dogs.append(newDog)
-            print(dogs.last!)
-            
-            //dropNewPin(locatedAt: dogs.last!.location, name: dogs.last!.name, rate: dogs.last!.score)
-        }
-        
-        self.dismiss(animated: true, completion: nil)
-    }
-    
+	
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         image = info[UIImagePickerControllerOriginalImage] as? UIImage
         if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
@@ -88,14 +60,66 @@ class NewDogViewController: UIViewController, UIImagePickerControllerDelegate, U
             self.dogImageView.image = self.image
         })
     }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
+	
+	@IBAction func dogRateChanged(_ sender: UISlider) {
+		var score = (Int(dogRateSlider.value * 10))
+		if score == 0 {
+			score = 1
+		}
+		var text = ""
+		for _ in 0..<score {
+			if text.isEmpty {
+				text = "🔥"
+			} else {
+				text += "🔥"
+			}
+		}
+		dogScoreLabel.text = text
+		self.dogScore = score
+	}
+	
+	@IBAction func submitDog(_ sender: Any) {
+		if dogNameTextField.text == "" {
+			let alert = UIAlertController(title: "Woops", message: "Please enter a name for the dog.", preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+			present(alert, animated: true)
+			return
+		} else if dogBreedTextField.text == "" {
+			let alert = UIAlertController(title: "Woops", message: "Please enter a breed for the dog.", preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+			present(alert, animated: true)
+			return
+		} else if dogImageView.image == nil {
+			let alert = UIAlertController(title: "Woops", message: "Please add a photo of the dog.", preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+			present(alert, animated: true)
+			return
+		}
+		
+		//        if delegate.location != nil {
+		//            let newDog = Dog(name: dogNameTextField.text!, score: dogScore, picture: image!, location: delegate.location!)
+		//            dogs.append(newDog)
+		//            print(dogs.last!)
+		//
+		//            //dropNewPin(locatedAt: dogs.last!.location, name: dogs.last!.name, rate: dogs.last!.score)
+		//        }
+		
+		dogInfoDelegate?.dogDataReceived(name: dogNameTextField.text!, breed: dogBreedTextField.text!, score: dogScore, image: dogImageView.image!)
+		
+		self.dismiss(animated: true, completion: nil)
+	}
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		if textField == self.dogNameTextField {
+			self.dogBreedTextField.becomeFirstResponder()
+		}
+		else if textField == self.dogBreedTextField {
+			textField.resignFirstResponder()
+		}
+		return true
+	}
+	
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+		self.view.endEditing(true)
+	}
 }
