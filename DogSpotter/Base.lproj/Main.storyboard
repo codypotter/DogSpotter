@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="svN-fF-E4S">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="B35-es-3Ib">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -17,6 +17,63 @@
         </array>
     </customFonts>
     <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="Hn0-mK-h7R">
+            <objects>
+                <viewController id="B35-es-3Ib" customClass="LoginViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bSA-zM-EH8"/>
+                        <viewControllerLayoutGuide type="bottom" id="PAe-Vu-cOu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nSJ-OH-ZyJ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1wY-c8-CSP">
+                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.45000000000000001" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dogLoginPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="8JW-QD-p5n">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                    </imageView>
+                                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3OA-FR-TCk">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="GvK-L1-wYb">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                        <blurEffect style="light"/>
+                                    </visualEffectView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.91372549020000005" green="0.4549019608" blue="0.31764705879999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="3OA-FR-TCk" firstAttribute="top" secondItem="1wY-c8-CSP" secondAttribute="top" id="2NL-RD-cxQ"/>
+                                    <constraint firstItem="8JW-QD-p5n" firstAttribute="leading" secondItem="1wY-c8-CSP" secondAttribute="leading" id="2aX-Hb-5tR"/>
+                                    <constraint firstItem="8JW-QD-p5n" firstAttribute="top" secondItem="1wY-c8-CSP" secondAttribute="top" id="2ua-Qw-8Ry"/>
+                                    <constraint firstAttribute="trailing" secondItem="3OA-FR-TCk" secondAttribute="trailing" id="6O6-Ug-FJ1"/>
+                                    <constraint firstAttribute="bottom" secondItem="8JW-QD-p5n" secondAttribute="bottom" id="aBx-rI-1sA"/>
+                                    <constraint firstAttribute="bottom" secondItem="3OA-FR-TCk" secondAttribute="bottom" id="bTR-z4-nIN"/>
+                                    <constraint firstAttribute="trailing" secondItem="8JW-QD-p5n" secondAttribute="trailing" id="fkT-4R-5Ny"/>
+                                    <constraint firstItem="3OA-FR-TCk" firstAttribute="leading" secondItem="1wY-c8-CSP" secondAttribute="leading" id="oW6-cl-mkF"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="1wY-c8-CSP" firstAttribute="leading" secondItem="nSJ-OH-ZyJ" secondAttribute="leading" id="BiK-I0-l4T"/>
+                            <constraint firstItem="PAe-Vu-cOu" firstAttribute="top" secondItem="1wY-c8-CSP" secondAttribute="bottom" id="Qvg-eB-akA"/>
+                            <constraint firstAttribute="trailing" secondItem="1wY-c8-CSP" secondAttribute="trailing" id="cKM-l0-Ov4"/>
+                            <constraint firstItem="1wY-c8-CSP" firstAttribute="top" secondItem="bSA-zM-EH8" secondAttribute="bottom" id="jBT-Hr-icg"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="blurView" destination="3OA-FR-TCk" id="KJo-t2-tR2"/>
+                        <outlet property="imageView" destination="8JW-QD-p5n" id="gDS-IA-TTK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OX1-IM-W0l" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="785.625" y="-1065.8450704225352"/>
+        </scene>
         <!--Map View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -70,7 +127,7 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l6H-9N-sfx">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 </button>
-                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7j9-EH-xXO">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7j9-EH-xXO" customClass="ShadowedView" customModule="DogSpotter" customModuleProvider="target">
                                     <rect key="frame" x="18" y="28" width="284" height="512"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="om7-zk-UBz">
@@ -185,6 +242,7 @@
                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                             <integer key="value" value="2"/>
                                         </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </view>
                             </subviews>
@@ -204,6 +262,7 @@
                     <connections>
                         <outlet property="dogBreedTextField" destination="lCW-Oe-lV5" id="Lyp-C6-ozF"/>
                         <outlet property="dogImageView" destination="7eP-Nb-P0X" id="cJy-QI-KI1"/>
+                        <outlet property="dogInfoView" destination="7j9-EH-xXO" id="Ss5-z7-VU7"/>
                         <outlet property="dogNameTextField" destination="Nd1-td-wdV" id="BpY-hZ-QsW"/>
                         <outlet property="dogRateSlider" destination="gf1-8k-BJ2" id="8pr-Di-lVU"/>
                         <outlet property="dogScoreLabel" destination="JeY-lA-xhw" id="7yi-Wb-t27"/>
@@ -234,5 +293,6 @@
     </scenes>
     <resources>
         <image name="cameraIcon" width="191" height="192"/>
+        <image name="dogLoginPhoto" width="360" height="640"/>
     </resources>
 </document>

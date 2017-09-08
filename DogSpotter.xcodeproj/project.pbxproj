@@ -13,6 +13,8 @@
 		557028E41F33DF67007ADC87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E21F33DF67007ADC87 /* Main.storyboard */; };
 		557028E61F33DF67007ADC87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 557028E51F33DF67007ADC87 /* Assets.xcassets */; };
 		557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */; };
+		55B273C51F62353B0088BF27 /* ShadowedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B273C41F62353B0088BF27 /* ShadowedView.swift */; };
+		55C606461F62063D00B3F870 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C606451F62063D00B3F870 /* LoginViewController.swift */; };
 		55C9A22E1F3D3EAB00232476 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C9A22D1F3D3EAB00232476 /* MapKit.framework */; };
 		55CEF8BD1F524EB1001F1C85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CEF8BC1F524EB1001F1C85 /* Foundation.framework */; };
 		55CEF8C31F57BF0F001F1C85 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CEF8C21F57BF0F001F1C85 /* Annotation.swift */; };
@@ -35,6 +37,8 @@
 		557028E51F33DF67007ADC87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		557028E81F33DF67007ADC87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		557028EA1F33DF67007ADC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55B273C41F62353B0088BF27 /* ShadowedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedView.swift; sourceTree = "<group>"; };
+		55C606451F62063D00B3F870 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		55C9A22D1F3D3EAB00232476 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		55CEF8BC1F524EB1001F1C85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		55CEF8C21F57BF0F001F1C85 /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
@@ -96,12 +100,13 @@
 			isa = PBXGroup;
 			children = (
 				55D8E58D1F5B3E0C00FD6A3A /* Interface */,
-				55D8E58A1F5B3BF100FD6A3A /* Designables */,
+				55D8E58A1F5B3BF100FD6A3A /* Custom Views */,
 				55D8E5851F5B38E900FD6A3A /* Fonts */,
 				557028DE1F33DF67007ADC87 /* AppDelegate.swift */,
 				557028E01F33DF67007ADC87 /* MapViewController.swift */,
 				55D8E5831F5B38D400FD6A3A /* NewDogViewController.swift */,
 				557028E21F33DF67007ADC87 /* Main.storyboard */,
+				55C606451F62063D00B3F870 /* LoginViewController.swift */,
 				55CEF8C21F57BF0F001F1C85 /* Annotation.swift */,
 				556A8B8E1F3A9C2800A24A7A /* Dog.swift */,
 				557028E51F33DF67007ADC87 /* Assets.xcassets */,
@@ -132,13 +137,14 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
-		55D8E58A1F5B3BF100FD6A3A /* Designables */ = {
+		55D8E58A1F5B3BF100FD6A3A /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
 				55D8E58B1F5B3C1F00FD6A3A /* DesignableView.swift */,
 				55D8E5911F5CF25300FD6A3A /* DesignableButton.swift */,
+				55B273C41F62353B0088BF27 /* ShadowedView.swift */,
 			);
-			path = Designables;
+			path = "Custom Views";
 			sourceTree = "<group>";
 		};
 		55D8E58D1F5B3E0C00FD6A3A /* Interface */ = {
@@ -278,10 +284,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55B273C51F62353B0088BF27 /* ShadowedView.swift in Sources */,
 				557028E11F33DF67007ADC87 /* MapViewController.swift in Sources */,
 				557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */,
 				55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */,
 				55D8E58C1F5B3C1F00FD6A3A /* DesignableView.swift in Sources */,
+				55C606461F62063D00B3F870 /* LoginViewController.swift in Sources */,
 				55CEF8C31F57BF0F001F1C85 /* Annotation.swift in Sources */,
 				556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */,
 				55D8E5841F5B38D400FD6A3A /* NewDogViewController.swift in Sources */,

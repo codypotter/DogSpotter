@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MaterialComponents
 
 protocol NewDogInfo {
 	func dogDataReceived(name: String, breed: String, score: Int, image: UIImage)
@@ -19,13 +20,12 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 	
     var dogScore: Int = 1
     var image: UIImage?
-    
 	
+	@IBOutlet var dogInfoView: ShadowedView?
 	@IBOutlet var dogRateSlider: UISlider!
 	@IBOutlet var dogScoreLabel: UILabel!
 	@IBOutlet var dogBreedTextField: UITextField!
 	@IBOutlet var dogNameTextField: UITextField!
-    
     @IBOutlet var dogImageView: UIImageView!
     
     override func viewDidLoad() {
@@ -33,6 +33,10 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 		self.dogNameTextField.delegate = self
 		self.dogBreedTextField.delegate = self
     }
+	
+	override func viewWillLayoutSubviews() {
+		dogInfoView?.shadowLayer.elevation = 2.0
+	}
 
     @IBAction func newPhotoTapped(_ sender: UIButton) {
         // Setup Camera and present it
