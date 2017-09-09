@@ -24,9 +24,11 @@ class LoginViewController: UIViewController {
     var loginCredentialsViewCenterXConstraint: NSLayoutConstraint!
     var loginCredentialsViewHeightConstraint: NSLayoutConstraint!
     var loginButtonWidthConstraint: NSLayoutConstraint!
+    var loginButtonBottomConstraint: NSLayoutConstraint!
     var userNameTextFieldHeightConstraint: NSLayoutConstraint!
     var emailTextFieldTopConstraint: NSLayoutConstraint!
     var signupButtonBottomConstraint: NSLayoutConstraint!
+    var signupButtonWidthConstraint: NSLayoutConstraint!
     
     var isInLoginMode = false
     var isInSignupMode = false
@@ -35,7 +37,6 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        self.view.addSubview(blurView)
         self.view.addSubview(loginButton)
         self.view.addSubview(signupButton)
         self.view.addSubview(loginCredentialsView)
@@ -57,7 +58,8 @@ class LoginViewController: UIViewController {
         
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        loginButton.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: 100).isActive = true
+        loginButtonBottomConstraint = loginButton.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: 100)
+        loginButtonBottomConstraint.isActive = true
         loginButtonWidthConstraint = loginButton.widthAnchor.constraint(equalToConstant: 200)
         loginButtonWidthConstraint.isActive = true
         loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -72,7 +74,8 @@ class LoginViewController: UIViewController {
         signupButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         signupButtonBottomConstraint = signupButton.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: 100)
         signupButtonBottomConstraint.isActive = true
-        signupButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        signupButtonWidthConstraint = signupButton.widthAnchor.constraint(equalToConstant: 100)
+        signupButtonWidthConstraint.isActive = true
         signupButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         loginCredentialsView.translatesAutoresizingMaskIntoConstraints = false
@@ -129,25 +132,29 @@ class LoginViewController: UIViewController {
     @objc func loginButtonTapped() {
         
         if !isInLoginMode {
-            userNameTextField.isHidden = true
-            userNameTextFieldHeightConstraint.constant = 0
-            emailTextFieldTopConstraint.constant = 0
-            loginCredentialsViewHeightConstraint.constant = 74
+            UIView.animate(withDuration: 0.2, animations: {
+                self.userNameTextField.isHidden = true
+                self.userNameTextFieldHeightConstraint.constant = 0
+                self.emailTextFieldTopConstraint.constant = 0
+                self.loginCredentialsViewHeightConstraint.constant = 74
+            })
             
             if !isInCredentialsMode {
                 UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseInOut, animations: {
-                    self.loginCredentialsViewCenterXConstraint.constant += self.view.bounds.width
+                    self.loginCredentialsViewCenterXConstraint.constant = 0
                     self.blurView.alpha = 1
                     self.view.layoutIfNeeded()
                 }, completion: nil)
             }
             isInCredentialsMode = true
             
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
-                if self.signupButtonBottomConstraint.constant != 100 + self.view.bounds.height/2 - 170 {
-                    self.signupButtonBottomConstraint.constant += (self.view.bounds.height/2 - 170)
-                }
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                self.signupButtonBottomConstraint.constant = (self.view.bounds.height/2 - 20)
+                self.signupButtonWidthConstraint.constant = 100
                 self.loginButtonWidthConstraint.constant = self.loginCredentialsView.bounds.width
+                self.loginButtonBottomConstraint.constant = 100
+                self.signupButton.setBackgroundColor(UIColor(red: 1, green: 1, blue: 1, alpha: 0), for: .normal)
+                self.signupButton.setTitleColor(UIColor.white, for: .normal)
                 self.loginButton.backgroundColor = UIColor(red: 178/255, green: 69/255, blue: 39/255, alpha: 1)
                 self.loginButton.setTitleColor(UIColor.white, for: .normal)
                 self.view.layoutIfNeeded()
@@ -159,20 +166,33 @@ class LoginViewController: UIViewController {
     
     @objc func signupButtonTapped() {
         if !isInSignupMode {
-            userNameTextField.isHidden = false
-            userNameTextFieldHeightConstraint.constant = 25
-            emailTextFieldTopConstraint.constant = 8
-            loginCredentialsViewHeightConstraint.constant = 107
+            UIView.animate(withDuration: 0.2, animations: {
+                self.userNameTextField.isHidden = false
+                self.userNameTextFieldHeightConstraint.constant = 25
+                self.emailTextFieldTopConstraint.constant = 8
+                self.loginCredentialsViewHeightConstraint.constant = 107
+            })
             
             if !isInCredentialsMode {
                 UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseInOut, animations: {
-                    self.loginCredentialsViewCenterXConstraint.constant += self.view.bounds.width
+                    self.loginCredentialsViewCenterXConstraint.constant = 0
                     self.blurView.alpha = 1
                     self.view.layoutIfNeeded()
                 }, completion: nil)
             }
             isInCredentialsMode = true
             
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                self.loginButtonBottomConstraint.constant = (self.view.bounds.height/2 - 20)
+                self.loginButtonWidthConstraint.constant = 200
+                self.signupButtonWidthConstraint.constant = self.loginCredentialsView.bounds.width
+                self.signupButtonBottomConstraint.constant = 110
+                self.signupButton.backgroundColor = UIColor(red: 178/255, green: 69/255, blue: 39/255, alpha: 1)
+                self.signupButton.setTitleColor(UIColor.white, for: .normal)
+                self.loginButton.backgroundColor = UIColor.white
+                self.loginButton.setTitleColor(UIColor.black, for: .normal)
+                self.view.layoutIfNeeded()
+            }, completion: nil)
         }
         isInSignupMode = true
         isInLoginMode = false
