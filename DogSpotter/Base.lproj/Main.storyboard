@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="svN-fF-E4S">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="svN-fF-E4S">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13165.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -69,12 +69,11 @@
                     <connections>
                         <outlet property="blurView" destination="3OA-FR-TCk" id="KJo-t2-tR2"/>
                         <outlet property="imageView" destination="8JW-QD-p5n" id="gDS-IA-TTK"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="showMapView" id="dg5-8Y-8cB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OX1-IM-W0l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="81" y="-393"/>
+            <point key="canvasLocation" x="949" y="-820"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -100,6 +99,15 @@
                                     <action selector="newDogTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HoD-3E-YpG"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YGS-0e-tNs">
+                                <rect key="frame" x="16" y="28" width="31" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                                <state key="normal" title="🛑"/>
+                                <connections>
+                                    <action selector="logOutTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="O2Z-i6-gZ1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -109,11 +117,12 @@
                     <connections>
                         <outlet property="map" destination="2Yf-Jh-Mlf" id="hjL-zV-FrG"/>
                         <segue destination="KsA-vq-xzT" kind="presentation" identifier="showNewDogViewController" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="Fwm-jb-LkS"/>
+                        <segue destination="B35-es-3Ib" kind="show" identifier="showLoginViewController" id="XBv-7h-ndn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="902" y="-394"/>
+            <point key="canvasLocation" x="122" y="-394"/>
         </scene>
         <!--New Dog View Controller-->
         <scene sceneID="b82-Pf-g2u">
@@ -272,7 +281,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e3K-ud-4r1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1678" y="-394"/>
+            <point key="canvasLocation" x="949" y="-1"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="6UK-7A-hi5">
@@ -284,7 +293,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="B35-es-3Ib" kind="relationship" relationship="rootViewController" id="3xL-ob-siN"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="IDH-d0-QX9"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iRG-4R-I1O" userLabel="First Responder" sceneMemberID="firstResponder"/>

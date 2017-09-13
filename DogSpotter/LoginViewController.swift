@@ -203,10 +203,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             
             if error != nil {
                 print(error!)
+                SVProgressHUD.dismiss()
+                return
                 //TODO: Handle incorrect credentials w/ alert
             } else {
                 print("User signed in successfully!")
-                self.performSegue(withIdentifier: "showMapView", sender: self)
+                self.navigationController?.popViewController(animated: true)
             }
             SVProgressHUD.dismiss()
             self.emailTextField.text = ""
@@ -266,6 +268,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
                 print(error!)
+                SVProgressHUD.dismiss()
                 return
                 //TODO: Handle create user error w/ alert
             } else {
@@ -276,10 +279,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 changeRequest?.commitChanges(completion: { (err) in
                     if err != nil {
                         print(err!)
+                        SVProgressHUD.dismiss()
                         return
+                        //TODO: Handle save displayName error w/ alert
                     } else {
                         print("Created displayName successfully!")
-                        self.performSegue(withIdentifier: "showMapView", sender: self)
+                        self.navigationController?.popViewController(animated: true)
                     }
                 })
             }

@@ -8,6 +8,7 @@
 
 import UIKit
 import MaterialComponents
+import Firebase
 
 protocol NewDogInfo {
 	func dogDataReceived(name: String, breed: String, score: Int, image: UIImage)
@@ -20,6 +21,7 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 	
     var dogScore: Int = 1
     var image: UIImage?
+	var imageData: Data?
 	
 	@IBOutlet var dogInfoView: ShadowedView?
 	@IBOutlet var dogRateSlider: UISlider!
@@ -58,7 +60,8 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         image = info[UIImagePickerControllerOriginalImage] as? UIImage
         if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            image = editedImage
+            imageData = UIImageJPEGRepresentation(editedImage, 0.70)
+			
         }
         self.dismiss(animated: true, completion: {
             self.dogImageView.image = self.image
@@ -100,15 +103,44 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 			return
 		}
 		
-		//        if delegate.location != nil {
-		//            let newDog = Dog(name: dogNameTextField.text!, score: dogScore, picture: image!, location: delegate.location!)
-		//            dogs.append(newDog)
-		//            print(dogs.last!)
-		//
-		//            //dropNewPin(locatedAt: dogs.last!.location, name: dogs.last!.name, rate: dogs.last!.score)
-		//        }
-		
-		dogInfoDelegate?.dogDataReceived(name: dogNameTextField.text!, breed: dogBreedTextField.text!, score: dogScore, image: dogImageView.image!)
+		if delegate.location != nil {
+			let latitude = delegate.location?.coordinate.latitude
+			let longitude = delegate.location?.coordinate.longitude
+			
+			let databaseRef = FIRDatabase.database().reference()
+			let dogRef = databaseRef.child("dogs").childByAutoId()
+			let userRef = databaseRef.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).child("dogs")
+			let user = FIRAuth.auth()?.currentUser?.displayName!
+			
+			let dogValues = ["creator": user!, "name": String(describing: dogNameTextField.text), "breed": String(describing: dogBreedTextField.text), "score": String(dogScore), "latitude": String(describing: latitude!), "longitude": String(describing: longitude!) ]
+			let userValues = ["dogAutoId": dogRef.key]
+			
+			dogRef.updateChildValues(dogValues, withCompletionBlock: { (error, ref) in
+				if error != nil {
+					print(error!)
+					return
+					//TODO: Handle malfunction of database update
+				} else {
+					print("Saved dog successfully!")
+				}
+			})
+			
+			userRef.updateChildValues(userValues, withCompletionBlock: { (error, ref) in
+				if error != nil {
+					print(error!)
+					return
+					//TODO: Handle malfunction of database update
+				} else {
+					print("Saved user-dog reference successfully!")
+				}
+			})
+			
+			Fir
+			
+		} else {
+			return
+			//TODO: Handle delegate location == nil alert
+		}
 		
 		self.dismiss(animated: true, completion: nil)
 	}
