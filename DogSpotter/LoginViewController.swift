@@ -8,12 +8,15 @@
 
 import UIKit
 import MaterialComponents
+import Firebase
+import SVProgressHUD
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var blurView: UIVisualEffectView!
     
+    // Properties
     let loginButton = MDCRaisedButton()
     let signupButton = MDCFlatButton()
     let loginCredentialsView = ShadowedView()
@@ -21,6 +24,7 @@ class LoginViewController: UIViewController {
     let passwordTextField = UITextField()
     let emailTextField = UITextField()
     
+    // Constraint variables to be used w/ animation
     var loginCredentialsViewCenterXConstraint: NSLayoutConstraint!
     var loginCredentialsViewHeightConstraint: NSLayoutConstraint!
     var loginButtonWidthConstraint: NSLayoutConstraint!
@@ -30,6 +34,7 @@ class LoginViewController: UIViewController {
     var signupButtonBottomConstraint: NSLayoutConstraint!
     var signupButtonWidthConstraint: NSLayoutConstraint!
     
+    // Status variables to check view status
     var isInLoginMode = false
     var isInSignupMode = false
     var isInCredentialsMode = false
@@ -37,25 +42,30 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        userNameTextField.delegate = self
+        passwordTextField.delegate = self
+        emailTextField.delegate = self
+        
         self.view.addSubview(loginButton)
         self.view.addSubview(signupButton)
+        
         self.view.addSubview(loginCredentialsView)
         self.loginCredentialsView.addSubview(userNameTextField)
         self.loginCredentialsView.addSubview(passwordTextField)
         self.loginCredentialsView.addSubview(emailTextField)
     }
     
-    override func viewWillLayoutSubviews() {
-        
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        //MARK: Login Button Setup
         loginButton.setTitle("Log in", for: .normal)
         loginButton.setBackgroundColor(UIColor.white, for: .normal)
         loginButton.setTitleColor(UIColor.black, for: .normal)
         loginButton.sizeToFit()
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         
+        //MARK: Login Button Layout
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         loginButtonBottomConstraint = loginButton.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: 100)
@@ -64,12 +74,14 @@ class LoginViewController: UIViewController {
         loginButtonWidthConstraint.isActive = true
         loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
+        //MARK: Signup Button Setup
         signupButton.setTitle("Sign up", for: .normal)
         signupButton.setBackgroundColor(UIColor(red: 1, green: 0.647, blue: 0.494, alpha: 0), for: .normal)
         signupButton.setTitleColor(UIColor.white, for: .normal)
         signupButton.sizeToFit()
         signupButton.addTarget(self, action: #selector(signupButtonTapped), for: .touchUpInside)
         
+        //MARK: Signup Button Layout
         signupButton.translatesAutoresizingMaskIntoConstraints = false
         signupButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         signupButtonBottomConstraint = signupButton.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: 100)
@@ -78,6 +90,7 @@ class LoginViewController: UIViewController {
         signupButtonWidthConstraint.isActive = true
         signupButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
+        //MARK: Login Credentials View Layout
         loginCredentialsView.translatesAutoresizingMaskIntoConstraints = false
         loginCredentialsViewCenterXConstraint = loginCredentialsView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -(view.bounds.width))
         loginCredentialsViewCenterXConstraint.isActive = true
@@ -89,24 +102,30 @@ class LoginViewController: UIViewController {
         loginCredentialsView.layer.cornerRadius = 2.0
         loginCredentialsView.shadowLayer.elevation = 2.0
         
+        //MARK: Username Text Field Layout
         userNameTextField.translatesAutoresizingMaskIntoConstraints = false
         userNameTextField.leadingAnchor.constraint(equalTo: loginCredentialsView.leadingAnchor, constant: 8).isActive = true
         userNameTextField.topAnchor.constraint(equalTo: loginCredentialsView.topAnchor, constant: 8).isActive = true
         userNameTextField.trailingAnchor.constraint(equalTo: loginCredentialsView.trailingAnchor, constant: -8).isActive = true
         userNameTextFieldHeightConstraint = userNameTextField.heightAnchor.constraint(equalToConstant: 25)
         userNameTextFieldHeightConstraint.isActive = true
+        
+        //MARK: Username Text Field Setup
         userNameTextField.borderStyle = .none
         userNameTextField.placeholder = "Username"
         userNameTextField.autocapitalizationType = .none
         userNameTextField.autocorrectionType = .no
         userNameTextField.font = UIFont(name: "Helvetica", size: 17)
         
+        //MARK: Email Text Field Layout
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
         emailTextField.leadingAnchor.constraint(equalTo: loginCredentialsView.leadingAnchor, constant: 8).isActive = true
         emailTextFieldTopConstraint = emailTextField.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor, constant: 8)
         emailTextFieldTopConstraint.isActive = true
         emailTextField.trailingAnchor.constraint(equalTo: loginCredentialsView.trailingAnchor, constant: -8).isActive = true
         emailTextField.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        //MARK: Email Text Field Setup
         emailTextField.borderStyle = .none
         emailTextField.placeholder = "Email"
         emailTextField.autocapitalizationType = .none
@@ -114,18 +133,22 @@ class LoginViewController: UIViewController {
         emailTextField.keyboardType = .emailAddress
         emailTextField.font = UIFont(name: "Helvetica", size: 17)
         
+        //MARK: Password Text Field Layout
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.leadingAnchor.constraint(equalTo: loginCredentialsView.leadingAnchor, constant: 8).isActive = true
         passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 8).isActive = true
         passwordTextField.trailingAnchor.constraint(equalTo: loginCredentialsView.trailingAnchor, constant: -8).isActive = true
         passwordTextField.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        //MARK: Password Text Field Setup
         passwordTextField.borderStyle = .none
         passwordTextField.placeholder = "Password"
         passwordTextField.autocorrectionType = .no
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
         passwordTextField.font = UIFont(name: "Helvetica", size: 17)
-
+        
+        //MARK: Blur View Setup
         blurView.alpha = 0
     }
     
@@ -159,9 +182,40 @@ class LoginViewController: UIViewController {
                 self.loginButton.setTitleColor(UIColor.white, for: .normal)
                 self.view.layoutIfNeeded()
             }, completion: nil)
+            
+            isInLoginMode = true
+            isInSignupMode = false
+            return
         }
-        isInLoginMode = true
-        isInSignupMode = false
+        
+        guard let email = emailTextField.text, let password = passwordTextField.text else {
+            //TODO: Add alert view for invalid form.
+            print("Form is not valid.")
+            return
+        }
+        
+        //MARK: Sign In to Firebase Authentication
+        SVProgressHUD.show()
+        self.emailTextField.isEnabled = false
+        self.passwordTextField.isEnabled = false
+        self.userNameTextField.isEnabled = false
+        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+            
+            if error != nil {
+                print(error!)
+                //TODO: Handle incorrect credentials w/ alert
+            } else {
+                print("User signed in successfully!")
+                self.performSegue(withIdentifier: "showMapView", sender: self)
+            }
+            SVProgressHUD.dismiss()
+            self.emailTextField.text = ""
+            self.passwordTextField.text = ""
+            self.userNameTextField.text = ""
+            self.emailTextField.isEnabled = true
+            self.passwordTextField.isEnabled = true
+            self.userNameTextField.isEnabled = true
+        })
     }
     
     @objc func signupButtonTapped() {
@@ -193,9 +247,51 @@ class LoginViewController: UIViewController {
                 self.loginButton.setTitleColor(UIColor.black, for: .normal)
                 self.view.layoutIfNeeded()
             }, completion: nil)
+            isInSignupMode = true
+            isInLoginMode = false
+            return
         }
-        isInSignupMode = true
-        isInLoginMode = false
+        
+        guard let email = emailTextField.text, let password = passwordTextField.text, let userName = userNameTextField.text else {
+            //TODO: Add alert view for invalid form.
+            print("Form is not valid.")
+            return
+        }
+        
+        //MARK: Create user using Firebase Authentication
+        SVProgressHUD.show()
+        self.emailTextField.isEnabled = false
+        self.passwordTextField.isEnabled = false
+        self.userNameTextField.isEnabled = false
+        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
+            if error != nil {
+                print(error!)
+                return
+                //TODO: Handle create user error w/ alert
+            } else {
+                print("Created user successfully!")
+                let changeRequest = user?.profileChangeRequest()
+                
+                changeRequest?.displayName = userName
+                changeRequest?.commitChanges(completion: { (err) in
+                    if err != nil {
+                        print(err!)
+                        return
+                    } else {
+                        print("Created displayName successfully!")
+                        self.performSegue(withIdentifier: "showMapView", sender: self)
+                    }
+                })
+            }
+            
+            SVProgressHUD.dismiss()
+            self.emailTextField.text = ""
+            self.passwordTextField.text = ""
+            self.userNameTextField.text = ""
+            self.emailTextField.isEnabled = true
+            self.passwordTextField.isEnabled = true
+            self.userNameTextField.isEnabled = true
+        })
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
