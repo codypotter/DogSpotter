@@ -7,6 +7,7 @@ target 'DogSpotter' do
 
   pod 'MaterialComponents'
   pod 'Firebase/Core'
+  pod 'Firebase/Storage'
   pod 'Firebase/Database'
   pod 'Firebase/Auth'
   pod 'SVProgressHUD'

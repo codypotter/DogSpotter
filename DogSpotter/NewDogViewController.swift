@@ -17,6 +17,8 @@ protocol NewDogInfo {
 class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     let delegate = UIApplication.shared.delegate as! AppDelegate
+	let storageRef = FIRStorage.storage().reference()
+	let uid = FIRAuth.auth()?.currentUser?.uid
 	var dogInfoDelegate: NewDogInfo?
 	
     var dogScore: Int = 1
@@ -86,6 +88,9 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 	}
 	
 	@IBAction func submitDog(_ sender: Any) {
+		let metadata = FIRStorageMetadata()
+		metadata.contentType = "image/jpeg"
+		
 		if dogNameTextField.text == "" {
 			let alert = UIAlertController(title: "Woops", message: "Please enter a name for the dog.", preferredStyle: .alert)
 			alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -106,13 +111,26 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 		if delegate.location != nil {
 			let latitude = delegate.location?.coordinate.latitude
 			let longitude = delegate.location?.coordinate.longitude
-			
+			let newDogUUID = UUID.init()
+			var dogDownloadURL = ""
 			let databaseRef = FIRDatabase.database().reference()
 			let dogRef = databaseRef.child("dogs").childByAutoId()
 			let userRef = databaseRef.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).child("dogs")
 			let user = FIRAuth.auth()?.currentUser?.displayName!
 			
-			let dogValues = ["creator": user!, "name": String(describing: dogNameTextField.text), "breed": String(describing: dogBreedTextField.text), "score": String(dogScore), "latitude": String(describing: latitude!), "longitude": String(describing: longitude!) ]
+			let dogPhotosReference = storageRef.child("dogPhotos/\(String(describing: uid!))/\(newDogUUID)")
+			dogPhotosReference.downloadURL(completion: { (url, error) in
+				if error != nil {
+					print(error!)
+					return
+					//TODO: Handle download url error
+				} else {
+					dogDownloadURL = (url?.absoluteString)!
+				}
+			})
+			dogPhotosReference.put(imageData!, metadata: metadata)
+			
+			let dogValues = ["creator": user!, "name": String(describing: dogNameTextField.text), "breed": String(describing: dogBreedTextField.text), "score": String(dogScore), "latitude": String(describing: latitude!), "longitude": String(describing: longitude!), "imageURL":dogDownloadURL]
 			let userValues = ["dogAutoId": dogRef.key]
 			
 			dogRef.updateChildValues(dogValues, withCompletionBlock: { (error, ref) in
@@ -135,7 +153,6 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 				}
 			})
 			
-			Fir
 			
 		} else {
 			return
