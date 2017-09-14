@@ -31,10 +31,11 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 	@IBOutlet var dogBreedTextField: UITextField!
 	@IBOutlet var dogNameTextField: UITextField!
     @IBOutlet var dogImageView: UIImageView!
+	@IBOutlet var dogInfoViewBottomConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		self.dogNameTextField.delegate = self
+        self.dogNameTextField.delegate = self
 		self.dogBreedTextField.delegate = self
     }
 	
@@ -181,6 +182,21 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 			textField.resignFirstResponder()
 		}
 		return true
+	}
+	
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+		
+		UIView.animate(withDuration: 0.3) {
+			self.dogInfoViewBottomConstraint.constant = 250
+			self.view.layoutIfNeeded()
+		}
+	}
+	
+	func textFieldDidEndEditing(_ textField: UITextField) {
+		UIView.animate(withDuration: 0.3) {
+			self.dogInfoViewBottomConstraint.constant = 28
+			self.view.layoutIfNeeded()
+		}
 	}
 	
 	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

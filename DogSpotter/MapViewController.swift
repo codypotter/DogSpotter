@@ -35,7 +35,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         handle = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             if FIRAuth.auth()?.currentUser == nil {
-                self.navigationController?.popViewController(animated: true)
+                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
             }
         })
         

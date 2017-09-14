@@ -40,6 +40,19 @@
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="GvK-L1-wYb">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Dog-Spoter-Logo" translatesAutoresizingMaskIntoConstraints="NO" id="svm-Fm-KIp">
+                                                    <rect key="frame" x="8" y="43" width="304" height="62"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="62" id="8fz-Nr-Aly"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="svm-Fm-KIp" firstAttribute="leading" secondItem="GvK-L1-wYb" secondAttribute="leadingMargin" id="G1h-7n-2bN"/>
+                                                <constraint firstItem="svm-Fm-KIp" firstAttribute="trailing" secondItem="GvK-L1-wYb" secondAttribute="trailingMargin" id="OE7-p5-VQe"/>
+                                                <constraint firstItem="svm-Fm-KIp" firstAttribute="top" secondItem="GvK-L1-wYb" secondAttribute="topMargin" constant="35" id="ZcD-tb-QSe"/>
+                                            </constraints>
                                         </view>
                                         <blurEffect style="light"/>
                                     </visualEffectView>
@@ -73,7 +86,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OX1-IM-W0l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="949" y="-820"/>
+            <point key="canvasLocation" x="948.75" y="-820.77464788732391"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -99,11 +112,10 @@
                                     <action selector="newDogTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HoD-3E-YpG"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YGS-0e-tNs">
-                                <rect key="frame" x="16" y="28" width="31" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YGS-0e-tNs">
+                                <rect key="frame" x="6" y="29" width="25" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <state key="normal" title="🛑"/>
+                                <state key="normal" title="🤚🏻"/>
                                 <connections>
                                     <action selector="logOutTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="O2Z-i6-gZ1"/>
                                 </connections>
@@ -122,7 +134,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="122" y="-394"/>
+            <point key="canvasLocation" x="121.875" y="-394.01408450704224"/>
         </scene>
         <!--New Dog View Controller-->
         <scene sceneID="b82-Pf-g2u">
@@ -139,7 +151,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 </button>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7j9-EH-xXO" customClass="ShadowedView" customModule="DogSpotter" customModuleProvider="target">
-                                    <rect key="frame" x="18" y="28" width="284" height="512"/>
+                                    <rect key="frame" x="18" y="23" width="284" height="517"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="om7-zk-UBz">
                                             <rect key="frame" x="0.0" y="0.0" width="284" height="284"/>
@@ -162,13 +174,13 @@
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="aQq-12-aki">
-                                            <rect key="frame" x="8" y="292" width="268" height="170"/>
+                                            <rect key="frame" x="8" y="292" width="268" height="175"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5AY-Np-F58">
-                                                    <rect key="frame" x="0.0" y="0.0" width="268" height="36"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="268" height="37"/>
                                                     <subviews>
                                                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Nd1-td-wdV">
-                                                            <rect key="frame" x="0.0" y="0.0" width="268" height="36"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="268" height="37"/>
                                                             <nil key="textColor"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" textContentType="name"/>
@@ -176,10 +188,10 @@
                                                     </subviews>
                                                 </stackView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="66h-fG-LBZ">
-                                                    <rect key="frame" x="0.0" y="45" width="268" height="35.5"/>
+                                                    <rect key="frame" x="0.0" y="46" width="268" height="37"/>
                                                     <subviews>
                                                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a breed" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="lCW-Oe-lV5">
-                                                            <rect key="frame" x="0.0" y="0.0" width="268" height="35.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="268" height="37"/>
                                                             <nil key="textColor"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" enablesReturnKeyAutomatically="YES" textContentType="name"/>
@@ -187,10 +199,10 @@
                                                     </subviews>
                                                 </stackView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="rJ7-dZ-lQI">
-                                                    <rect key="frame" x="0.0" y="89.5" width="268" height="36"/>
+                                                    <rect key="frame" x="0.0" y="92" width="268" height="37"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="MfX-tx-gVj">
-                                                            <rect key="frame" x="0.0" y="0.0" width="60" height="36"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="60" height="37"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="xYx-2d-30h"/>
                                                             </constraints>
@@ -199,7 +211,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="gf1-8k-BJ2">
-                                                            <rect key="frame" x="66" y="0.0" width="204" height="37"/>
+                                                            <rect key="frame" x="66" y="0.0" width="204" height="38"/>
                                                             <color key="minimumTrackTintColor" red="1" green="0.64705882349999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="maximumTrackTintColor" red="0.69803921570000005" green="0.27058823529999998" blue="0.1529411765" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="thumbTintColor" red="1" green="0.64705882349999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
@@ -210,7 +222,7 @@
                                                     </subviews>
                                                 </stackView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🔥" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="JeY-lA-xhw">
-                                                    <rect key="frame" x="0.0" y="134.5" width="268" height="35.5"/>
+                                                    <rect key="frame" x="0.0" y="138" width="268" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="31"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -218,7 +230,7 @@
                                             </subviews>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WfJ-Rh-bqi">
-                                            <rect key="frame" x="0.0" y="462" width="284" height="50"/>
+                                            <rect key="frame" x="0.0" y="467" width="284" height="50"/>
                                             <color key="backgroundColor" red="0.91372549020000005" green="0.4549019608" blue="0.31764705879999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="50" id="XVT-Rm-K7g"/>
@@ -259,7 +271,6 @@
                             </subviews>
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="l6H-9N-sfx" secondAttribute="bottom" id="1Db-7V-f3E"/>
-                                <constraint firstItem="7j9-EH-xXO" firstAttribute="centerY" secondItem="OV1-dW-2Pm" secondAttribute="centerY" id="E2L-9v-ZHm"/>
                                 <constraint firstAttribute="trailing" secondItem="l6H-9N-sfx" secondAttribute="trailing" id="J2B-9O-PRV"/>
                                 <constraint firstItem="l6H-9N-sfx" firstAttribute="leading" secondItem="OV1-dW-2Pm" secondAttribute="leading" id="Qv0-eX-M6V"/>
                                 <constraint firstAttribute="bottom" secondItem="7j9-EH-xXO" secondAttribute="bottom" constant="28" id="ari-On-ogu"/>
@@ -274,6 +285,7 @@
                         <outlet property="dogBreedTextField" destination="lCW-Oe-lV5" id="Lyp-C6-ozF"/>
                         <outlet property="dogImageView" destination="7eP-Nb-P0X" id="cJy-QI-KI1"/>
                         <outlet property="dogInfoView" destination="7j9-EH-xXO" id="Ss5-z7-VU7"/>
+                        <outlet property="dogInfoViewBottomConstraint" destination="ari-On-ogu" id="4lh-Q5-wH5"/>
                         <outlet property="dogNameTextField" destination="Nd1-td-wdV" id="BpY-hZ-QsW"/>
                         <outlet property="dogRateSlider" destination="gf1-8k-BJ2" id="8pr-Di-lVU"/>
                         <outlet property="dogScoreLabel" destination="JeY-lA-xhw" id="7yi-Wb-t27"/>
@@ -302,7 +314,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="cameraIcon" width="191" height="192"/>
+        <image name="Dog-Spoter-Logo" width="297" height="58"/>
+        <image name="cameraIcon" width="107" height="109"/>
         <image name="dogLoginPhoto" width="360" height="640"/>
     </resources>
 </document>
