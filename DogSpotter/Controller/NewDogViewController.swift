@@ -129,16 +129,23 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 					print(error!)
 					//TODO: Handle upload error
 				} else {
+					// Image upload was success! Let's get a reference to the dogPhoto URL.
 					dogPhotosReference.downloadURL(completion: { (url, error) in
 						if error != nil {
 							print(error!)
 							return
 							//TODO: Handle download url error
 						} else {
+							// Successfuly got a URL, let's save that along with our dog info to the DB.
 							dogDownloadURL = (url?.absoluteString)!
 							
-							let dogValues = ["creator": user!, "name": self.dogNameTextField.text!, "breed": self.dogBreedTextField.text!, "score": String(self.dogScore), "latitude": String(describing: latitude!), "longitude": String(describing: longitude!), "imageURL":dogDownloadURL]
-							let userValues = ["dogAutoId": dogRef.key]
+							let dogValues = ["creator": user!,
+							                 "name": self.dogNameTextField.text!,
+							                 "breed": self.dogBreedTextField.text!,
+							                 "score": String(self.dogScore),
+							                 "latitude": String(describing: latitude!),
+							                 "longitude": String(describing: longitude!),
+							                 "imageURL":dogDownloadURL]
 							
 							dogRef.updateChildValues(dogValues, withCompletionBlock: { (error, ref) in
 								if error != nil {
@@ -150,7 +157,9 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 								}
 								
 							})
-							userRef.updateChildValues(userValues, withCompletionBlock: { (error, ref) in
+							
+							// At the same time, let's update the user's list of dogs with the dog we've made
+							userRef.childByAutoId().setValue(dogRef.key, withCompletionBlock: { (error, ref) in
 								if error != nil {
 									print(error!)
 									return
@@ -163,14 +172,10 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 					})
 				}
 			})
-			
-			
-			
 		} else {
 			return
 			//TODO: Handle delegate location == nil alert
 		}
-		
 		self.dismiss(animated: true, completion: nil)
 	}
 	
