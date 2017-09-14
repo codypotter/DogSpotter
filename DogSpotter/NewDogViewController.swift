@@ -63,7 +63,7 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
         image = info[UIImagePickerControllerOriginalImage] as? UIImage
         if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             imageData = UIImageJPEGRepresentation(editedImage, 0.70)
-			
+			image = editedImage
         }
         self.dismiss(animated: true, completion: {
             self.dogImageView.image = self.image
@@ -111,47 +111,58 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 		if delegate.location != nil {
 			let latitude = delegate.location?.coordinate.latitude
 			let longitude = delegate.location?.coordinate.longitude
+			
 			let newDogUUID = UUID.init()
 			var dogDownloadURL = ""
+			
 			let databaseRef = FIRDatabase.database().reference()
 			let dogRef = databaseRef.child("dogs").childByAutoId()
 			let userRef = databaseRef.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).child("dogs")
+			
 			let user = FIRAuth.auth()?.currentUser?.displayName!
 			
-			let dogPhotosReference = storageRef.child("dogPhotos/\(String(describing: uid!))/\(newDogUUID)")
-			dogPhotosReference.downloadURL(completion: { (url, error) in
+			let dogPhotosReference = storageRef.child("dogPhotos").child(String(describing: newDogUUID))
+			
+			dogPhotosReference.put(imageData!, metadata: metadata, completion: { (metatada, error) in
 				if error != nil {
 					print(error!)
-					return
-					//TODO: Handle download url error
+					//TODO: Handle upload error
 				} else {
-					dogDownloadURL = (url?.absoluteString)!
+					dogPhotosReference.downloadURL(completion: { (url, error) in
+						if error != nil {
+							print(error!)
+							return
+							//TODO: Handle download url error
+						} else {
+							dogDownloadURL = (url?.absoluteString)!
+							
+							let dogValues = ["creator": user!, "name": self.dogNameTextField.text!, "breed": self.dogBreedTextField.text!, "score": String(self.dogScore), "latitude": String(describing: latitude!), "longitude": String(describing: longitude!), "imageURL":dogDownloadURL]
+							let userValues = ["dogAutoId": dogRef.key]
+							
+							dogRef.updateChildValues(dogValues, withCompletionBlock: { (error, ref) in
+								if error != nil {
+									print(error!)
+									return
+									//TODO: Handle malfunction of database update
+								} else {
+									print("Saved dog successfully!")
+								}
+								
+							})
+							userRef.updateChildValues(userValues, withCompletionBlock: { (error, ref) in
+								if error != nil {
+									print(error!)
+									return
+									//TODO: Handle malfunction of database update
+								} else {
+									print("Saved user-dog reference successfully!")
+								}
+							})
+						}
+					})
 				}
 			})
-			dogPhotosReference.put(imageData!, metadata: metadata)
 			
-			let dogValues = ["creator": user!, "name": String(describing: dogNameTextField.text), "breed": String(describing: dogBreedTextField.text), "score": String(dogScore), "latitude": String(describing: latitude!), "longitude": String(describing: longitude!), "imageURL":dogDownloadURL]
-			let userValues = ["dogAutoId": dogRef.key]
-			
-			dogRef.updateChildValues(dogValues, withCompletionBlock: { (error, ref) in
-				if error != nil {
-					print(error!)
-					return
-					//TODO: Handle malfunction of database update
-				} else {
-					print("Saved dog successfully!")
-				}
-			})
-			
-			userRef.updateChildValues(userValues, withCompletionBlock: { (error, ref) in
-				if error != nil {
-					print(error!)
-					return
-					//TODO: Handle malfunction of database update
-				} else {
-					print("Saved user-dog reference successfully!")
-				}
-			})
 			
 			
 		} else {
