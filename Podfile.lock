@@ -1,4 +1,5 @@
 PODS:
+  - Cluster (1.0.5)
   - Firebase/Auth (3.17.0):
     - Firebase/Core
     - FirebaseAuth (= 3.1.1)
@@ -203,6 +204,7 @@ PODS:
   - SVProgressHUD (2.1.2)
 
 DEPENDENCIES:
+  - Cluster
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -211,6 +213,7 @@ DEPENDENCIES:
   - SVProgressHUD
 
 SPEC CHECKSUMS:
+  Cluster: c73268ac45ef39cabd7f8209dd56c40e1aef68e7
   Firebase: 4b66b5b59c43edac745b87f0c87e42cdd0279c13
   FirebaseAnalytics: e5fe8486efc01bec33f6bf82e2fa9fce4b124052
   FirebaseAuth: cc8a1824170adbd351edb7f994490a3fb5c18be6
@@ -224,6 +227,6 @@ SPEC CHECKSUMS:
   MDFTextAccessibility: 94098925e0853551c5a311ce7c1ecefbe297cdb6
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
 
-PODFILE CHECKSUM: 285120186fc7cd25506c917b2a340392859715cf
+PODFILE CHECKSUM: d456ab596b649e6d1de4fdfb36e0067ba93ef0c0
 
 COCOAPODS: 1.2.0

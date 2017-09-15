@@ -122,7 +122,7 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 			
 			let user = FIRAuth.auth()?.currentUser?.displayName!
 			
-			let dogPhotosReference = storageRef.child("dogPhotos").child(String(describing: newDogUUID))
+			let dogPhotosReference = storageRef.child("dogPhotos").child("\(String(describing: newDogUUID)).jpg")
 			
 			dogPhotosReference.put(imageData!, metadata: metadata, completion: { (metatada, error) in
 				if error != nil {
@@ -147,6 +147,8 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 							                 "longitude": String(describing: longitude!),
 							                 "imageURL":dogDownloadURL]
 							
+							let userDogListValues = ["dogID": dogRef.key]
+							
 							dogRef.updateChildValues(dogValues, withCompletionBlock: { (error, ref) in
 								if error != nil {
 									print(error!)
@@ -159,13 +161,13 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 							})
 							
 							// At the same time, let's update the user's list of dogs with the dog we've made
-							userRef.childByAutoId().setValue(dogRef.key, withCompletionBlock: { (error, ref) in
+							userRef.childByAutoId().updateChildValues(userDogListValues, withCompletionBlock: { (error, ref) in
 								if error != nil {
 									print(error!)
 									return
 									//TODO: Handle malfunction of database update
 								} else {
-									print("Saved user-dog reference successfully!")
+									print("User-Dog list updated successfully!")
 								}
 							})
 						}

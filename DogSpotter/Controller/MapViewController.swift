@@ -10,15 +10,19 @@ import UIKit
 import Photos
 import MapKit
 import Firebase
+import Cluster
 
 class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate, NewDogInfo {
 
     @IBOutlet var map: MKMapView!
     
-    var handle: FIRAuthStateDidChangeListenerHandle?
-    var dogs: [Dog] = []
+    var authHandle: FIRAuthStateDidChangeListenerHandle?
+    var dogs: [Dog] = [Dog]()
     
     let delegate = UIApplication.shared.delegate as! AppDelegate
+    let clusterManager = ClusterManager()
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,12 +37,66 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        handle = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
+        let userDogRef = FIRDatabase.database().reference().child("users").child((FIRAuth.auth()?.currentUser?.uid)!).child("dogs")
+        
+        //MARK: Auto-Logout handler
+        authHandle = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             if FIRAuth.auth()?.currentUser == nil {
                 self.performSegue(withIdentifier: "showLoginViewController", sender: self)
             }
         })
         
+        //MARK: Auto-Map-Update handler
+        userDogRef.observe(.childAdded, with: { (snapshot) in
+            if snapshot.value == nil {
+                print("no new dog found")
+            } else {
+                print("new dog found")
+                
+                let snapshotValue = snapshot.value as! Dictionary<String, String>
+                let dogID = snapshotValue["dogID"]!
+                
+                let dogRef = FIRDatabase.database().reference().child("dogs").child(dogID)
+                dogRef.observeSingleEvent(of: .value, with: { (snap) in
+                    print("Found dog data!")
+                    let value = snap.value as! Dictionary<String, String>
+                    
+                    let name = value["name"]!
+                    let breed = value["breed"]!
+                    let creator = value["creator"]!
+                    let score = Int(value["score"]!)!
+                    let lat = Double(value["latitude"]!)!
+                    let lon = Double(value["longitude"]!)!
+                    let url = value["imageURL"]!
+                    let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                    
+                    let newDog = Dog()
+                    newDog.name = name
+                    newDog.breed = breed
+                    newDog.creator = creator
+                    newDog.score = score
+                    newDog.imageURL = url
+                    newDog.location = location
+                    
+                    let downloadURL = URL(string: newDog.imageURL)!
+                    URLSession.shared.dataTask(with: downloadURL, completionHandler: { (data, response, error) in
+                        if error != nil {
+                            print(error!)
+                            return
+                        }
+                        
+                        
+                        newDog.picture = UIImage(data: data!)!
+                        
+                        
+                    }).resume()
+                    
+                    self.dogs.append(newDog)
+                    
+                })
+                
+            }
+        })
     }
     
     @IBAction func logOutTapped(_ sender: Any) {
@@ -50,6 +108,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         DispatchQueue.global(qos: .background).async {
             self.delegate.locationManager.requestLocation()
         }
+        
         performSegue(withIdentifier: "showNewDogViewController", sender: self)
     }
     
