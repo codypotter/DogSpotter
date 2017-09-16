@@ -43,40 +43,28 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 dogRef.observeSingleEvent(of: .value, with: { (snap) in
                     print("Found dog data!")
                     let value = snap.value as! Dictionary<String, String>
-                    
-                    let name = value["name"]!
-                    let breed = value["breed"]!
-                    let creator = value["creator"]!
-                    let score = Int(value["score"]!)!
-                    let lat = Double(value["latitude"]!)!
-                    let lon = Double(value["longitude"]!)!
-                    let url = value["imageURL"]!
-                    let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                    
+
                     let newDog = Dog()
-                    newDog.name = name
-                    newDog.breed = breed
-                    newDog.creator = creator
-                    newDog.score = score
-                    newDog.imageURL = url
-                    newDog.location = location
-                    
-                    let downloadURL = URL(string: newDog.imageURL)!
-                    URLSession.shared.dataTask(with: downloadURL, completionHandler: { (data, response, error) in
+                    newDog.name = value["name"]!
+                    newDog.breed = value["breed"]!
+                    newDog.creator = value["creator"]!
+                    newDog.score = Int(value["score"]!)!
+                    newDog.imageURL = value["imageURL"]!
+                    newDog.location = CLLocationCoordinate2D(latitude: Double(value["latitude"]!)!, longitude: Double(value["longitude"]!)!)
+
+                    URLSession.shared.dataTask(with: URL(string: newDog.imageURL)!, completionHandler: { (data, response, error) in
                         if error != nil {
                             print(error!)
                             return
                         }
                         newDog.picture = UIImage(data: data!)!
+                        self.dogs.append(newDog)
+                        let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name, subtitle: newDog.creator)
+                        DispatchQueue.main.async {
+                            self.map.addAnnotation(annotation)
+                        }
                         
                     }).resume()
-                    self.dogs.append(newDog)
-                    for dog in self.dogs {
-                        let annotation  = CustomAnnotation(location: dog.location, title: dog.name, subtitle: dog.creator)
-                        
-                        self.map.addAnnotation(annotation)
-                    }
-                    
                 })
             }
         })
