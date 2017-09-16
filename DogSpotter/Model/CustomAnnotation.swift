@@ -9,13 +9,15 @@
 import Foundation
 import MapKit
 
-class Annotation: NSObject, MKAnnotation {
-    dynamic var coordinate : CLLocationCoordinate2D
+class CustomAnnotation: NSObject, MKAnnotation {
+    var coordinate : CLLocationCoordinate2D
     var title: String?
     var subtitle: String?
     
-    init(location coord:CLLocationCoordinate2D) {
-        self.coordinate = coord
+    init(location: CLLocationCoordinate2D, title: String, subtitle: String) {
+        self.coordinate = location
+        self.title = title
+        self.subtitle = title
         super.init()
     }
     

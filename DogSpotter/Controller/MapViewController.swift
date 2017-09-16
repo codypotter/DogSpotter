@@ -10,7 +10,6 @@ import UIKit
 import Photos
 import MapKit
 import Firebase
-import Cluster
 
 class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate, NewDogInfo {
 
@@ -20,9 +19,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     var dogs: [Dog] = [Dog]()
     
     let delegate = UIApplication.shared.delegate as! AppDelegate
-    let clusterManager = ClusterManager()
-    
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,21 +28,8 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.userTrackingMode = .follow
         self.map.delegate = self
         self.map.mapType = .hybrid
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         let userDogRef = FIRDatabase.database().reference().child("users").child((FIRAuth.auth()?.currentUser?.uid)!).child("dogs")
         
-        //MARK: Auto-Logout handler
-        authHandle = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
-            if FIRAuth.auth()?.currentUser == nil {
-                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
-            }
-        })
-        
-        //MARK: Auto-Map-Update handler
         userDogRef.observe(.childAdded, with: { (snapshot) in
             if snapshot.value == nil {
                 print("no new dog found")
@@ -84,17 +67,30 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                             print(error!)
                             return
                         }
-                        
-                        
                         newDog.picture = UIImage(data: data!)!
                         
-                        
                     }).resume()
-                    
                     self.dogs.append(newDog)
+                    for dog in self.dogs {
+                        let annotation  = CustomAnnotation(location: dog.location, title: dog.name, subtitle: dog.creator)
+                        
+                        self.map.addAnnotation(annotation)
+                    }
                     
                 })
-                
+            }
+        })
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        
+        //MARK: Auto-Logout handler
+        authHandle = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
+            if FIRAuth.auth()?.currentUser == nil {
+                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
             }
         })
     }
@@ -110,13 +106,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         }
         
         performSegue(withIdentifier: "showNewDogViewController", sender: self)
-    }
-    
-    func dropNewPin(locatedAt: CLLocation, name: String, rate: Int) {
-        let annotation = Annotation(location: CLLocationCoordinate2D(latitude: locatedAt.coordinate.latitude, longitude: locatedAt.coordinate.longitude))
-        annotation.title = name
-        annotation.subtitle = "\(rate)/10"
-        self.map.addAnnotation(annotation)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -139,19 +128,36 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         if(annotation is MKUserLocation){
             return nil
         }
-        
+
         let ident = "pin"
-        var v = mapView.dequeueReusableAnnotationView(withIdentifier: ident)
-        if v == nil {
-            v = MKAnnotationView(annotation: annotation, reuseIdentifier: ident) 
-            v?.image = UIImage(named: "pin")
-            v?.centerOffset = CGPoint(x: 0, y: -15)
-            v?.bounds.size.height /= 1.5
-            v?.bounds.size.width /= 1.5
-            v?.canShowCallout = true
+        
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: ident)
+        if annotationView == nil {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: ident)
+            annotationView?.canShowCallout = true
+        } else {
+            annotationView!.annotation = annotation
         }
-        v?.annotation = annotation
-        return v
+        configureDetailView(annotationView!)
+        return annotationView
+    }
+    
+    func configureDetailView(_ annotationView: MKAnnotationView) {
+        let width = 300
+        let height = 300
+        
+        let dogPhotoView = UIView()
+        let views = ["dogPhotoView": dogPhotoView]
+        dogPhotoView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[dogPhotoView(\(height))]", options: [], metrics: nil, views: views))
+        dogPhotoView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[dogPhotoView(\(width))]", options: [], metrics: nil, views: views))
+        
+        
+        for dog in self.dogs {
+            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+            imageView.image = dog.picture
+        }
+        
+        annotationView.detailCalloutAccessoryView = dogPhotoView
     }
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {

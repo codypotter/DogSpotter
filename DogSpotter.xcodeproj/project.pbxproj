@@ -18,7 +18,7 @@
 		55C606461F62063D00B3F870 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C606451F62063D00B3F870 /* LoginViewController.swift */; };
 		55C9A22E1F3D3EAB00232476 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C9A22D1F3D3EAB00232476 /* MapKit.framework */; };
 		55CEF8BD1F524EB1001F1C85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CEF8BC1F524EB1001F1C85 /* Foundation.framework */; };
-		55CEF8C31F57BF0F001F1C85 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CEF8C21F57BF0F001F1C85 /* Annotation.swift */; };
+		55CEF8C31F57BF0F001F1C85 /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CEF8C21F57BF0F001F1C85 /* CustomAnnotation.swift */; };
 		55D8E5841F5B38D400FD6A3A /* NewDogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D8E5831F5B38D400FD6A3A /* NewDogViewController.swift */; };
 		55D8E58C1F5B3C1F00FD6A3A /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D8E58B1F5B3C1F00FD6A3A /* DesignableView.swift */; };
 		55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D8E5911F5CF25300FD6A3A /* DesignableButton.swift */; };
@@ -43,7 +43,7 @@
 		55C606451F62063D00B3F870 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		55C9A22D1F3D3EAB00232476 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		55CEF8BC1F524EB1001F1C85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		55CEF8C21F57BF0F001F1C85 /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
+		55CEF8C21F57BF0F001F1C85 /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
 		55D8E5831F5B38D400FD6A3A /* NewDogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDogViewController.swift; sourceTree = "<group>"; usesTabs = 1; };
 		55D8E5861F5B398A00FD6A3A /* PT_Sans-Web-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PT_Sans-Web-Regular.ttf"; sourceTree = "<group>"; };
 		55D8E5871F5B39A500FD6A3A /* PT_Serif-Web-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PT_Serif-Web-Bold.ttf"; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 		5596A2B81F6B2E8E00ED546E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				55CEF8C21F57BF0F001F1C85 /* Annotation.swift */,
+				55CEF8C21F57BF0F001F1C85 /* CustomAnnotation.swift */,
 				556A8B8E1F3A9C2800A24A7A /* Dog.swift */,
 			);
 			path = Model;
@@ -300,7 +300,7 @@
 				55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */,
 				55D8E58C1F5B3C1F00FD6A3A /* DesignableView.swift in Sources */,
 				55C606461F62063D00B3F870 /* LoginViewController.swift in Sources */,
-				55CEF8C31F57BF0F001F1C85 /* Annotation.swift in Sources */,
+				55CEF8C31F57BF0F001F1C85 /* CustomAnnotation.swift in Sources */,
 				556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */,
 				55D8E5841F5B38D400FD6A3A /* NewDogViewController.swift in Sources */,
 			);
