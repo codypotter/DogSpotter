@@ -37,10 +37,35 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
         super.viewDidLoad()
         self.dogNameTextField.delegate = self
 		self.dogBreedTextField.delegate = self
+
+		let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeUp))
+		swipeUp.direction = UISwipeGestureRecognizerDirection.up
+		dogInfoView?.addGestureRecognizer(swipeUp)
     }
+	
+	@objc func handleSwipeUp(gesture: UISwipeGestureRecognizer) {
+		UIView.animate(withDuration: 0.4) {
+			self.dogInfoViewBottomConstraint.constant = self.view.layer.bounds.height
+			self.view.layoutIfNeeded()
+		}
+		dismiss(animated: true, completion: nil)
+	}
 	
 	override func viewWillLayoutSubviews() {
 		dogInfoView?.shadowLayer.elevation = 2.0
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		dogInfoViewBottomConstraint.constant = -view.layer.bounds.height
+		self.view.layoutIfNeeded()
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		UIView.animate(withDuration: 0.4) {
+			self.dogInfoViewBottomConstraint.constant = 28
+			self.view.layoutIfNeeded()
+		}
 	}
 
     @IBAction func newPhotoTapped(_ sender: UIButton) {
