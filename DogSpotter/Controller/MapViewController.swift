@@ -143,6 +143,12 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         for dog in self.dogs {
             let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: width, height: height))
             imageView.image = dog.picture
+            
+            DispatchQueue.main.async {
+                dogPhotoView.addSubview(imageView)
+                self.view.layoutIfNeeded()
+            }
+            
         }
         
         annotationView.detailCalloutAccessoryView = dogPhotoView
