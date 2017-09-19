@@ -267,29 +267,44 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.emailTextField.isEnabled = false
         self.passwordTextField.isEnabled = false
         self.userNameTextField.isEnabled = false
+        
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
                 print(error!)
                 SVProgressHUD.dismiss()
                 return
                 //TODO: Handle create user error w/ alert
-            } else {
-                print("Created user successfully!")
-                let changeRequest = user?.profileChangeRequest()
-                
-                changeRequest?.displayName = userName
-                changeRequest?.commitChanges(completion: { (err) in
-                    if err != nil {
-                        print(err!)
-                        SVProgressHUD.dismiss()
-                        return
-                        //TODO: Handle save displayName error w/ alert
-                    } else {
-                        print("Created displayName successfully!")
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                })
             }
+            print("Created user successfully!")
+            
+            let userRef = FIRDatabase.database().reference().child("users").child((FIRAuth.auth()?.currentUser?.uid)!)
+            let userValues = ["username": self.userNameTextField.text!,
+                              "email": self.emailTextField.text!]
+            
+            userRef.updateChildValues(userValues, withCompletionBlock: { (error, ref) in
+                if error != nil {
+                    print(error!.localizedDescription)
+                    SVProgressHUD.dismiss()
+                    return
+                }
+            })
+            
+            let changeRequest = user?.profileChangeRequest()
+            changeRequest?.displayName = userName
+            changeRequest?.commitChanges(completion: { (err) in
+                if err != nil {
+                    print(err!)
+                    SVProgressHUD.dismiss()
+                    return
+                    //TODO: Handle save displayName error w/ alert
+                }
+                print("Created displayName successfully!")
+                self.navigationController?.popViewController(animated: true)
+                    
+            })
+            
+            
+            
             
             SVProgressHUD.dismiss()
             self.emailTextField.text = ""

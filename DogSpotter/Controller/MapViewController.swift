@@ -170,5 +170,11 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     func dogDataReceived(name: String, breed: String, score: Int, image: UIImage) {
         
     }
+    @IBAction func accountButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "showAccountViewController", sender: self)
+    }
+    @IBAction func disoverButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "showUserSearch", sender: self)
+    }
 }
 
