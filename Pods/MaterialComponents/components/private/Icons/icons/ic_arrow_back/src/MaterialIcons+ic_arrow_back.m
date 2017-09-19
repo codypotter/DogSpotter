@@ -19,7 +19,7 @@
 
 #import "MaterialIcons+ic_arrow_back.h"
 
-#import "MDCIcons+BundleLoader.h"
+#import "MaterialIcons.h"
 
 static NSString *const kBundleName = @"MaterialIcons_ic_arrow_back";
 static NSString *const kIconName = @"ic_arrow_back";
@@ -28,8 +28,8 @@ static NSString *const kNewIconName = @"ic_arrow_back_ios";
 static NSString *__icArrowBackIconName = @"ic_arrow_back_ios";
 
 // Export a nonsense symbol to suppress a libtool warning when this is linked alone in a static lib.
-__attribute__((visibility("default"))) char MDCIconsExportToSuppressLibToolWarning_ic_arrow_back =
-    0;
+__attribute__((visibility("default")))
+    char MDCIconsExportToSuppressLibToolWarning_ic_arrow_back = 0;
 
 @implementation MDCIcons (ic_arrow_back)
 
@@ -45,6 +45,13 @@ __attribute__((visibility("default"))) char MDCIconsExportToSuppressLibToolWarni
   } else {
     __icArrowBackIconName = kIconName;
   }
+}
+
++ (nullable UIImage *)imageFor_ic_arrow_back {
+  NSBundle *bundle = [self bundleNamed:kBundleName];
+  return [UIImage imageNamed:__icArrowBackIconName
+                    inBundle:bundle
+      compatibleWithTraitCollection:nil];
 }
 
 @end

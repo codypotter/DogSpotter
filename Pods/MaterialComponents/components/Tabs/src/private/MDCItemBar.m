@@ -68,9 +68,6 @@ static void *kItemPropertyContext = &kItemPropertyContext;
   /// Underline displayed under the active item.
   UIView *_selectionIndicator;
 
-  /// Index path of the previously selected item.
-  NSIndexPath *_lastSelectedIndexPath;
-
   /// Size of the view at last layout, for deduplicating changes.
   CGSize _lastSize;
 
@@ -171,12 +168,21 @@ static void *kItemPropertyContext = &kItemPropertyContext;
 
     _items = [items copy];
 
+    // Determine new selected item, defaulting to the first item.
+    UITabBarItem *newSelectedItem = _items.firstObject;
+    if (_selectedItem && [_items containsObject:_selectedItem]) {
+      // Previously-selected item still around: Preserve selection.
+      newSelectedItem = _selectedItem;
+    }
+
+    // Update _selectedItem directly so it's available for -reload.
+    _selectedItem = newSelectedItem;
+
+    // Update collection with new items
     [self reload];
 
-    // Reset selection to a valid item.
-    if (![_items containsObject:_selectedItem]) {
-      self.selectedItem = [_items firstObject];
-    }
+    // Select tab for current item.
+    [self selectItemAtIndex:[self indexForItem:_selectedItem] animated:NO];
 
     // Start observing new items for changes.
     [self startObservingItems];
@@ -201,8 +207,8 @@ static void *kItemPropertyContext = &kItemPropertyContext;
 
 - (void)setSelectedItem:(nullable UITabBarItem *)selectedItem animated:(BOOL)animated {
   if (_selectedItem != selectedItem) {
-    NSInteger itemIndex = [_items indexOfObject:selectedItem];
-    if (itemIndex == NSNotFound) {
+    NSUInteger itemIndex = [self indexForItem:selectedItem];
+    if (selectedItem && (itemIndex == NSNotFound)) {
       [[NSException exceptionWithName:NSInvalidArgumentException
                                reason:@"Invalid item"
                              userInfo:nil] raise];
@@ -272,10 +278,8 @@ static void *kItemPropertyContext = &kItemPropertyContext;
   if (!CGSizeEqualToSize(bounds.size, _lastSize)) {
     [self updateFlowLayoutMetrics];
 
-    if (_lastSelectedIndexPath) {
-      // Ensure selected item is aligned properly on resize.
-      [self selectItemAtIndex:_lastSelectedIndexPath.item animated:NO];
-    }
+    // Ensure selected item is aligned properly on resize.
+    [self selectItemAtIndex:[self indexForItem:_selectedItem] animated:NO];
   }
   _lastSize = bounds.size;
 }
@@ -314,12 +318,11 @@ static void *kItemPropertyContext = &kItemPropertyContext;
 - (BOOL)collectionView:(UICollectionView *)collectionView
     shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
   if (_collectionView == collectionView) {
-    UITabBarItem *item = [self itemAtIndexPath:indexPath];
-
     // Notify delegate of impending selection.
     id<MDCItemBarDelegate> delegate = self.delegate;
-    if ([delegate respondsToSelector:@selector(itemBar:willSelectItem:)]) {
-      [delegate itemBar:self willSelectItem:item];
+    if ([delegate respondsToSelector:@selector(itemBar:shouldSelectItem:)]) {
+      UITabBarItem *item = [self itemAtIndexPath:indexPath];
+      return [delegate itemBar:self shouldSelectItem:item];
     }
   }
   return YES;
@@ -339,7 +342,7 @@ static void *kItemPropertyContext = &kItemPropertyContext;
     }
 
     // Update UI to reflect newly selected item.
-    [self didSelectItemAtIndexPath:indexPath animateTransition:YES];
+    [self didSelectItemAtIndex:indexPath.item animateTransition:YES];
     [_collectionView scrollToItemAtIndexPath:indexPath
                             atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
                                     animated:YES];
@@ -373,7 +376,7 @@ static void *kItemPropertyContext = &kItemPropertyContext;
 #pragma mark - UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
-                    layout:(UICollectionViewLayout *)collectionViewLayout
+                    layout:(__unused UICollectionViewLayout *)collectionViewLayout
     sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
   NSParameterAssert(_collectionView == collectionView);
 
@@ -394,10 +397,13 @@ static void *kItemPropertyContext = &kItemPropertyContext;
     size.width = _collectionView.bounds.size.width / MAX(count, 1);
   }
 
-  // Constrain width if necessary.
+  // Constrain to style-based width if necessary.
   if (_style.maximumItemWidth > 0) {
     size.width = MIN(size.width, _style.maximumItemWidth);
   }
+
+  // Constrain to view width
+  size.width = MIN(size.width, CGRectGetWidth(collectionView.frame));
 
   // Force height to our height.
   size.height = itemHeight;
@@ -410,13 +416,16 @@ static void *kItemPropertyContext = &kItemPropertyContext;
 + (NSArray *)observableItemKeys {
   static dispatch_once_t onceToken;
   static NSArray *s_keys = nil;
+  // clang-format off
   dispatch_once(&onceToken, ^{
     s_keys = @[
-      NSStringFromSelector(@selector(title)), NSStringFromSelector(@selector(image)),
+      NSStringFromSelector(@selector(title)),
+      NSStringFromSelector(@selector(image)),
       NSStringFromSelector(@selector(badgeValue)),
       NSStringFromSelector(@selector(accessibilityIdentifier))
     ];
   });
+  // clang-format on
   return s_keys;
 }
 
@@ -451,18 +460,30 @@ static void *kItemPropertyContext = &kItemPropertyContext;
   return isPad ? UIUserInterfaceSizeClassRegular : UIUserInterfaceSizeClassCompact;
 }
 
-- (void)selectItemAtIndex:(NSInteger)index animated:(BOOL)animated {
-  NSParameterAssert(index >= 0 && index < (NSInteger)[_items count]);
-
-  NSIndexPath *indexPath = [self indexPathForItemAtIndex:index];
-  [_collectionView selectItemAtIndexPath:indexPath
-                                animated:animated
-                          scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-  [self didSelectItemAtIndexPath:indexPath animateTransition:animated];
+- (void)selectItemAtIndex:(NSUInteger)index animated:(BOOL)animated {
+  if (index != NSNotFound) {
+    NSParameterAssert(index < [_items count]);
+    [_collectionView selectItemAtIndexPath:[self indexPathForItemAtIndex:index]
+                                  animated:animated
+                            scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
+  } else {
+    // Deselect all
+    for (NSIndexPath *path in [_collectionView indexPathsForSelectedItems]) {
+      [_collectionView deselectItemAtIndexPath:path animated:NO];
+    }
+  }
+  [self didSelectItemAtIndex:index animateTransition:animated];
 }
 
 - (UITabBarItem *)itemAtIndexPath:(NSIndexPath *)indexPath {
   return _items[indexPath.item];
+}
+
+- (NSInteger)indexForItem:(nullable UITabBarItem *)item {
+  if (item) {
+    return [_items indexOfObject:item];
+  }
+  return NSNotFound;
 }
 
 - (NSIndexPath *)indexPathForItemAtIndex:(NSInteger)index {
@@ -485,9 +506,9 @@ static void *kItemPropertyContext = &kItemPropertyContext;
   return flowLayout;
 }
 
-- (void)didSelectItemAtIndexPath:(NSIndexPath *)indexPath animateTransition:(BOOL)animate {
+- (void)didSelectItemAtIndex:(NSInteger)index animateTransition:(BOOL)animate {
   void (^animationBlock)(void) = ^{
-    [self updateSelectionIndicatorToIndexPath:indexPath];
+    [self updateSelectionIndicatorToIndex:index];
   };
 
   if (animate) {
@@ -502,8 +523,6 @@ static void *kItemPropertyContext = &kItemPropertyContext;
   } else {
     animationBlock();
   }
-
-  _lastSelectedIndexPath = indexPath;
 }
 
 - (void)updateAlignmentAnimated:(BOOL)animated {
@@ -511,16 +530,18 @@ static void *kItemPropertyContext = &kItemPropertyContext;
   [self updateFlowLayoutMetricsAnimated:animated];
 }
 
-/// Sets _selectionIndicator's bounds and center to display under the item at the given index path
-/// with no animation. May be called from an animation block to animate the transition.
-- (void)updateSelectionIndicatorToIndexPath:(NSIndexPath *)indexPath {
-  if (!indexPath) {
+/// Sets _selectionIndicator's bounds and center to display under the item at the given index with
+/// no animation. May be called from an animation block to animate the transition.
+- (void)updateSelectionIndicatorToIndex:(NSInteger)index {
+  if (index == NSNotFound) {
+    // Hide selection indicator.
+    _selectionIndicator.bounds = CGRectZero;
     return;
   }
 
   // Use layout attributes as the cell may not be visible or loaded yet.
   UICollectionViewLayoutAttributes *attributes =
-      [_flowLayout layoutAttributesForItemAtIndexPath:indexPath];
+      [_flowLayout layoutAttributesForItemAtIndexPath:[self indexPathForItemAtIndex:index]];
 
   // Size selection indicator to a fixed height, equal in width to the selected item's cell.
   CGRect selectionIndicatorBounds = attributes.bounds;
@@ -536,7 +557,7 @@ static void *kItemPropertyContext = &kItemPropertyContext;
 }
 
 - (void)updateFlowLayoutMetricsAnimated:(BOOL)animate {
-  void (^animationBlock)() = ^{
+  void (^animationBlock)(void) = ^{
     [self updateFlowLayoutMetrics];
   };
 
@@ -605,7 +626,7 @@ static void *kItemPropertyContext = &kItemPropertyContext;
 
   // Update selection indicator to potentially new location and size
   // Not animated for the same reason as mentioned above.
-  [self updateSelectionIndicatorToIndexPath:_lastSelectedIndexPath];
+  [self updateSelectionIndicatorToIndex:[self indexForItem:_selectedItem]];
 
   _horizontalSizeClassAtLastMetricsUpdate = horizontalSizeClass;
 }
@@ -775,7 +796,7 @@ static void *kItemPropertyContext = &kItemPropertyContext;
   if (_correctedAttributesForIndexPath) {
     NSPredicate *predicate =
         [NSPredicate predicateWithBlock:^BOOL(UICollectionViewLayoutAttributes *layoutAttributes,
-                                              NSDictionary *__nullable bindings) {
+                                              __unused NSDictionary *__nullable bindings) {
           return CGRectIntersectsRect(layoutAttributes.frame, rect);
         }];
     return [_correctedAttributesForIndexPath.allValues filteredArrayUsingPredicate:predicate];

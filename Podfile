@@ -11,5 +11,4 @@ target 'DogSpotter' do
   pod 'Firebase/Database'
   pod 'Firebase/Auth'
   pod 'SVProgressHUD'
-  pod 'Cluster'
 end

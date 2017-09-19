@@ -32,7 +32,7 @@ typedef void (^MDCFeatureHighlightCompletion)(BOOL accepted);
  MDCFeatureHighlightViewController highlights an element of a UI to introduce features or
  functionality that a user hasn’t tried.
 
- https://material.googleplex.com/growth-communications/feature-discovery.html
+ https://material.io/guidelines/growth-communications/feature-discovery.html
 
  MDCFeatureHighlightViewController should be presented modally and dismissed using either
  |acceptFeature| or |rejectFeature|.
@@ -105,6 +105,34 @@ typedef void (^MDCFeatureHighlightCompletion)(BOOL accepted);
  Should be opaque.
  */
 @property(nonatomic, strong, null_resettable) UIColor *innerHighlightColor;
+
+/**
+ Sets the color to be used for the title text. If nil upon presentation, a color of sufficient
+ contrast to the |outerHighlightColor| will be automatically chosen.
+
+ Defaults to nil.
+ */
+@property(nonatomic, strong, nullable) UIColor *titleColor;
+
+/**
+ Sets the color to be used for the body text. If nil upon presentation, a color of sufficient
+ contrast to the |outerHighlightColor| will be automatically chosen upon presentation.
+
+ Defaults to nil.
+ */
+@property(nonatomic, strong, nullable) UIColor *bodyColor;
+
+/*
+ Indicates whether the feature highlight contents should automatically update their font when the
+ device’s UIContentSizeCategory changes.
+
+ This property is modeled after the adjustsFontForContentSizeCategory property in the
+ UIContentSizeCategoryAdjusting protocol added by Apple in iOS 10.0.
+
+ Default value is NO.
+ */
+@property(nonatomic, readwrite, setter=mdc_setAdjustsFontForContentSizeCategory:)
+    BOOL mdc_adjustsFontForContentSizeCategory UI_APPEARANCE_SELECTOR;
 
 /**
  Dismisses the feature highlight using the 'accept' style dismissal animation and triggers the

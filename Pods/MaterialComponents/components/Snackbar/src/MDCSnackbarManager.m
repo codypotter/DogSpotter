@@ -18,7 +18,7 @@
 #import "MDCSnackbarMessage.h"
 #import "MDCSnackbarMessageView.h"
 #import "MaterialOverlayWindow.h"
-#import "UIApplication+AppExtensions.h"
+#import "MaterialApplication.h"
 #import "private/MDCSnackbarMessageInternal.h"
 #import "private/MDCSnackbarMessageViewInternal.h"
 #import "private/MDCSnackbarOverlayView.h"
@@ -409,7 +409,9 @@ static NSString *const kAllMessagesCategory = @"$$___ALL_MESSAGES___$$";
   // queue.
   NSMutableIndexSet *indexesToRemove = [NSMutableIndexSet indexSet];
   [self.pendingMessages
-      enumerateObjectsUsingBlock:^(MDCSnackbarMessage *pendingMessage, NSUInteger idx, BOOL *stop) {
+      enumerateObjectsUsingBlock:^(MDCSnackbarMessage *pendingMessage,
+                                   NSUInteger idx,
+                                   __unused BOOL *stop) {
         if (!categoryToDismiss || [pendingMessage.category isEqualToString:categoryToDismiss]) {
           // Mark the message for removal from the pending messages list.
           [indexesToRemove addIndex:idx];
@@ -570,6 +572,10 @@ static NSString *const kAllMessagesCategory = @"$$___ALL_MESSAGES___$$";
     _identifier = [NSUUID UUID];
   }
   return self;
+}
+
+- (void)dealloc {
+  [MDCSnackbarManager resumeMessagesWithToken:self];
 }
 
 @end

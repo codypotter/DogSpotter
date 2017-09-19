@@ -80,7 +80,7 @@ static UIEdgeInsets MDCDialogEdgeInsets = {24, 20, 24, 20};
   CGRect presentedViewFrame = CGRectZero;
 
   CGRect containerBounds = self.containerView.bounds;
-  containerBounds.size.height -= [MDCKeyboardWatcher sharedKeyboardWatcher].keyboardOffset;
+  containerBounds.size.height -= [MDCKeyboardWatcher sharedKeyboardWatcher].visibleKeyboardHeight;
 
   presentedViewFrame.size = [self sizeForChildContentContainer:self.presentedViewController
                                        withParentContainerSize:containerBounds.size];
@@ -98,7 +98,7 @@ static UIEdgeInsets MDCDialogEdgeInsets = {24, 20, 24, 20};
 - (void)presentationTransitionWillBegin {
   // TODO: Follow the Material spec description of Autonomous surface creation for both
   // presentation and dismissal of the dialog.
-  // https://spec.googleplex.com/quantum/motion/choreography.html#choreography-creation
+  // https://material.io/guidelines/motion/choreography.html#choreography-creation
 
   // Set the dimming view to the container's bounds and fully transparent.
   self.dimmingView.frame = self.containerView.bounds;
@@ -116,7 +116,8 @@ static UIEdgeInsets MDCDialogEdgeInsets = {24, 20, 24, 20};
       [self.presentedViewController transitionCoordinator];
   if (transitionCoordinator) {
     [transitionCoordinator
-        animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        animateAlongsideTransition:
+            ^(__unused id<UIViewControllerTransitionCoordinatorContext> context) {
           self.dimmingView.alpha = 1.0f;
           self.trackingView.alpha = 1.0f;
         }
@@ -149,7 +150,8 @@ static UIEdgeInsets MDCDialogEdgeInsets = {24, 20, 24, 20};
       [self.presentedViewController transitionCoordinator];
   if (transitionCoordinator != nil) {
     [transitionCoordinator
-        animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        animateAlongsideTransition:
+            ^(__unused id<UIViewControllerTransitionCoordinatorContext> context) {
           self.dimmingView.alpha = 0.0f;
           self.trackingView.alpha = 0.0f;
         }
@@ -224,14 +226,14 @@ static UIEdgeInsets MDCDialogEdgeInsets = {24, 20, 24, 20};
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
   [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
-  [coordinator
-      animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+  [coordinator animateAlongsideTransition:
+      ^(__unused id<UIViewControllerTransitionCoordinatorContext> context) {
         self.dimmingView.frame = self.containerView.bounds;
         CGRect presentedViewFrame = [self frameOfPresentedViewInContainerView];
         self.presentedView.frame = presentedViewFrame;
         self.trackingView.frame = presentedViewFrame;
       }
-                      completion:NULL];
+                               completion:NULL];
 }
 
 /**

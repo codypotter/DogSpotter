@@ -18,12 +18,12 @@
 
 #import "MDCSnackbarOverlayView.h"
 
-#import "MDCSnackbarMessageView.h"
 #import "MDCSnackbarMessageViewInternal.h"
 #import "MaterialAnimationTiming.h"
+#import "MaterialApplication.h"
 #import "MaterialKeyboardWatcher.h"
-#import "MaterialOverlays.h"
-#import "UIApplication+AppExtensions.h"
+#import "MaterialOverlay.h"
+#import "MaterialSnackbar.h"
 
 NSString *const MDCSnackbarOverlayIdentifier = @"MDCSnackbar";
 
@@ -191,7 +191,7 @@ static const CGFloat kMaximumHeight = 80.0f;
  change at any time during runtime.
  */
 - (CGFloat)dynamicBottomMargin {
-  CGFloat keyboardHeight = self.watcher.keyboardOffset;
+  CGFloat keyboardHeight = self.watcher.visibleKeyboardHeight;
   CGFloat userHeight = self.bottomOffset;
 
   return MAX(keyboardHeight, userHeight);
@@ -341,16 +341,8 @@ static const CGFloat kMaximumHeight = 80.0f;
     return CGRectNull;
   }
 
-  UIScreen *screen = window.screen;
-  if ([screen respondsToSelector:@selector(fixedCoordinateSpace)]) {
-    return [self.snackbarView convertRect:self.snackbarView.bounds
-                        toCoordinateSpace:screen.fixedCoordinateSpace];
-  }
-
-  CGRect snackbarWindowFrame =
-      [window convertRect:self.snackbarView.bounds fromView:self.snackbarView];
-  CGRect snackbarScreenFrame = [window convertRect:snackbarWindowFrame toWindow:nil];
-  return snackbarScreenFrame;
+  return [self.snackbarView convertRect:self.snackbarView.bounds
+                      toCoordinateSpace:window.screen.coordinateSpace];
 }
 
 #pragma mark - Presentation/Dismissal
@@ -399,7 +391,7 @@ static const CGFloat kMaximumHeight = 80.0f;
   void (^animations)(void) = ^{
     self.snackbarView.alpha = 1.0;
   };
-  void (^realCompletion)(BOOL) = ^(BOOL finished) {
+  void (^realCompletion)(BOOL) = ^(__unused BOOL finished) {
     if (completion) {
       completion();
     }
@@ -448,7 +440,7 @@ static const CGFloat kMaximumHeight = 80.0f;
         // Trigger snackbar animation.
         [_containingView layoutIfNeeded];
       }
-      completion:^(BOOL finished) {
+      completion:^(__unused BOOL finished) {
         if (completion) {
           completion();
         }
@@ -542,6 +534,18 @@ static const CGFloat kMaximumHeight = 80.0f;
 
     self.bottomConstraint.constant = -[self dynamicBottomMargin];
     [self triggerSnackbarLayoutChange];
+
+    // If there is no snackbar the following method returns CGRectNull, but we still need to notify
+    // observers of bottom offset changes.
+    CGRect frame = [self snackbarRectInScreenCoordinates];
+    if (CGRectIsNull(frame)) {
+      frame = CGRectMake(0, CGRectGetHeight(self.frame) - self.bottomOffset,
+                         CGRectGetWidth(self.frame), self.bottomOffset);
+    }
+    [self notifyOverlayChangeWithFrame:frame
+                              duration:[CATransaction animationDuration]
+                                 curve:UIViewAnimationCurveEaseInOut
+                        timingFunction:nil];
   }
 }
 
@@ -560,6 +564,7 @@ static const CGFloat kMaximumHeight = 80.0f;
   [super layoutSubviews];
 
   if (!self.manualLayoutChange && self.rotationDuration > 0) {
+    [self.containingView layoutIfNeeded];
     [self handleRotation];
   }
 }
@@ -580,18 +585,9 @@ static const CGFloat kMaximumHeight = 80.0f;
   }
 
   self.rotationDuration = duration;
-
-  // On iOS 7, the layout of this overlay view will have already occurred by the time the will
-  // rotation notification is posted. In that event, we need to report rotation here. Opting to
-  // check for version using the UIDevice string methods because we need to perform this check even
-  // if the app was compiled on an iOS 7 SDK and is running on an iOS 8 device.
-  NSString *version = [[UIDevice currentDevice] systemVersion];
-  if ([version compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending) {
-    [self handleRotation];
-  }
 }
 
-- (void)didRotate:(NSNotification *)notification {
+- (void)didRotate:(__unused NSNotification *)notification {
   // The UIApplicationDidChangeStatusBarOrientationNotification happens pretty much immediately
   // after the willRotate notification, before any layouts are changed. By delaying this until the
   // next runloop, any rotation-related layout changes will occur, and we can know that they were

@@ -370,15 +370,14 @@ static NSString *const MDCFlexibleHeaderDelegateKey = @"MDCFlexibleHeaderDelegat
   [super layoutSubviews];
 
   [self fhv_updateShadowPath];
+  [CATransaction begin];
   BOOL disableActions = [CATransaction disableActions];
   [CATransaction setDisableActions:YES];
   _defaultShadowLayer.frame = self.bounds;
   _customShadowLayer.frame = self.bounds;
   _shadowLayer.frame = self.bounds;
-  [_defaultShadowLayer layoutIfNeeded];
-  [_customShadowLayer layoutIfNeeded];
-  [_shadowLayer layoutIfNeeded];
   [CATransaction setDisableActions:disableActions];
+  [CATransaction commit];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
@@ -406,6 +405,13 @@ static NSString *const MDCFlexibleHeaderDelegateKey = @"MDCFlexibleHeaderDelegat
   if (!_interfaceOrientationIsChanging) {
     [self fhv_updateLayout];
   }
+}
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+  [super setBackgroundColor:backgroundColor];
+
+  // Update default shadow to match
+  _defaultShadowLayer.backgroundColor = self.backgroundColor.CGColor;
 }
 
 #pragma mark - Private (fhv_ prefix)
@@ -920,7 +926,8 @@ static BOOL isRunningiOS10_3OrAbove() {
 
 #pragma mark - MDCStatusBarShifterDelegate
 
-- (void)statusBarShifterNeedsStatusBarAppearanceUpdate:(MDCStatusBarShifter *)statusBarShifter {
+- (void)statusBarShifterNeedsStatusBarAppearanceUpdate:
+    (__unused MDCStatusBarShifter *)statusBarShifter {
   // UINavigationController reacts to status bar visibility changes by adjusting the content offset.
   // To counteract this sort of behavior, we forcefully stash the content offset and restore it
   // after updating the status bar appearance.
@@ -933,7 +940,7 @@ static BOOL isRunningiOS10_3OrAbove() {
   _isChangingStatusBarVisibility = NO;
 }
 
-- (void)statusBarShifter:(MDCStatusBarShifter *)statusBarShifter
+- (void)statusBarShifter:(__unused MDCStatusBarShifter *)statusBarShifter
     wantsSnapshotViewAdded:(UIView *)view {
   [self addSubview:view];
 }
@@ -978,7 +985,7 @@ static BOOL isRunningiOS10_3OrAbove() {
   if (!_sharedWithManyScrollViews || !_trackingInfo) {
     [self fhv_addInsetsToScrollView:_trackingScrollView];
   }
-  void (^animate)() = ^{
+  void (^animate)(void) = ^{
     [self fhv_updateLayout];
   };
   void (^completion)(BOOL) = ^(BOOL finished) {
@@ -1112,14 +1119,14 @@ static BOOL isRunningiOS10_3OrAbove() {
   [_statusBarShifter interfaceOrientationDidChange];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size
+- (void)viewWillTransitionToSize:(__unused CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
   [self interfaceOrientationWillChange];
-  [coordinator
-      animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+  [coordinator animateAlongsideTransition:
+      ^(__unused id<UIViewControllerTransitionCoordinatorContext> context) {
         [self interfaceOrientationIsChanging];
       }
-      completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+      completion:^(__unused id<UIViewControllerTransitionCoordinatorContext> context) {
         [self interfaceOrientationDidChange];
       }];
 }
@@ -1184,7 +1191,7 @@ static BOOL isRunningiOS10_3OrAbove() {
   [self fhv_updateLayout];
 }
 
-- (BOOL)trackingScrollViewWillEndDraggingWithVelocity:(CGPoint)velocity
+- (BOOL)trackingScrollViewWillEndDraggingWithVelocity:(__unused CGPoint)velocity
                                   targetContentOffset:(inout CGPoint *)targetContentOffset {
 #if DEBUG
   _didAdjustTargetContentOffset = YES;

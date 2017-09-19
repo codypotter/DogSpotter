@@ -16,7 +16,7 @@
 
 #import "MDCFeatureHighlightAnimationController.h"
 
-#import "MDCFeatureHighlightView.h"
+#import "MDCFeatureHighlightView+Private.h"
 
 const NSTimeInterval kMDCFeatureHighlightPresentationDuration = 0.35f;
 const NSTimeInterval kMDCFeatureHighlightDismissalDuration = 0.2f;
@@ -24,7 +24,7 @@ const NSTimeInterval kMDCFeatureHighlightDismissalDuration = 0.2f;
 @implementation MDCFeatureHighlightAnimationController
 
 - (NSTimeInterval)transitionDuration:
-        (nullable id<UIViewControllerContextTransitioning>)transitionContext {
+    (nullable __unused id<UIViewControllerContextTransitioning>)transitionContext {
   if (self.presenting) {
     return kMDCFeatureHighlightPresentationDuration;
   } else {
@@ -71,15 +71,15 @@ const NSTimeInterval kMDCFeatureHighlightDismissalDuration = 0.2f;
       options:UIViewAnimationOptionBeginFromCurrentState
       animations:^{
         // We have to perform an animation on highlightView in this block or else UIKit
-        // will not know we are performing an animation and will cancel our
-        // CAAnimations.
+        // will not know we are performing an animation and will call the completion block
+        // immediately, causing our CAAnimations to be cut short.
         if (self.presenting) {
           [highlightView layoutAppearing];
         } else {
           [highlightView layoutDisappearing];
         }
       }
-      completion:^(BOOL finished) {
+      completion:^(__unused BOOL finished) {
         // If we're dismissing, remove the highlight view from the hierarchy
         if (!self.presenting) {
           [fromView removeFromSuperview];

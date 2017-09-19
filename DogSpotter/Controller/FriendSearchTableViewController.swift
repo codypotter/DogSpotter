@@ -15,7 +15,7 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
     var usersArray = [NSDictionary?]()
     var filteredUsers = [NSDictionary?]()
 
-    var databaseRef = FIRDatabase.database().reference()
+    var databaseRef = Database.database().reference()
     
     let searchController = UISearchController(searchResultsController: nil)
     

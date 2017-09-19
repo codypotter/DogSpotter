@@ -16,14 +16,16 @@
 
 #import "MDCFeatureHighlightViewController.h"
 
+#import "MDFTextAccessibility.h"
+#import "MaterialTypography.h"
 #import "private/MDCFeatureHighlightAnimationController.h"
-#import "private/MDCFeatureHighlightView.h"
+#import "private/MDCFeatureHighlightView+Private.h"
 
-const CGFloat kMDCFeatureHighlightOuterHighlightAlpha = 0.96f;
-
+static const CGFloat kMDCFeatureHighlightLineSpacing = 1.0f;
 static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
 
 @interface MDCFeatureHighlightViewController () <UIViewControllerTransitioningDelegate>
+@property(nonatomic, strong) MDCFeatureHighlightView *view;
 @end
 
 @implementation MDCFeatureHighlightViewController {
@@ -35,6 +37,8 @@ static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
   UIView *_highlightedView;
 }
 
+@dynamic view;
+
 - (nonnull instancetype)initWithHighlightedView:(nonnull UIView *)highlightedView
                                     andShowView:(nonnull UIView *)displayedView
                                      completion:(nullable MDCFeatureHighlightCompletion)completion {
@@ -45,10 +49,7 @@ static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
     _animationController = [[MDCFeatureHighlightAnimationController alloc] init];
     _animationController.presenting = YES;
 
-    [_highlightedView addObserver:self
-                       forKeyPath:@"frame"
-                          options:NSKeyValueObservingOptionNew
-                          context:nil];
+    _displayedView.accessibilityTraits = UIAccessibilityTraitButton;
 
     super.transitioningDelegate = self;
     super.modalPresentationStyle = UIModalPresentationCustom;
@@ -57,13 +58,14 @@ static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
 }
 
 /* Disable setter. Always use internal transition controller */
-- (void)setTransitioningDelegate:(id<UIViewControllerTransitioningDelegate>)transitioningDelegate {
+- (void)setTransitioningDelegate:
+      (__unused id<UIViewControllerTransitioningDelegate>)transitioningDelegate {
   NSAssert(NO, @"MDCAlertController.transitioningDelegate cannot be changed.");
   return;
 }
 
 /* Disable setter. Always use custom presentation style */
-- (void)setModalPresentationStyle:(UIModalPresentationStyle)modalPresentationStyle {
+- (void)setModalPresentationStyle:(__unused UIModalPresentationStyle)modalPresentationStyle {
   NSAssert(NO, @"MDCAlertController.modalPresentationStyle cannot be changed.");
   return;
 }
@@ -87,22 +89,11 @@ static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
                             completion:completion];
 }
 
-- (void)dealloc {
-  [_pulseTimer invalidate];
-  [_highlightedView removeObserver:self forKeyPath:@"frame"];
-}
-
 - (void)loadView {
-  _displayedView.accessibilityTraits = UIAccessibilityTraitButton;
-
   _featureHighlightView = [[MDCFeatureHighlightView alloc] initWithFrame:CGRectZero];
   _featureHighlightView.displayedView = _displayedView;
-  _featureHighlightView.titleLabel.text = self.titleText;
-  _featureHighlightView.bodyLabel.text = self.bodyText;
   _featureHighlightView.autoresizingMask =
       UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-  _featureHighlightView.outerHighlightColor = self.outerHighlightColor;
-  _featureHighlightView.innerHighlightColor = self.innerHighlightColor;
 
   __weak __typeof__(self) weakSelf = self;
   _featureHighlightView.interactionBlock = ^(BOOL accepted) {
@@ -110,7 +101,22 @@ static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
     [strongSelf dismiss:accepted];
   };
 
+  UIGestureRecognizer *tapGestureRecognizer =
+      [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(acceptFeature)];
+  [_displayedView addGestureRecognizer:tapGestureRecognizer];
+
   self.view = _featureHighlightView;
+}
+
+- (void)viewWillLayoutSubviews {
+  _featureHighlightView.titleLabel.text = self.titleText;
+  [self attributedStringForString:self.titleText lineSpacing:kMDCFeatureHighlightLineSpacing];
+  _featureHighlightView.bodyLabel.attributedText =
+      [self attributedStringForString:self.bodyText lineSpacing:kMDCFeatureHighlightLineSpacing];
+}
+
+- (void)dealloc {
+  [_pulseTimer invalidate];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -119,6 +125,34 @@ static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
   CGPoint point = [_highlightedView.superview convertPoint:_highlightedView.center
                                          toCoordinateSpace:_featureHighlightView];
   _featureHighlightView.highlightPoint = point;
+
+  if (!self.bodyColor) {
+    MDFTextAccessibilityOptions options = MDFTextAccessibilityOptionsPreferLighter;
+    if ([MDFTextAccessibility isLargeForContrastRatios:_featureHighlightView.bodyLabel.font]) {
+      options |= MDFTextAccessibilityOptionsLargeFont;
+    }
+
+    UIColor *outerColor = [self.outerHighlightColor colorWithAlphaComponent:1.0];
+    self.bodyColor =
+        [MDFTextAccessibility textColorOnBackgroundColor:outerColor
+                                         targetTextAlpha:[MDCTypography captionFontOpacity]
+                                                 options:options];
+  }
+
+  if (!self.titleColor) {
+    MDFTextAccessibilityOptions options = MDFTextAccessibilityOptionsPreferLighter;
+    if ([MDFTextAccessibility isLargeForContrastRatios:_featureHighlightView.titleLabel.font]) {
+      options |= MDFTextAccessibilityOptionsLargeFont;
+    }
+    UIColor *outerColor = [self.outerHighlightColor colorWithAlphaComponent:1.0];
+    // Since MDFTextAccessibility can return either a dark value or light value color we want to
+    // guarantee that the title and body have the same value.
+    CGFloat titleAlpha = [MDFTextAccessibility minAlphaOfTextColor:self.bodyColor
+                                                 onBackgroundColor:outerColor
+                                                           options:options];
+    titleAlpha = MAX([MDCTypography titleFontOpacity], titleAlpha);
+    self.titleColor = [self.bodyColor colorWithAlphaComponent:titleAlpha];
+  }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -137,18 +171,51 @@ static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
   [_pulseTimer invalidate];
 }
 
-- (UIColor *)outerHighlightColor {
-  if (!_outerHighlightColor) {
-    return [[UIColor blueColor] colorWithAlphaComponent:kMDCFeatureHighlightOuterHighlightAlpha];
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+  [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+  [coordinator animateAlongsideTransition:^(__unused
+                   id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
+    CGPoint point = [_highlightedView.superview convertPoint:_highlightedView.center
+                                                      toView:_featureHighlightView];
+
+    _featureHighlightView.highlightPoint = point;
+    [_featureHighlightView layoutIfNeeded];
+    [_featureHighlightView updateOuterHighlight];
   }
-  return _outerHighlightColor;
+                               completion:nil];
+}
+
+- (UIColor *)outerHighlightColor {
+  return self.view.outerHighlightColor;
+}
+
+- (void)setOuterHighlightColor:(UIColor *)outerHighlightColor {
+  self.view.outerHighlightColor = outerHighlightColor;
 }
 
 - (UIColor *)innerHighlightColor {
-  if (!_innerHighlightColor) {
-    return [UIColor whiteColor];
-  }
-  return _innerHighlightColor;
+  return self.view.innerHighlightColor;
+}
+
+- (void)setInnerHighlightColor:(UIColor *)innerHighlightColor {
+  self.view.innerHighlightColor = innerHighlightColor;
+}
+
+- (UIColor *)titleColor {
+  return self.view.titleColor;
+}
+
+- (void)setTitleColor:(UIColor *)titleColor {
+  self.view.titleColor = titleColor;
+}
+
+- (UIColor *)bodyColor {
+  return self.view.bodyColor;
+}
+
+- (void)setBodyColor:(UIColor *)bodyColor {
+  self.view.bodyColor = bodyColor;
 }
 
 - (void)acceptFeature {
@@ -174,24 +241,47 @@ static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
                            }];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary<NSString *, id> *)change
-                       context:(void *)context {
-  if (object == _highlightedView && [keyPath isEqualToString:@"frame"]) {
-    CGPoint point = [_highlightedView.superview convertPoint:_highlightedView.center
-                                                      toView:_featureHighlightView];
-    _featureHighlightView.highlightPoint = point;
-    [_featureHighlightView layoutIfNeeded];
+#pragma mark - Dynamic Type
+
+- (void)mdc_setAdjustsFontForContentSizeCategory:(BOOL)adjusts {
+  _mdc_adjustsFontForContentSizeCategory = adjusts;
+
+  if (_mdc_adjustsFontForContentSizeCategory) {
+    [self updateFontsForDynamicType];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(contentSizeCategoryDidChange:)
+                                                 name:UIContentSizeCategoryDidChangeNotification
+                                               object:nil];
+  } else {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIContentSizeCategoryDidChangeNotification
+                                                  object:nil];
   }
+}
+
+- (void)contentSizeCategoryDidChange:(__unused NSNotification *)notification {
+  [self updateFontsForDynamicType];
+}
+
+- (void)updateFontsForDynamicType {
+  [_featureHighlightView updateFontsForDynamicType];
+  [_featureHighlightView layoutIfNeeded];
+}
+
+#pragma mark - Accessibility
+
+- (BOOL)accessibilityPerformEscape {
+  [self rejectFeature];
+
+  return YES;
 }
 
 #pragma mark - UIViewControllerTransitioningDelegate
 
 - (id<UIViewControllerAnimatedTransitioning>)
     animationControllerForPresentedController:(UIViewController *)presented
-                         presentingController:(UIViewController *)presenting
-                             sourceController:(UIViewController *)source {
+                         presentingController:(__unused UIViewController *)presenting
+                             sourceController:(__unused UIViewController *)source {
   if (presented == self) {
     return _animationController;
   }
@@ -204,6 +294,21 @@ static const CGFloat kMDCFeatureHighlightPulseAnimationInterval = 1.5f;
     return _animationController;
   }
   return nil;
+}
+
+#pragma mark - Private
+
+- (NSAttributedString *)attributedStringForString:(NSString *)string
+                                      lineSpacing:(CGFloat)lineSpacing {
+  if (!string) {
+    return nil;
+  }
+  NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+  paragraphStyle.lineSpacing = lineSpacing;
+
+  NSDictionary *attrs = @{NSParagraphStyleAttributeName : paragraphStyle};
+
+  return [[NSAttributedString alloc] initWithString:string attributes:attrs];
 }
 
 @end

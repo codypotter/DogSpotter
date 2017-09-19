@@ -24,6 +24,7 @@
 #import "MaterialShadowElevations.h"
 #import "MaterialShadowLayer.h"
 #import "MaterialTypography.h"
+#import "MDFTextAccessibility.h"
 #import "private/MaterialAppBarStrings.h"
 #import "private/MaterialAppBarStrings_table.h"
 
@@ -36,6 +37,40 @@ static const CGFloat kStatusBarHeight = 20;
 
 // The Bundle for string resources.
 static NSString *const kMaterialAppBarBundle = @"MaterialAppBar.bundle";
+
+@implementation MDCAppBarTextColorAccessibilityMutator
+
+- (void)mutate:(nonnull MDCAppBar *)appBar {
+  // Determine what is the appropriate background color
+  // Because navigation bar renders above headerview, it takes presedence
+  UIColor *backgroundColor = appBar.navigationBar.backgroundColor ?:
+      appBar.headerViewController.headerView.backgroundColor;
+  if (!backgroundColor) {
+    return;
+  }
+
+  // Update title label color based on navigationBar/headerView backgroundColor
+  NSMutableDictionary *textAttr =
+      [NSMutableDictionary dictionaryWithDictionary:[appBar.navigationBar titleTextAttributes]];
+  MDFTextAccessibilityOptions options = 0;
+  BOOL isLarge =
+      [MDCTypography isLargeForContrastRatios:[textAttr objectForKey:NSFontAttributeName]];
+  if (isLarge) {
+    options |= MDFTextAccessibilityOptionsLargeFont;
+  }
+  UIColor *textColor =
+      [MDFTextAccessibility textColorOnBackgroundColor:backgroundColor
+                                       targetTextAlpha:1.0
+                                                  options:options];
+
+  [textAttr setObject:textColor forKey:NSForegroundColorAttributeName];
+  [appBar.navigationBar setTitleTextAttributes:textAttr];
+
+  // Update button's tint color based on navigationBar backgroundColor
+  appBar.navigationBar.tintColor = textColor;
+}
+
+@end
 
 @class MDCAppBarViewController;
 
@@ -213,7 +248,7 @@ static NSString *const kMaterialAppBarBundle = @"MaterialAppBar.bundle";
   }
   UIBarButtonItem *backBarButtonItem = previousViewControler.navigationItem.backBarButtonItem;
   if (!backBarButtonItem) {
-    UIImage *backButtonImage = [UIImage imageWithContentsOfFile:[MDCIcons pathFor_ic_arrow_back]];
+    UIImage *backButtonImage = [MDCIcons imageFor_ic_arrow_back];
     backButtonImage = [backButtonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     if (self.navigationBar.mdc_effectiveUserInterfaceLayoutDirection ==
         UIUserInterfaceLayoutDirectionRightToLeft) {
@@ -251,7 +286,7 @@ static NSString *const kMaterialAppBarBundle = @"MaterialAppBar.bundle";
   // In iOS 8+, we could be included by way of a dynamic framework, and our resource bundles may
   // not be in the main .app bundle, but rather in a nested framework, so figure out where we live
   // and use that as the search location.
-  NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+  NSBundle *bundle = [NSBundle bundleForClass:[MDCAppBar class]];
   NSString *resourcePath = [(nil == bundle ? [NSBundle mainBundle] : bundle)resourcePath];
   return [resourcePath stringByAppendingPathComponent:bundleName];
 }
@@ -295,7 +330,7 @@ static NSString *const kMaterialAppBarBundle = @"MaterialAppBar.bundle";
 
 #pragma mark User actions
 
-- (void)didTapBackButton:(id)sender {
+- (void)didTapBackButton:(__unused id)sender {
   UIViewController *pvc = self.flexibleHeaderParentViewController;
   if (pvc.navigationController && pvc.navigationController.viewControllers.count > 1) {
     [pvc.navigationController popViewControllerAnimated:YES];

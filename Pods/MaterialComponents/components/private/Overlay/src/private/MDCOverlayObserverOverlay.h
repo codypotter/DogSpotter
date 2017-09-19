@@ -16,7 +16,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "MDCOverlayTransitioning.h"
+#import "MaterialOverlay.h"
 
 /**
  Object representing a single overlay being displayed on screen.
@@ -31,6 +31,6 @@
 /**
  The frame of the overlay, in screen coordinates.
  */
-@property(nonatomic) CGRect frame;
+@property(nonatomic, assign) CGRect frame;
 
 @end

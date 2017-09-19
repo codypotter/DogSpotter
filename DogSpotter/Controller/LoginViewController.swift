@@ -201,7 +201,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.emailTextField.isEnabled = false
         self.passwordTextField.isEnabled = false
         self.userNameTextField.isEnabled = false
-        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+        Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
             
             if error != nil {
                 print(error!)
@@ -268,7 +268,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.passwordTextField.isEnabled = false
         self.userNameTextField.isEnabled = false
         
-        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
+        Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
                 print(error!)
                 SVProgressHUD.dismiss()
@@ -277,7 +277,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
             print("Created user successfully!")
             
-            let userRef = FIRDatabase.database().reference().child("users").child((FIRAuth.auth()?.currentUser?.uid)!)
+            let userRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!)
             let userValues = ["username": self.userNameTextField.text!,
                               "email": self.emailTextField.text!]
             
@@ -289,7 +289,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 }
             })
             
-            let changeRequest = user?.profileChangeRequest()
+            let changeRequest = user?.createProfileChangeRequest()
             changeRequest?.displayName = userName
             changeRequest?.commitChanges(completion: { (err) in
                 if err != nil {

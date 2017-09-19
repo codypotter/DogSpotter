@@ -16,8 +16,13 @@
 
 #import "MDCActivityIndicator.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "MaterialRTL.h"
-#import "UIApplication+AppExtensions.h"
+#import "MaterialApplication.h"
+#import "private/MDCActivityIndicator+Private.h"
+#import "private/MaterialActivityIndicatorStrings.h"
+#import "private/MaterialActivityIndicatorStrings_table.h"
 
 static const NSInteger kMDCActivityIndicatorTotalDetentCount = 5;
 static const NSTimeInterval kMDCActivityIndicatorAnimateOutDuration = 0.1f;
@@ -30,22 +35,14 @@ static const CGFloat kOuterRotationIncrement =
 static const CGFloat kSpinnerRadius = 12.f;
 static const CGFloat kStrokeLength = 0.75f;
 
+// The Bundle for string resources.
+static NSString *const kMaterialActivityIndicatorBundle = @"MaterialActivityIndicator.bundle";
+
 /**
  Total rotation (outer rotation + stroke rotation) per _cycleCount. One turn is 2.0f.
  */
 static const CGFloat kSingleCycleRotation =
     2 * kStrokeLength + kCycleRotation + 1.0f / kMDCActivityIndicatorTotalDetentCount;
-
-/*
- States for the internal state machine. The states represent the last animation completed.
- It provides information required to select the next animation.
- */
-typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
-  MDCActivityIndicatorStateIndeterminate,
-  MDCActivityIndicatorStateTransitionToDeterminate,
-  MDCActivityIndicatorStateDeterminate,
-  MDCActivityIndicatorStateTransitionToIndeterminate,
-};
 
 @interface MDCActivityIndicator ()
 
@@ -56,10 +53,11 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
 @property(nonatomic, assign, readonly) CGFloat minStrokeDifference;
 
 /**
- The current color count for the spinner. Subclasses can change this value to start the spinner at
- a different color.
+ The index of the current stroke color in the @c cycleColors array.
+
+ @note Subclasses can change this value to start the spinner at a different color.
  */
-@property(nonatomic, assign) NSUInteger currentColorCount;
+@property(nonatomic, assign) NSUInteger cycleColorsIndex;
 
 /**
  The current cycle count.
@@ -115,8 +113,17 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
   self = [super initWithCoder:coder];
   if (self) {
     [self commonMDCActivityIndicatorInit];
+    // TODO: Overwrite cycleColors if the value is present in the coder
+    // https://github.com/material-components/material-components-ios/issues/1530
   }
   return self;
+}
+
++ (void)initialize {
+  // Ensure we do not set the UIAppearance proxy if subclasses are initialized
+  if (self == [MDCActivityIndicator class]) {
+    [MDCActivityIndicator appearance].cycleColors = [MDCActivityIndicator defaultCycleColors];
+  }
 }
 
 - (void)dealloc {
@@ -155,8 +162,8 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
   _strokeWidth = 2.0f;
 
   // Colors.
-  _cycleColors = [MDCActivityIndicator defaultColors];
-  _currentColorCount = 0;
+  _cycleColorsIndex = 0;
+  _cycleColors = [MDCActivityIndicator defaultCycleColors];
 
   // Track layer.
   _trackLayer = [CAShapeLayer layer];
@@ -238,7 +245,7 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
 }
 
 - (void)resetStrokeColor {
-  _currentColorCount = 0;
+  _cycleColorsIndex = 0;
 
   [self updateStrokeColor];
 }
@@ -265,7 +272,7 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
   }
 }
 
-- (void)setIndicatorMode:(MDCActivityIndicatorMode)mode animated:(BOOL)animated {
+- (void)setIndicatorMode:(MDCActivityIndicatorMode)mode animated:(__unused BOOL)animated {
   [self setIndicatorMode:mode];
 }
 
@@ -384,6 +391,18 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
   }];
 }
 
+- (void)setCycleColors:(NSArray<UIColor *> *)cycleColors {
+  if (cycleColors.count) {
+    _cycleColors = [cycleColors copy];
+  } else {
+    _cycleColors = [MDCActivityIndicator defaultCycleColors];
+  }
+
+  if (self.cycleColors.count) {
+    [self setStrokeColor:self.cycleColors[0]];
+  }
+}
+
 - (void)updateStrokePath {
   CGFloat offsetRadius = _radius - _strokeLayer.lineWidth / 2.0f;
   UIBezierPath *strokePath = [UIBezierPath bezierPathWithArcCenter:_strokeLayer.position
@@ -398,10 +417,11 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
 }
 
 - (void)updateStrokeColor {
-  if (_cycleColors.count > 0) {
-    [self setStrokeColor:_cycleColors[_currentColorCount]];
+  if (self.cycleColors.count > 0 && self.cycleColors.count > self.cycleColorsIndex) {
+    [self setStrokeColor:self.cycleColors[self.cycleColorsIndex]];
   } else {
-    [self setStrokeColor:[MDCActivityIndicator defaultColors][0]];
+    NSAssert(NO, @"cycleColorsIndex is outside the bounds of cycleColors.");
+    [self setStrokeColor:[[MDCActivityIndicator defaultCycleColors] firstObject]];
   }
 }
 
@@ -682,8 +702,8 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
     return;
   }
   if (state == MDCActivityIndicatorStateIndeterminate) {
-    if (_cycleColors.count > 0) {
-      _currentColorCount = (_currentColorCount + 1) % _cycleColors.count;
+    if (self.cycleColors.count > 0) {
+      self.cycleColorsIndex = (self.cycleColorsIndex + 1) % self.cycleColors.count;
       [self updateStrokeColor];
     }
     _cycleCount = (_cycleCount + 1) % kMDCActivityIndicatorTotalDetentCount;
@@ -771,6 +791,19 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
   return kSpinnerRadius * 2.f;
 }
 
++ (NSArray<UIColor *> *)defaultCycleColors {
+  static NSArray<UIColor *> *s_defaultCycleColors;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    s_defaultCycleColors =
+    @[ [[UIColor alloc] initWithRed:0.129f green:0.588f blue:0.953f alpha:1],
+       [[UIColor alloc] initWithRed:0.957f green:0.263f blue:0.212f alpha:1],
+       [[UIColor alloc] initWithRed:1.0f green:0.922f blue:0.231f alpha:1],
+       [[UIColor alloc] initWithRed:0.298f green:0.686f blue:0.314f alpha:1] ];
+  });
+  return s_defaultCycleColors;
+}
+
 - (void)applyPropertiesWithoutAnimation:(void (^)(void))setPropBlock {
   [CATransaction begin];
 
@@ -781,18 +814,73 @@ typedef NS_ENUM(NSInteger, MDCActivityIndicatorState) {
   [CATransaction commit];
 }
 
-+ (NSArray<UIColor *> *)defaultColors {
-  static NSArray *defaultColors;
+#pragma mark - Resource Bundle
+
++ (NSBundle *)bundle {
+  static NSBundle *bundle = nil;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    defaultColors = @[
-      [[UIColor alloc] initWithRed:0.129f green:0.588f blue:0.953f alpha:1],
-      [[UIColor alloc] initWithRed:0.957f green:0.263f blue:0.212f alpha:1],
-      [[UIColor alloc] initWithRed:1.0f green:0.922f blue:0.231f alpha:1],
-      [[UIColor alloc] initWithRed:0.298f green:0.686f blue:0.314f alpha:1]
-    ];
+    bundle = [NSBundle bundleWithPath:[self bundlePathWithName:kMaterialActivityIndicatorBundle]];
   });
-  return defaultColors;
+
+  return bundle;
+}
+
++ (NSString *)bundlePathWithName:(NSString *)bundleName {
+  // In iOS 8+, we could be included by way of a dynamic framework, and our resource bundles may
+  // not be in the main .app bundle, but rather in a nested framework, so figure out where we live
+  // and use that as the search location.
+  NSBundle *bundle = [NSBundle bundleForClass:[MDCActivityIndicator class]];
+  NSString *resourcePath = [(nil == bundle ? [NSBundle mainBundle] : bundle)resourcePath];
+  return [resourcePath stringByAppendingPathComponent:bundleName];
+}
+
+#pragma mark - Accessibility
+
+- (BOOL)isAccessibilityElement {
+  return YES;
+}
+
+- (NSString *)accessibilityLabel {
+
+  if (self.isAnimating) {
+    if (self.indicatorMode == MDCActivityIndicatorModeIndeterminate) {
+      NSString *key =
+      kMaterialActivityIndicatorStringTable[kStr_MaterialActivityIndicatorInProgressAccessibilityLabel];
+      return NSLocalizedStringFromTableInBundle(key,
+                                                kMaterialActivityIndicatorStringsTableName,
+                                                [[self class] bundle],
+                                                @"In Progress");
+    } else {
+      NSUInteger percentage = (int)(self.progress * 100);
+      NSString *key =
+      kMaterialActivityIndicatorStringTable[kStr_MaterialActivityIndicatorProgressCompletedAccessibilityLabel];
+      NSString *localizedString = NSLocalizedStringFromTableInBundle(key,
+                                                kMaterialActivityIndicatorStringsTableName,
+                                                [[self class] bundle],
+                                                @"{percentage} Percent Complete");
+      return [NSString localizedStringWithFormat:localizedString, percentage];
+    }
+  } else {
+    NSString *key =
+        kMaterialActivityIndicatorStringTable[kStr_MaterialActivityIndicatorProgressHaltedAccessibilityLabel];
+    return NSLocalizedStringFromTableInBundle(key,
+                                              kMaterialActivityIndicatorStringsTableName,
+                                              [[self class] bundle],
+                                              @"Progress Halted");
+  }
+}
+
+- (UIAccessibilityTraits)accessibilityTraits {
+  return UIAccessibilityTraitUpdatesFrequently;
+}
+
+- (NSString *)accessibilityValue {
+  if (self.isAnimating) {
+    return [NSNumberFormatter localizedStringFromNumber:@1 numberStyle:NSNumberFormatterNoStyle];
+  } else {
+    return [NSNumberFormatter localizedStringFromNumber:@0 numberStyle:NSNumberFormatterNoStyle];
+  }
 }
 
 @end

@@ -15,7 +15,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
 
     @IBOutlet var map: MKMapView!
     
-    var authHandle: FIRAuthStateDidChangeListenerHandle?
+    var authHandle: AuthStateDidChangeListenerHandle?
     var dogs: [Dog] = [Dog]()
     
     let delegate = UIApplication.shared.delegate as! AppDelegate
@@ -28,7 +28,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.userTrackingMode = .follow
         self.map.delegate = self
         self.map.mapType = .hybrid
-        let userDogRef = FIRDatabase.database().reference().child("users").child((FIRAuth.auth()?.currentUser?.uid)!).child("dogs")
+        let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
         
         userDogRef.observe(.childAdded, with: { (snapshot) in
             if snapshot.value == nil {
@@ -39,7 +39,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 let snapshotValue = snapshot.value as! Dictionary<String, String>
                 let dogID = snapshotValue["dogID"]!
                 
-                let dogRef = FIRDatabase.database().reference().child("dogs").child(dogID)
+                let dogRef = Database.database().reference().child("dogs").child(dogID)
                 dogRef.observeSingleEvent(of: .value, with: { (snap) in
                     print("Found dog data!")
                     let value = snap.value as! Dictionary<String, String>
@@ -76,8 +76,8 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         
         
         //MARK: Auto-Logout handler
-        authHandle = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
-            if FIRAuth.auth()?.currentUser == nil {
+        authHandle = Auth.auth().addStateDidChangeListener({ (auth, user) in
+            if Auth.auth().currentUser == nil {
                 self.performSegue(withIdentifier: "showLoginViewController", sender: self)
             }
         })

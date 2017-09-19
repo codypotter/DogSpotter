@@ -20,8 +20,6 @@
 /**
  A Core Animation layer that draws and animates the ink effect.
 
- Exact behaviour of the ink splash is defined in this sandbox demo: http://go/qinkdemo.
-
  Quick summary of how the ink ripple works:
 
  1. On touch down, blast initiates from the touch point.
@@ -80,7 +78,7 @@
  @param completionBlock Block called after the completion of the animation.
  @param point Point at which the ink spreads from.
  */
-- (void)spreadFromPoint:(CGPoint)point completion:(void (^)())completionBlock;
+- (void)spreadFromPoint:(CGPoint)point completion:(void (^)(void))completionBlock;
 
 /**
  Dissipate ink blast, should be called on touch up.
@@ -89,7 +87,7 @@
 
  @param completionBlock Block called after the completion of the evaporation.
  */
-- (void)evaporateWithCompletion:(void (^)())completionBlock;
+- (void)evaporateWithCompletion:(void (^)(void))completionBlock;
 
 /**
  Dissipates the ink blast, but condenses to a point. Used for touch exit or cancel.
@@ -99,6 +97,6 @@
  @param point Evaporate the ink towards the point.
  @param completionBlock Block called after the completion of the evaporation.
  */
-- (void)evaporateToPoint:(CGPoint)point completion:(void (^)())completionBlock;
+- (void)evaporateToPoint:(CGPoint)point completion:(void (^)(void))completionBlock;
 
 @end

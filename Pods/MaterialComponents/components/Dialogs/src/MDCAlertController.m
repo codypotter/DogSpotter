@@ -20,6 +20,11 @@
 #import "MaterialButtons.h"
 #import "MaterialRTL.h"
 #import "MaterialTypography.h"
+#import "private/MaterialDialogsStrings.h"
+#import "private/MaterialDialogsStrings_table.h"
+
+// The Bundle for string resources.
+static NSString *const kMaterialDialogsBundle = @"MaterialDialogs.bundle";
 
 @interface MDCAlertAction ()
 
@@ -44,7 +49,7 @@
   return self;
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(__unused NSZone *)zone {
   MDCAlertAction *action = [[self class] actionWithTitle:self.title handler:self.completionHandler];
 
   return action;
@@ -62,7 +67,7 @@ static const CGFloat MDCDialogActionsVerticalPadding = 8.0;
 static const CGFloat MDCDialogActionButtonHeight = 36.0;
 static const CGFloat MDCDialogActionButtonMinimumWidth = 48.0;
 
-static const CGFloat MDCDialogMessageOpacity = 0.38f;
+static const CGFloat MDCDialogMessageOpacity = 0.54f;
 
 @interface MDCAlertController ()
 
@@ -123,13 +128,14 @@ static const CGFloat MDCDialogMessageOpacity = 0.38f;
 }
 
 /* Disable setter. Always use internal transition controller */
-- (void)setTransitioningDelegate:(id<UIViewControllerTransitioningDelegate>)transitioningDelegate {
+- (void)setTransitioningDelegate:
+    (__unused id<UIViewControllerTransitioningDelegate>)transitioningDelegate {
   NSAssert(NO, @"MDCAlertController.transitioningDelegate cannot be changed.");
   return;
 }
 
 /* Disable setter. Always use custom presentation style */
-- (void)setModalPresentationStyle:(UIModalPresentationStyle)modalPresentationStyle {
+- (void)setModalPresentationStyle:(__unused UIModalPresentationStyle)modalPresentationStyle {
   NSAssert(NO, @"MDCAlertController.modalPresentationStyle cannot be changed.");
   return;
 }
@@ -170,8 +176,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.38f;
   MDCFlatButton *actionButton = [[MDCFlatButton alloc] initWithFrame:CGRectZero];
   actionButton.mdc_adjustsFontForContentSizeCategory = self.mdc_adjustsFontForContentSizeCategory;
   [actionButton setTitle:action.title forState:UIControlStateNormal];
-  // TODO(iangordon): Determine default text color values for Normal and Disabled
-  [actionButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+  // TODO(#1726): Determine default text color values for Normal and Disabled
   [actionButton sizeToFit];
   CGRect buttonRect = actionButton.bounds;
   buttonRect.size.height = MAX(buttonRect.size.height, MDCDialogActionButtonHeight);
@@ -215,7 +220,7 @@ static const CGFloat MDCDialogMessageOpacity = 0.38f;
 }
 
 // Handles UIContentSizeCategoryDidChangeNotifications
-- (void)contentSizeCategoryDidChange:(NSNotification *)notification {
+- (void)contentSizeCategoryDidChange:(__unused NSNotification *)notification {
   [self updateFontsForDynamicType];
 }
 
@@ -288,6 +293,36 @@ static const CGFloat MDCDialogMessageOpacity = 0.38f;
   _previousLayoutSize = CGSizeZero;
 
   [self.view setNeedsLayout];
+
+  NSString *key =
+      kMaterialDialogsStringTable[kStr_MaterialDialogsPresentedAccessibilityAnnouncement];
+  NSString *announcement = NSLocalizedStringFromTableInBundle(key,
+                                                              kMaterialDialogsStringsTableName,
+                                                              [[self class] bundle],
+                                                              @"Alert");
+  UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
+                                  announcement);
+}
+
+#pragma mark - Resource bundle
+
++ (NSBundle *)bundle {
+  static NSBundle *bundle = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    bundle = [NSBundle bundleWithPath:[self bundlePathWithName:kMaterialDialogsBundle]];
+  });
+
+  return bundle;
+}
+
++ (NSString *)bundlePathWithName:(NSString *)bundleName {
+  // In iOS 8+, we could be included by way of a dynamic framework, and our resource bundles may
+  // not be in the main .app bundle, but rather in a nested framework, so figure out where we live
+  // and use that as the search location.
+  NSBundle *bundle = [NSBundle bundleForClass:[MDCAlertController class]];
+  NSString *resourcePath = [(nil == bundle ? [NSBundle mainBundle] : bundle) resourcePath];
+  return [resourcePath stringByAppendingPathComponent:bundleName];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -423,8 +458,13 @@ static const CGFloat MDCDialogMessageOpacity = 0.38f;
     self.actionsScrollView.frame = actionsScrollViewRect;
   } else {
     // Complex layout case : Split the space between the two scrollviews
-    CGFloat maxActionsHeight = CGRectGetHeight(self.view.bounds) * 0.5f;
-    actionsScrollViewRect.size.height = MIN(maxActionsHeight, actionsScrollViewRect.size.height);
+    if (CGRectGetHeight(contentScrollViewRect) < CGRectGetHeight(self.view.bounds) * 0.5f) {
+      actionsScrollViewRect.size.height = 
+          CGRectGetHeight(self.view.bounds) - contentScrollViewRect.size.height;
+    } else {
+      CGFloat maxActionsHeight = CGRectGetHeight(self.view.bounds) * 0.5f;
+      actionsScrollViewRect.size.height = MIN(maxActionsHeight, actionsScrollViewRect.size.height);
+    }
     actionsScrollViewRect.origin.y =
         CGRectGetHeight(self.view.bounds) - actionsScrollViewRect.size.height;
     self.actionsScrollView.frame = actionsScrollViewRect;
@@ -439,11 +479,12 @@ static const CGFloat MDCDialogMessageOpacity = 0.38f;
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
   [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
-  [coordinator animateAlongsideTransition:^(
-                   id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
-    // Reset preferredContentSize on viewWIllTransition to take advantage of additional width
-    self.preferredContentSize = [self calculatePreferredContentSizeForBounds:CGRectInfinite.size];
-  }
+  [coordinator animateAlongsideTransition:
+      ^(__unused id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
+        // Reset preferredContentSize on viewWIllTransition to take advantage of additional width
+        self.preferredContentSize =
+            [self calculatePreferredContentSizeForBounds:CGRectInfinite.size];
+      }
                                completion:nil];
 }
 

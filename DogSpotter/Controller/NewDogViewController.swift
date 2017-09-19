@@ -17,8 +17,8 @@ protocol NewDogInfo {
 class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     let delegate = UIApplication.shared.delegate as! AppDelegate
-	let storageRef = FIRStorage.storage().reference()
-	let uid = FIRAuth.auth()?.currentUser?.uid
+	let storageRef = Storage.storage().reference()
+	let uid = Auth.auth().currentUser?.uid
 	var dogInfoDelegate: NewDogInfo?
 	
     var dogScore: Int = 1
@@ -114,7 +114,7 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 	}
 	
 	@IBAction func submitDog(_ sender: Any) {
-		let metadata = FIRStorageMetadata()
+		let metadata = StorageMetadata()
 		metadata.contentType = "image/jpeg"
 		
 		if dogNameTextField.text == "" {
@@ -141,15 +141,15 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 			let newDogUUID = UUID.init()
 			var dogDownloadURL = ""
 			
-			let databaseRef = FIRDatabase.database().reference()
+			let databaseRef = Database.database().reference()
 			let dogRef = databaseRef.child("dogs").childByAutoId()
-			let userRef = databaseRef.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).child("dogs")
+			let userRef = databaseRef.child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
 			
-			let user = FIRAuth.auth()?.currentUser?.displayName!
+			let user = Auth.auth().currentUser?.displayName!
 			
 			let dogPhotosReference = storageRef.child("dogPhotos").child("\(String(describing: newDogUUID)).jpg")
 			
-			dogPhotosReference.put(imageData!, metadata: metadata, completion: { (metatada, error) in
+			dogPhotosReference.putData(imageData!, metadata: metadata, completion: { (metatada, error) in
 				if error != nil {
 					print(error!)
 					//TODO: Handle upload error

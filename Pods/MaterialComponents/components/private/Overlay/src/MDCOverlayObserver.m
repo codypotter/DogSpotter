@@ -21,7 +21,7 @@
 #import <UIKit/UIKit.h>
 
 #import "MDCOverlayImplementor.h"
-#import "MDCOverlayTransitioning.h"
+#import "MaterialOverlay.h"
 #import "private/MDCOverlayAnimationObserver.h"
 #import "private/MDCOverlayObserverOverlay.h"
 #import "private/MDCOverlayObserverTransition.h"
@@ -151,7 +151,8 @@ static MDCOverlayObserver *_sOverlayObserver;
     return;
   }
 
-  NSValue *frame = userInfo[MDCOverlayFrameKey] ?: [NSValue valueWithCGRect:CGRectNull];
+  NSValue *frame = userInfo[MDCOverlayFrameKey] ?
+                      userInfo[MDCOverlayFrameKey] : [NSValue valueWithCGRect:CGRectNull];
   NSNumber *duration = userInfo[MDCOverlayTransitionDurationKey];
 
   // Update the overlay frame.
@@ -207,10 +208,10 @@ static MDCOverlayObserver *_sOverlayObserver;
     return NSNotFound;
   }
 
-  return [invocations
-      indexOfObjectPassingTest:^BOOL(NSInvocation *invocation, NSUInteger idx, BOOL *stop) {
-        return invocation.selector == action;
-      }];
+  return [invocations indexOfObjectPassingTest:
+          ^BOOL(NSInvocation *invocation, __unused NSUInteger idx, __unused BOOL *stop) {
+            return invocation.selector == action;
+          }];
 }
 
 - (void)addTarget:(id)target action:(SEL)action {
@@ -296,7 +297,7 @@ static MDCOverlayObserver *_sOverlayObserver;
   self.pendingTransition = nil;
 }
 
-- (void)animationObserverDidEndRunloop:(MDCOverlayAnimationObserver *)observer {
+- (void)animationObserverDidEndRunloop:(__unused MDCOverlayAnimationObserver *)observer {
   [self fireTransition];
 }
 

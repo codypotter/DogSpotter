@@ -33,15 +33,20 @@
  @see https://material.io/guidelines/components/tabs.html
  */
 IB_DESIGNABLE
-@interface MDCTabBar : UIView
+@interface MDCTabBar : UIView <UIBarPositioning>
 
-/** Return the desired height for the tab bar given an item appearance. */
+/** The default height for the tab bar in the top position, given an item appearance. */
 + (CGFloat)defaultHeightForItemAppearance:(MDCTabBarItemAppearance)appearance;
 
 /**
  Items displayed in the tab bar.
 
- If the new items do not contain the currently selected item, the selection will be reset to nil.
+ The bar determines the newly-selected item using the following logic:
+ * Reselect the previously-selected item if it's still present in `items` after the update.
+ * If there was no selection previously or if the old selected item is gone, select the first item.
+   Clients that need empty selection to be preserved across updates to `items` must manually reset
+   selectedItem to nil after the update.
+ 
  Changes to this property are not animated.
  */
 @property(nonatomic, copy, nonnull) NSArray<UITabBarItem *> *items;
@@ -84,12 +89,15 @@ IB_DESIGNABLE
 /**
  Horizontal alignment of tabs within the tab bar. Changes are not animated. Default alignment is
  MDCTabBarAlignmentLeading.
+
+ The default value is based on the position and is recommended for most applications.
  */
 @property(nonatomic) MDCTabBarAlignment alignment;
 
 /**
- Appearance of tabs within the tab bar. Changes are not animated. Default appearance is
- MDCTabBarItemAppearanceTitles.
+ Appearance of tabs within the tab bar. Changes are not animated.
+
+ The default value is based on the position and is recommended for most applications.
  */
 @property(nonatomic) MDCTabBarItemAppearance itemAppearance;
 
@@ -97,9 +105,9 @@ IB_DESIGNABLE
  Indicates if all tab titles should be uppercased for display. If NO, item titles will be
  displayed verbatim.
 
- Default is YES and is recommended whenever possible.
+ The default value is based on the position and is recommended for most applications.
  */
-@property(nonatomic) BOOL displaysUppercaseTitles;
+@property(nonatomic) IBInspectable BOOL displaysUppercaseTitles;
 
 /**
  Select an item with optional animation. Setting to nil will clear the selection.
@@ -133,15 +141,22 @@ IB_DESIGNABLE
 
 /**
  Delegate protocol for MDCTabBar. Clients may implement this protocol to receive notifications of
- selection changes in the tab bar.
+ selection changes in the tab bar or to determine the bar's position.
  */
-@protocol MDCTabBarDelegate <NSObject>
+@protocol MDCTabBarDelegate <UIBarPositioningDelegate>
 
 @optional
 
 /**
  Called before the selected item changes by user action. This method is not called for programmatic
- changes to the tab bar's selected item.
+ changes to the tab bar's selected item. Return YES to allow the selection.
+ If you don't implement all items changes are allowed.
+ */
+- (BOOL)tabBar:(nonnull MDCTabBar *)tabBar shouldSelectItem:(nonnull UITabBarItem *)item;
+
+/**
+ Called before the selected item changes by user action. This method is not called for programmatic
+ changes to the tab bar's selected item.  NOTE: Will be deprecated. Use tabBar:shouldSelectItem:.
  */
 - (void)tabBar:(nonnull MDCTabBar *)tabBar willSelectItem:(nonnull UITabBarItem *)item;
 

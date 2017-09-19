@@ -19,19 +19,26 @@
 
 #import "MaterialIcons+ic_radio_button_unchecked.h"
 
-#import "MDCIcons+BundleLoader.h"
+#import "MaterialIcons.h"
 
 static NSString *const kBundleName = @"MaterialIcons_ic_radio_button_unchecked";
 static NSString *const kIconName = @"ic_radio_button_unchecked";
 
 // Export a nonsense symbol to suppress a libtool warning when this is linked alone in a static lib.
-__attribute__((visibility(
-    "default"))) char MDCIconsExportToSuppressLibToolWarning_ic_radio_button_unchecked = 0;
+__attribute__((visibility("default")))
+    char MDCIconsExportToSuppressLibToolWarning_ic_radio_button_unchecked = 0;
 
 @implementation MDCIcons (ic_radio_button_unchecked)
 
 + (nonnull NSString *)pathFor_ic_radio_button_unchecked {
   return [self pathForIconName:kIconName withBundleName:kBundleName];
+}
+
++ (nullable UIImage *)imageFor_ic_radio_button_unchecked {
+  NSBundle *bundle = [self bundleNamed:kBundleName];
+  return [UIImage imageNamed:kIconName
+                    inBundle:bundle
+      compatibleWithTraitCollection:nil];
 }
 
 @end

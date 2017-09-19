@@ -27,6 +27,13 @@ static NSString *const MDCFloatingButtonShapeKey = @"MDCFloatingButtonShapeKey";
   MDCFloatingButtonShape _shape;
 }
 
++ (void)initialize {
+  [[MDCFloatingButton appearance] setElevation:MDCShadowElevationFABResting
+                                      forState:UIControlStateNormal];
+  [[MDCFloatingButton appearance] setElevation:MDCShadowElevationFABPressed
+                                      forState:UIControlStateHighlighted];
+}
+
 + (CGFloat)defaultDimension {
   return MDCFloatingButtonDefaultDimension;
 }
@@ -37,6 +44,10 @@ static NSString *const MDCFloatingButtonShapeKey = @"MDCFloatingButtonShapeKey";
 
 + (instancetype)floatingButtonWithShape:(MDCFloatingButtonShape)shape {
   return [[[self class] alloc] initWithFrame:CGRectZero shape:shape];
+}
+
+- (instancetype)init {
+  return [self initWithFrame:CGRectZero shape:MDCFloatingButtonShapeDefault];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -50,6 +61,7 @@ static NSString *const MDCFloatingButtonShapeKey = @"MDCFloatingButtonShapeKey";
     // The superclass sets contentEdgeInsets from defaultContentEdgeInsets before the _shape is set.
     // Set contentEdgeInsets again to ensure the defaults are for the correct shape.
     self.contentEdgeInsets = [self defaultContentEdgeInsets];
+    self.hitAreaInsets = [self defaultHitAreaInsets];
   }
   return self;
 }
@@ -71,12 +83,14 @@ static NSString *const MDCFloatingButtonShapeKey = @"MDCFloatingButtonShapeKey";
 
 #pragma mark - UIView
 
-- (CGSize)sizeThatFits:(CGSize)size {
+- (CGSize)sizeThatFits:(__unused CGSize)size {
   switch (_shape) {
     case MDCFloatingButtonShapeDefault:
       return CGSizeMake([[self class] defaultDimension], [[self class] defaultDimension]);
     case MDCFloatingButtonShapeMini:
       return CGSizeMake([[self class] miniDimension], [[self class] miniDimension]);
+    case MDCFloatingButtonShapeLargeIcon:
+      return CGSizeMake([[self class] defaultDimension], [[self class] defaultDimension]);
   }
 }
 
@@ -86,6 +100,8 @@ static NSString *const MDCFloatingButtonShapeKey = @"MDCFloatingButtonShapeKey";
       return CGSizeMake([[self class] defaultDimension], [[self class] defaultDimension]);
     case MDCFloatingButtonShapeMini:
       return CGSizeMake([[self class] miniDimension], [[self class] miniDimension]);
+    case MDCFloatingButtonShapeLargeIcon:
+      return CGSizeMake([[self class] defaultDimension], [[self class] defaultDimension]);
   }
 }
 
@@ -105,13 +121,21 @@ static NSString *const MDCFloatingButtonShapeKey = @"MDCFloatingButtonShapeKey";
       return UIEdgeInsetsMake(16, 16, 16, 16);
     case MDCFloatingButtonShapeMini:
       return UIEdgeInsetsMake(8, 8, 8, 8);
+    case MDCFloatingButtonShapeLargeIcon:
+      return UIEdgeInsetsMake(10, 10, 10, 10);
   }
 }
 
-- (CGFloat)defaultElevationForState:(UIControlState)state {
-  return (((state & UIControlStateSelected) == UIControlStateSelected)
-              ? MDCShadowElevationFABPressed
-              : MDCShadowElevationFABResting);
+- (UIEdgeInsets)defaultHitAreaInsets {
+  switch (_shape) {
+    case MDCFloatingButtonShapeDefault:
+      return UIEdgeInsetsZero;
+    case MDCFloatingButtonShapeMini:
+      // Increase the touch target from (40, 40) to the minimum (48, 48)
+      return UIEdgeInsetsMake(-4, -4, -4, -4);
+    case MDCFloatingButtonShapeLargeIcon:
+      return UIEdgeInsetsZero;
+  }
 }
 
 #pragma mark - Deprecations

@@ -25,18 +25,27 @@
 #import "MaterialIcons+ic_reorder.h"
 #import "MaterialRTL.h"
 
-#define RGBCOLOR(r, g, b) \
-  [UIColor colorWithRed:(r) / 255.0f green:(g) / 255.0f blue:(b) / 255.0f alpha:1]
-#define HEXCOLOR(hex) RGBCOLOR((((hex) >> 16) & 0xFF), (((hex) >> 8) & 0xFF), ((hex)&0xFF))
-
 static CGFloat kEditingControlAppearanceOffset = 16.0f;
 
 // Default accessory insets.
 static const UIEdgeInsets kAccessoryInsetDefault = {0, 16.0f, 0, 16.0f};
 
 // Default editing icon colors.
-static const uint32_t kCellGrayColor = 0x626262;
-static const uint32_t kCellRedColor = 0xF44336;
+// Color is 0x626262
+static inline UIColor *MDCCollectionViewCellGreyColor(void) {
+  return [UIColor colorWithRed:(CGFloat)(98 / 255.0)
+                         green:(CGFloat)(98 / 255.0)
+                          blue:(CGFloat)(98 / 255.0)
+                         alpha:1];
+}
+
+// Color is 0xF44336
+static inline UIColor *MDCCollectionViewCellRedColor(void) {
+  return [UIColor colorWithRed:(CGFloat)(244 / 255.0)
+                         green:(CGFloat)(67 / 255.0)
+                          blue:(CGFloat)(54 / 255.0)
+                         alpha:1];
+}
 
 // File name of the bundle (without the '.bundle' extension) containing resources.
 static NSString *const kResourceBundleName = @"MaterialCollectionCells";
@@ -95,7 +104,7 @@ NSString *const kDeselectedCellAccessibilityHintKey =
   // Accessory defaults.
   _accessoryType = MDCCollectionViewCellAccessoryNone;
   _accessoryInset = kAccessoryInsetDefault;
-  _editingSelectorColor = HEXCOLOR(kCellRedColor);
+  _editingSelectorColor = MDCCollectionViewCellRedColor();
 }
 
 #pragma mark - Layout
@@ -131,7 +140,7 @@ NSString *const kDeselectedCellAccessibilityHintKey =
   [self updateInterfaceForEditing];
   [self layoutForegroundSubviews];
 
-  void (^editingViewLayout)() = ^() {
+  void (^editingViewLayout)(void) = ^() {
     CGFloat txReorderTransform;
     CGFloat txSelectorTransform;
     switch (self.mdc_effectiveUserInterfaceLayoutDirection) {
@@ -227,21 +236,21 @@ NSString *const kDeselectedCellAccessibilityHintKey =
 
   switch (_accessoryType) {
     case MDCCollectionViewCellAccessoryDisclosureIndicator: {
-      UIImage *image = [UIImage imageWithContentsOfFile:[MDCIcons pathFor_ic_chevron_right]];
+      UIImage *image = [MDCIcons imageFor_ic_chevron_right];
       if (self.mdc_effectiveUserInterfaceLayoutDirection ==
           UIUserInterfaceLayoutDirectionRightToLeft) {
         image = [image mdc_imageFlippedForRightToLeftLayoutDirection];
       }
-      accessoryImageView.image = image;
+      accessoryImageView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
       break;
     }
     case MDCCollectionViewCellAccessoryCheckmark: {
-      UIImage *image = [UIImage imageWithContentsOfFile:[MDCIcons pathFor_ic_check]];
+      UIImage *image = [MDCIcons imageFor_ic_check];
       accessoryImageView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
       break;
     }
     case MDCCollectionViewCellAccessoryDetailButton: {
-      UIImage *image = [UIImage imageWithContentsOfFile:[MDCIcons pathFor_ic_info]];
+      UIImage *image = [MDCIcons imageFor_ic_info];
       accessoryImageView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
       break;
     }
@@ -363,10 +372,10 @@ NSString *const kDeselectedCellAccessibilityHintKey =
     // Create reorder editing controls.
     if (_attr.shouldShowReorderStateMask) {
       if (!_editingReorderImageView) {
-        UIImage *reorderImage = [UIImage imageWithContentsOfFile:[MDCIcons pathFor_ic_reorder]];
+        UIImage *reorderImage = [MDCIcons imageFor_ic_reorder];
         reorderImage = [reorderImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _editingReorderImageView = [[UIImageView alloc] initWithImage:reorderImage];
-        _editingReorderImageView.tintColor = HEXCOLOR(kCellGrayColor);
+        _editingReorderImageView.tintColor = MDCCollectionViewCellGreyColor();
         _editingReorderImageView.autoresizingMask =
             MDCAutoresizingFlexibleTrailingMargin(self.mdc_effectiveUserInterfaceLayoutDirection);
         [self addSubview:_editingReorderImageView];
@@ -387,11 +396,10 @@ NSString *const kDeselectedCellAccessibilityHintKey =
     // Create selector editing controls.
     if (_attr.shouldShowSelectorStateMask) {
       if (!_editingSelectorImageView) {
-        UIImage *selectorImage =
-            [UIImage imageWithContentsOfFile:[MDCIcons pathFor_ic_radio_button_unchecked]];
+        UIImage *selectorImage = [MDCIcons imageFor_ic_radio_button_unchecked];
         selectorImage = [selectorImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _editingSelectorImageView = [[UIImageView alloc] initWithImage:selectorImage];
-        _editingSelectorImageView.tintColor = HEXCOLOR(kCellGrayColor);
+        _editingSelectorImageView.tintColor = MDCCollectionViewCellGreyColor();
         _editingSelectorImageView.autoresizingMask =
             MDCAutoresizingFlexibleLeadingMargin(self.mdc_effectiveUserInterfaceLayoutDirection);
         [self addSubview:_editingSelectorImageView];
@@ -425,25 +433,30 @@ NSString *const kDeselectedCellAccessibilityHintKey =
 #pragma mark - Selecting
 
 - (void)setSelected:(BOOL)selected {
+  BOOL previousSelectedState = self.selected;
   [super setSelected:selected];
   if (selected) {
-    _editingSelectorImageView.image =
-        [UIImage imageWithContentsOfFile:[MDCIcons pathFor_ic_check_circle]];
-    _editingSelectorImageView.tintColor = self.editingSelectorColor;
+    if (_editingSelectorImageView && previousSelectedState != selected) {
+      _editingSelectorImageView.image = [MDCIcons imageFor_ic_check_circle];
+      _editingSelectorImageView.tintColor = self.editingSelectorColor;
+      _editingSelectorImageView.image = [_editingSelectorImageView.image
+          imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
     self.accessibilityTraits |= UIAccessibilityTraitSelected;
   } else {
-    _editingSelectorImageView.image =
-        [UIImage imageWithContentsOfFile:[MDCIcons pathFor_ic_radio_button_unchecked]];
-    _editingSelectorImageView.tintColor = HEXCOLOR(kCellGrayColor);
+    if (_editingSelectorImageView && previousSelectedState != selected) {
+      _editingSelectorImageView.image = [MDCIcons imageFor_ic_radio_button_unchecked];
+      _editingSelectorImageView.tintColor = MDCCollectionViewCellGreyColor();
+      _editingSelectorImageView.image = [_editingSelectorImageView.image
+          imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
     self.accessibilityTraits &= ~UIAccessibilityTraitSelected;
   }
-  _editingSelectorImageView.image =
-      [_editingSelectorImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 - (void)setEditingSelectorColor:(UIColor *)editingSelectorColor {
   if (editingSelectorColor == nil) {
-    editingSelectorColor = HEXCOLOR(kCellRedColor);
+    editingSelectorColor = MDCCollectionViewCellRedColor();
   }
   _editingSelectorColor = editingSelectorColor;
 }

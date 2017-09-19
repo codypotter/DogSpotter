@@ -16,13 +16,10 @@
 
 #import "MDCCollectionViewStyler.h"
 
-#import "MDCCollectionViewStylingDelegate.h"
 #import "MaterialCollectionLayoutAttributes.h"
+#import "MaterialCollections.h"
 
-#import <tgmath.h>
-
-#define RGBCOLOR(r, g, b) \
-  [UIColor colorWithRed:(r) / 255.0f green:(g) / 255.0f blue:(b) / 255.0f alpha:1]
+#include <tgmath.h>
 
 typedef NS_OPTIONS(NSUInteger, BackgroundCacheKey) {
   BackgroundCacheKeyFlat = 0,
@@ -125,11 +122,18 @@ NS_INLINE CGRect RectShift(CGRect rect, CGFloat dx, CGFloat dy) {
     // Cell default style properties.
     _cellBackgroundColor = [UIColor whiteColor];
     _cellStyle = MDCCollectionViewCellStyleDefault;
-    _collectionView.backgroundColor = RGBCOLOR(0xEE, 0xEE, 0xEE);
+    // Background color is 0xEEEEEE
+    _collectionView.backgroundColor = [UIColor colorWithRed:(CGFloat)(238 / 255.0)
+                                                      green:(CGFloat)(238 / 255.0)
+                                                       blue:(CGFloat)(238 / 255.0)
+                                                      alpha:1];
     _inlaidIndexPathSet = [NSMutableSet set];
 
     // Cell separator defaults.
-    _separatorColor = RGBCOLOR(224, 224, 224);
+    _separatorColor = [UIColor colorWithRed:(CGFloat)(224 / 255.0)
+                                      green:(CGFloat)(224 / 255.0)
+                                       blue:(CGFloat)(224 / 255.0)
+                                      alpha:1];
     _separatorInset = UIEdgeInsetsZero;
     _separatorLineHeight =
         kCollectionViewCellSeparatorDefaultHeightInPixels / [[UIScreen mainScreen] scale];
@@ -172,7 +176,7 @@ NS_INLINE CGRect RectShift(CGRect rect, CGFloat dx, CGFloat dy) {
         animations:^{
           [self updateLayoutAnimated:YES];
         }
-        completion:^(BOOL finished) {
+        completion:^(__unused BOOL finished) {
           [self setShouldAnimateCellsOnAppearance:NO];
         }];
   }
@@ -244,6 +248,40 @@ NS_INLINE CGRect RectShift(CGRect rect, CGFloat dx, CGFloat dy) {
   [_cellBackgroundCaches removeAllObjects];
   [self invalidateLayoutForStyleChange];
   _cellStyle = cellStyle;
+}
+
+- (BOOL)shouldHideSeparatorForCellLayoutAttributes:(MDCCollectionViewLayoutAttributes *)attr {
+  BOOL shouldHideSeparator = self.shouldHideSeparators;
+  if (!self.delegate) {
+    return shouldHideSeparator;
+  }
+
+  NSIndexPath *indexPath = attr.indexPath;
+  BOOL isCell = attr.representedElementCategory == UICollectionElementCategoryCell;
+  BOOL isSectionHeader =
+      [attr.representedElementKind isEqualToString:UICollectionElementKindSectionHeader];
+  BOOL isSectionFooter =
+      [attr.representedElementKind isEqualToString:UICollectionElementKindSectionFooter];
+  if (isCell) {
+    if ([self.delegate
+            respondsToSelector:@selector(collectionView:shouldHideItemSeparatorAtIndexPath:)]) {
+      shouldHideSeparator = [self.delegate collectionView:_collectionView
+                       shouldHideItemSeparatorAtIndexPath:indexPath];
+    }
+  } else if (isSectionHeader) {
+    if ([self.delegate
+            respondsToSelector:@selector(collectionView:shouldHideHeaderSeparatorForSection:)]) {
+      shouldHideSeparator = [self.delegate collectionView:_collectionView
+                      shouldHideHeaderSeparatorForSection:indexPath.section];
+    }
+  } else if (isSectionFooter) {
+    if ([self.delegate
+            respondsToSelector:@selector(collectionView:shouldHideFooterSeparatorForSection:)]) {
+      shouldHideSeparator = [self.delegate collectionView:_collectionView
+                      shouldHideFooterSeparatorForSection:indexPath.section];
+    }
+  }
+  return shouldHideSeparator;
 }
 
 #pragma mark - Public
@@ -325,7 +363,7 @@ NS_INLINE CGRect RectShift(CGRect rect, CGFloat dx, CGFloat dy) {
       }
     }
 
-    void (^completionBlock)(BOOL finished) = ^(BOOL finished) {
+    void (^completionBlock)(BOOL finished) = ^(__unused BOOL finished) {
       if ([self.delegate
               respondsToSelector:@selector(collectionView:didApplyInlayToItemAtIndexPaths:)]) {
         [self.delegate collectionView:_collectionView
@@ -342,7 +380,7 @@ NS_INLINE CGRect RectShift(CGRect rect, CGFloat dx, CGFloat dy) {
 - (void)removeInlayFromItemAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {
   [_inlaidIndexPathSet removeObject:indexPath];
 
-  void (^completionBlock)(BOOL finished) = ^(BOOL finished) {
+  void (^completionBlock)(BOOL finished) = ^(__unused BOOL finished) {
     if ([self.delegate
             respondsToSelector:@selector(collectionView:didRemoveInlayFromItemAtIndexPaths:)]) {
       [self.delegate collectionView:_collectionView
@@ -364,7 +402,7 @@ NS_INLINE CGRect RectShift(CGRect rect, CGFloat dx, CGFloat dy) {
       }
     }
 
-    void (^completionBlock)(BOOL finished) = ^(BOOL finished) {
+    void (^completionBlock)(BOOL finished) = ^(__unused BOOL finished) {
       if ([self.delegate
               respondsToSelector:@selector(collectionView:didApplyInlayToItemAtIndexPaths:)]) {
         [self.delegate collectionView:_collectionView
@@ -381,7 +419,7 @@ NS_INLINE CGRect RectShift(CGRect rect, CGFloat dx, CGFloat dy) {
   NSArray *indexPaths = [_inlaidIndexPathSet allObjects];
   [_inlaidIndexPathSet removeAllObjects];
 
-  void (^completionBlock)(BOOL finished) = ^(BOOL finished) {
+  void (^completionBlock)(BOOL finished) = ^(__unused BOOL finished) {
     if ([self.delegate
             respondsToSelector:@selector(collectionView:didRemoveInlayFromItemAtIndexPaths:)]) {
       [self.delegate collectionView:_collectionView didRemoveInlayFromItemAtIndexPaths:indexPaths];
@@ -528,8 +566,11 @@ NS_INLINE CGRect RectShift(CGRect rect, CGFloat dx, CGFloat dy) {
   // Get cell color.
   UIColor *backgroundColor = _cellBackgroundColor;
   if ([_delegate respondsToSelector:@selector(collectionView:cellBackgroundColorAtIndexPath:)]) {
-    backgroundColor =
+    UIColor *customBackgroundColor =
         [_delegate collectionView:_collectionView cellBackgroundColorAtIndexPath:attr.indexPath];
+    if (customBackgroundColor) {
+      backgroundColor = customBackgroundColor;
+    }
   }
 
   NSPointerArray *cellBackgroundCache = _cellBackgroundCaches[backgroundColor];
