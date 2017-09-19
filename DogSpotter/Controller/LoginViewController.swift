@@ -202,7 +202,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.passwordTextField.isEnabled = false
         self.userNameTextField.isEnabled = false
         Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
-            
+            //this is a git test
             if error != nil {
                 print(error!)
                 SVProgressHUD.dismiss()
