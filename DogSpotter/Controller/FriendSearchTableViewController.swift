@@ -27,7 +27,7 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
 
-        databaseRef.child("users").queryOrdered(byChild: "name").observe(.childAdded) { (snapshot) in
+        databaseRef.child("users").queryOrdered(byChild: "username").observe(.childAdded) { (snapshot) in
             self.usersArray.append(snapshot.value as! NSDictionary?)
             
             //insert the rows
@@ -55,12 +55,32 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return filteredUsers.count
+        }
+        return self.usersArray.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        
+        let user: NSDictionary?
+        if searchController.isActive && searchController.searchBar.text != "" {
+            user = filteredUsers[indexPath.row]
+            
+        } else {
+            user = self.usersArray[indexPath.row]
+        }
+        
+        cell.textLabel?.text = user?["username"] as? String
+        cell.detailTextLabel?.text = user?["email"] as? String
+        
+        return cell
     }
 
     @IBAction func stopButtonTapped(_ sender: Any) {
@@ -76,6 +96,8 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
             let username = user!["name"] as? String
             return(username?.lowercased().contains(searchText.lowercased()))!
         })
+        tableView.reloadData()
+        
     }
     
 }
