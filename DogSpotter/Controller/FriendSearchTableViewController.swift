@@ -28,28 +28,19 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
         tableView.tableHeaderView = searchController.searchBar
 
         databaseRef.child("users").queryOrdered(byChild: "username").observe(.childAdded) { (snapshot) in
-            self.usersArray.append(snapshot.value as! NSDictionary?)
+            self.usersArray.append(snapshot.value as? NSDictionary)
             
             //insert the rows
             
             self.followUsersTableView.insertRows(at: [IndexPath(row: self.usersArray.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
         }
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+
 
     // MARK: - Table view data source
 
@@ -89,13 +80,14 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
     
     func updateSearchResults(for searchController: UISearchController) {
         //update the search results
+        filterContent(searchText: self.searchController.searchBar.text!)
     }
     
     func filterContent(searchText: String) {
-        self.filteredUsers = self.usersArray.filter({ (user) -> Bool in
-            let username = user!["name"] as? String
+        self.filteredUsers = self.usersArray.filter{ user in
+            let username = user!["username"] as? String
             return(username?.lowercased().contains(searchText.lowercased()))!
-        })
+        }
         tableView.reloadData()
         
     }
