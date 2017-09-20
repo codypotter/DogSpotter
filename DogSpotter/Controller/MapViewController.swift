@@ -10,11 +10,13 @@ import UIKit
 import Photos
 import MapKit
 import Firebase
+import MaterialComponents
 
 class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate, NewDogInfo {
 
     @IBOutlet var map: MKMapView!
     
+    let newDogButton = MDCFloatingButton()
     var authHandle: AuthStateDidChangeListenerHandle?
     var dogs: [Dog] = [Dog]()
     
@@ -28,6 +30,8 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.userTrackingMode = .follow
         self.map.delegate = self
         self.map.mapType = .hybrid
+        self.map.addSubview(newDogButton)
+        
         let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
         
         userDogRef.observe(.childAdded, with: { (snapshot) in
@@ -71,8 +75,19 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        //MARK: Setup newDogButton attributes
+        newDogButton.setTitle("+", for: .normal)
+        newDogButton.sizeToFit()
+        newDogButton.addTarget(self, action: #selector(newDogButtonTapped), for: .touchUpInside)
+        newDogButton.backgroundColor = UIColor(red: 233/255, green: 116/255, blue: 81/255, alpha: 1)
+        
+        //MARK: Setup newDogButton layout
+        newDogButton.translatesAutoresizingMaskIntoConstraints = false
+        newDogButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
+        newDogButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
         
         //MARK: Auto-Logout handler
@@ -83,17 +98,17 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         })
     }
     
-    @IBAction func logOutTapped(_ sender: Any) {
-        performSegue(withIdentifier: "showLoginViewController", sender: self)
-    }
-    
-    @IBAction func newDogTapped(_ sender: Any) {
+    @objc func newDogButtonTapped() {
         // Get current location
         DispatchQueue.global(qos: .background).async {
             self.delegate.locationManager.requestLocation()
         }
         
         performSegue(withIdentifier: "showNewDogViewController", sender: self)
+    }
+    
+    @IBAction func logOutTapped(_ sender: Any) {
+        performSegue(withIdentifier: "showLoginViewController", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
