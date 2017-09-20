@@ -236,11 +236,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.toggleEnableTextFields(named: textFieldsArray, to: true)
                 self.toggleEnableButtons(named: buttonsArray, to: true)
                 return
-            } else {
-                print("User signed in successfully!")
-                self.navigationController?.popViewController(animated: true)
             }
+            print("User signed in successfully!")
             SVProgressHUD.dismiss()
+            self.navigationController?.popViewController(animated: true)
             self.emailTextField.text = ""
             self.passwordTextField.text = ""
             self.userNameTextField.text = ""
