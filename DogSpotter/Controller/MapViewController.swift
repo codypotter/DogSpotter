@@ -64,6 +64,11 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                         newDog.picture = UIImage(data: data!)!
                         self.dogs.append(newDog)
                         let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name, subtitle: newDog.creator)
+                        annotation.name = newDog.name
+                        annotation.breed = newDog.breed
+                        annotation.score = newDog.score
+                        annotation.creator = newDog.creator
+                        annotation.picture = newDog.picture
                         DispatchQueue.main.async {
                             self.map.addAnnotation(annotation)
                         }
@@ -136,43 +141,45 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: ident)
         if annotationView == nil {
-            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: ident)
-            annotationView?.canShowCallout = true
+            annotationView = CustomAnnotationView(annotation: annotation, reuseIdentifier: ident)
+            annotationView?.canShowCallout = false
         } else {
             annotationView!.annotation = annotation
         }
-        configureDetailView(annotationView!)
+        annotationView?.image = UIImage(named: "pin")
+        //Set the annotationView image here annotationView.image
+//        configureDetailView(annotationView!)
         return annotationView
     }
     
-    func configureDetailView(_ annotationView: MKAnnotationView) {
-        let width = 300
-        let height = 100
-        
-        let dogPhotoView = UIView()
-        let views = ["dogPhotoView": dogPhotoView]
-        
-        dogPhotoView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[dogPhotoView(\(width))]", options: [], metrics: nil, views: views))
-        dogPhotoView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[dogPhotoView(\(height))]", options: [], metrics: nil, views: views))
-     
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+//    func configureDetailView(_ annotationView: MKAnnotationView) {
+//        let width = 300
+//        let height = 100
+//
+//        let dogPhotoView = UIView()
+//        let views = ["dogPhotoView": dogPhotoView]
+//
+//        dogPhotoView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[dogPhotoView(\(width))]", options: [], metrics: nil, views: views))
+//        dogPhotoView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[dogPhotoView(\(height))]", options: [], metrics: nil, views: views))
+//
+//        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
 //        let creatorLabel = UILabel()
 //        let breedLabel = UILabel()
 //        let scoreLabel = UILabel()
-        
-        for dog in self.dogs {
-            imageView.image = dog.picture
-            
-            DispatchQueue.main.async {
-                dogPhotoView.addSubview(imageView)
-                
-                self.view.layoutIfNeeded()
-            }
-            
-        }
-        
-        annotationView.detailCalloutAccessoryView = dogPhotoView
-    }
+//
+//        for dog in self.dogs {
+//            imageView.image = dog.picture
+//
+//            DispatchQueue.main.async {
+//                dogPhotoView.addSubview(imageView)
+//
+//                self.view.layoutIfNeeded()
+//            }
+//
+//        }
+//
+//        annotationView.detailCalloutAccessoryView = dogPhotoView
+//    }
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
         for aView in views {
@@ -187,14 +194,50 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         }
     }
     
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if view.annotation is MKUserLocation {
+            return
+        }
+        
+        let customAnnotation = view.annotation as! CustomAnnotation
+        let views = Bundle.main.loadNibNamed("CustomCalloutView", owner: nil, options: nil)
+        let calloutView = views?[0] as! CustomCalloutView
+        calloutView.nameLabel.text = customAnnotation.name
+        calloutView.breedLabel.text = customAnnotation.breed
+        calloutView.scoreLabel.text = String(describing: customAnnotation.score)
+        calloutView.creatorLabel.text = customAnnotation.creator
+        calloutView.dogImageView.image = customAnnotation.picture
+        calloutView.upvoteButton.addTarget(self, action: #selector(upvoteTapped(_:)), for: .touchUpInside)
+        
+        calloutView.center = CGPoint(x: view.bounds.size.width/2, y: -calloutView.bounds.size.height*0.52)
+        view.addSubview(calloutView)
+        mapView.setCenter((view.annotation?.coordinate)!, animated: true)
+        
+    }
+    
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        if view.isKind(of: CustomAnnotationView.self)
+        {
+            for subview in view.subviews
+            {
+                subview.removeFromSuperview()
+            }
+        }
+    }
+    
     func dogDataReceived(name: String, breed: String, score: Int, image: UIImage) {
         
     }
+    
     @IBAction func accountButtonTapped(_ sender: Any) {
         performSegue(withIdentifier: "showAccountViewController", sender: self)
     }
     @IBAction func disoverButtonTapped(_ sender: Any) {
         performSegue(withIdentifier: "showUserSearch", sender: self)
+    }
+    
+    @objc func upvoteTapped(_ sender: UIButton) {
+        
     }
 }
 

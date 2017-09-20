@@ -13,6 +13,9 @@
 		557028E41F33DF67007ADC87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E21F33DF67007ADC87 /* Main.storyboard */; };
 		557028E61F33DF67007ADC87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 557028E51F33DF67007ADC87 /* Assets.xcassets */; };
 		557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */; };
+		55957A931F72E4070083C0C4 /* CustomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */; };
+		55957A951F72E7A10083C0C4 /* CustomCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */; };
+		55957A971F72EFA00083C0C4 /* CustomCalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */; };
 		55A8C93D1F650AA4008B8B22 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55A8C93C1F650A93008B8B22 /* GoogleService-Info.plist */; };
 		55B273C51F62353B0088BF27 /* ShadowedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B273C41F62353B0088BF27 /* ShadowedView.swift */; };
 		55C606461F62063D00B3F870 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C606451F62063D00B3F870 /* LoginViewController.swift */; };
@@ -40,6 +43,9 @@
 		557028E51F33DF67007ADC87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		557028E81F33DF67007ADC87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		557028EA1F33DF67007ADC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotationView.swift; sourceTree = "<group>"; };
+		55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCalloutView.xib; sourceTree = "<group>"; };
+		55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalloutView.swift; sourceTree = "<group>"; };
 		55A8C93C1F650A93008B8B22 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		55B273C41F62353B0088BF27 /* ShadowedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedView.swift; sourceTree = "<group>"; };
 		55C606451F62063D00B3F870 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +126,7 @@
 			children = (
 				55CEF8C21F57BF0F001F1C85 /* CustomAnnotation.swift */,
 				556A8B8E1F3A9C2800A24A7A /* Dog.swift */,
+				55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -166,6 +173,8 @@
 				55D8E58B1F5B3C1F00FD6A3A /* DesignableView.swift */,
 				55D8E5911F5CF25300FD6A3A /* DesignableButton.swift */,
 				55B273C41F62353B0088BF27 /* ShadowedView.swift */,
+				55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */,
+				55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -235,6 +244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				55D8E5931F5CFC2F00FD6A3A /* PT_Serif-Web-Bold.ttf in Resources */,
+				55957A951F72E7A10083C0C4 /* CustomCalloutView.xib in Resources */,
 				55A8C93D1F650AA4008B8B22 /* GoogleService-Info.plist in Resources */,
 				55D8E5941F5CFC2F00FD6A3A /* PT_Serif-Web-BoldItalic.ttf in Resources */,
 				55D8E5951F5CFC2F00FD6A3A /* PT_Serif-Web-Regular.ttf in Resources */,
@@ -331,9 +341,11 @@
 				55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */,
 				55D8E58C1F5B3C1F00FD6A3A /* DesignableView.swift in Sources */,
 				55CFC9281F70BD8E007789D2 /* FriendSearchTableViewController.swift in Sources */,
+				55957A971F72EFA00083C0C4 /* CustomCalloutView.swift in Sources */,
 				55C606461F62063D00B3F870 /* LoginViewController.swift in Sources */,
 				55CEF8C31F57BF0F001F1C85 /* CustomAnnotation.swift in Sources */,
 				556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */,
+				55957A931F72E4070083C0C4 /* CustomAnnotationView.swift in Sources */,
 				55D8E5841F5B38D400FD6A3A /* NewDogViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -14,6 +14,12 @@ class CustomAnnotation: NSObject, MKAnnotation {
     var title: String?
     var subtitle: String?
     
+    var creator: String = ""
+    var name: String = ""
+    var breed: String = ""
+    var score: Int = 1
+    var picture = UIImage()
+    
     init(location: CLLocationCoordinate2D, title: String, subtitle: String) {
         self.coordinate = location
         self.title = title
