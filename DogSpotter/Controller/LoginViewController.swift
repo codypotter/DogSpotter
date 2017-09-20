@@ -21,6 +21,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     let signupButton = MDCFlatButton()
     let loginCredentialsView = ShadowedView()
     let userNameTextField = UITextField()
+    let nameTextField = UITextField()
     let passwordTextField = UITextField()
     let emailTextField = UITextField()
     
@@ -29,6 +30,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     var loginCredentialsViewHeightConstraint: NSLayoutConstraint!
     var loginButtonWidthConstraint: NSLayoutConstraint!
     var loginButtonBottomConstraint: NSLayoutConstraint!
+    var nameTextFieldHeightConstraint: NSLayoutConstraint!
     var userNameTextFieldHeightConstraint: NSLayoutConstraint!
     var emailTextFieldTopConstraint: NSLayoutConstraint!
     var signupButtonBottomConstraint: NSLayoutConstraint!
@@ -51,6 +53,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         self.view.addSubview(loginCredentialsView)
         self.loginCredentialsView.addSubview(userNameTextField)
+        self.loginCredentialsView.addSubview(nameTextField)
         self.loginCredentialsView.addSubview(passwordTextField)
         self.loginCredentialsView.addSubview(emailTextField)
     }
@@ -119,10 +122,25 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         userNameTextField.autocorrectionType = .no
         userNameTextField.font = UIFont(name: "Helvetica", size: 17)
         
+        //MARK: Name Text Field Layout
+        nameTextField.translatesAutoresizingMaskIntoConstraints = false
+        nameTextField.leadingAnchor.constraint(equalTo: loginCredentialsView.leadingAnchor, constant: 8).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor, constant: 8).isActive = true
+        nameTextFieldHeightConstraint = nameTextField.heightAnchor.constraint(equalToConstant: 25)
+        nameTextFieldHeightConstraint.isActive = true
+        nameTextField.trailingAnchor.constraint(equalTo: loginCredentialsView.trailingAnchor, constant: -8).isActive = true
+        
+        //MARK: Name Text Field Setup
+        nameTextField.borderStyle = .none
+        nameTextField.placeholder = "Name"
+        nameTextField.autocapitalizationType = .words
+        nameTextField.autocorrectionType = .no
+        nameTextField.font = UIFont(name: "Helvetica", size: 17)
+        
         //MARK: Email Text Field Layout
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
         emailTextField.leadingAnchor.constraint(equalTo: loginCredentialsView.leadingAnchor, constant: 8).isActive = true
-        emailTextFieldTopConstraint = emailTextField.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor, constant: 8)
+        emailTextFieldTopConstraint = emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 8)
         emailTextFieldTopConstraint.isActive = true
         emailTextField.trailingAnchor.constraint(equalTo: loginCredentialsView.trailingAnchor, constant: -8).isActive = true
         emailTextField.heightAnchor.constraint(equalToConstant: 25).isActive = true
@@ -160,7 +178,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             UIView.animate(withDuration: 0.2, animations: {
                 self.userNameTextField.isHidden = true
                 self.userNameTextFieldHeightConstraint.constant = 0
-                self.emailTextFieldTopConstraint.constant = 0
+                self.nameTextField.isHidden = true
+                self.nameTextFieldHeightConstraint.constant = 0
+                self.emailTextFieldTopConstraint.constant = -8
                 self.loginCredentialsViewHeightConstraint.constant = 74
             })
             
@@ -227,8 +247,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             UIView.animate(withDuration: 0.2, animations: {
                 self.userNameTextField.isHidden = false
                 self.userNameTextFieldHeightConstraint.constant = 25
+                self.nameTextField.isHidden = false
+                self.nameTextFieldHeightConstraint.constant = 25
                 self.emailTextFieldTopConstraint.constant = 8
-                self.loginCredentialsViewHeightConstraint.constant = 107
+                self.loginCredentialsViewHeightConstraint.constant = 140
             })
             
             if !isInCredentialsMode {
@@ -244,7 +266,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.loginButtonBottomConstraint.constant = (self.view.bounds.height/2 - 20)
                 self.loginButtonWidthConstraint.constant = 200
                 self.signupButtonWidthConstraint.constant = self.loginCredentialsView.bounds.width
-                self.signupButtonBottomConstraint.constant = 110
+                self.signupButtonBottomConstraint.constant = 130
                 self.signupButton.backgroundColor = UIColor(red: 178/255, green: 69/255, blue: 39/255, alpha: 1)
                 self.signupButton.setTitleColor(UIColor.white, for: .normal)
                 self.loginButton.backgroundColor = UIColor.white
@@ -256,7 +278,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        guard let email = emailTextField.text, let password = passwordTextField.text, let userName = userNameTextField.text else {
+        guard let email = emailTextField.text, let password = passwordTextField.text, let userName = userNameTextField.text , let name = nameTextField.text else {
             //TODO: Add alert view for invalid form.
             print("Form is not valid.")
             return
@@ -264,6 +286,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         //MARK: Create user using Firebase Authentication
         SVProgressHUD.show()
+        self.nameTextField.isEnabled = false
         self.emailTextField.isEnabled = false
         self.passwordTextField.isEnabled = false
         self.userNameTextField.isEnabled = false
@@ -278,8 +301,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             print("Created user successfully!")
             
             let userRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!)
-            let userValues = ["username": self.userNameTextField.text!,
-                              "email": self.emailTextField.text!]
+            let userValues = ["username": userName,
+                              "email": email,
+                              "name": name]
             
             userRef.updateChildValues(userValues, withCompletionBlock: { (error, ref) in
                 if error != nil {
@@ -310,6 +334,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.emailTextField.text = ""
             self.passwordTextField.text = ""
             self.userNameTextField.text = ""
+            self.nameTextField.text = ""
             self.emailTextField.isEnabled = true
             self.passwordTextField.isEnabled = true
             self.userNameTextField.isEnabled = true
