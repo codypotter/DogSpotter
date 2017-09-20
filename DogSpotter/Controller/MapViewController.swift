@@ -156,15 +156,16 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         dogPhotoView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[dogPhotoView(\(height))]", options: [], metrics: nil, views: views))
      
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        let creatorLabel = UILabel()
-        let breedLabel = UILabel()
-        let scoreLabel = UILabel()
+//        let creatorLabel = UILabel()
+//        let breedLabel = UILabel()
+//        let scoreLabel = UILabel()
         
         for dog in self.dogs {
             imageView.image = dog.picture
             
             DispatchQueue.main.async {
                 dogPhotoView.addSubview(imageView)
+                
                 self.view.layoutIfNeeded()
             }
             
