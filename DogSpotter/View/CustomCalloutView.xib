@@ -41,9 +41,6 @@
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="34"/>
                     <state key="normal" title="⬆"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="keyPath" value="YES"/>
-                    </userDefinedRuntimeAttributes>
                     <connections>
                         <action selector="upvoteButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="BOD-L8-JQ0"/>
                     </connections>
