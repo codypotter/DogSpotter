@@ -34,12 +34,11 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAd-YR-Dyg">
-                    <rect key="frame" x="250" y="27" width="50" height="69"/>
+                <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAd-YR-Dyg">
+                    <rect key="frame" x="250" y="45" width="50" height="34"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="50" id="c8E-DV-36h"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="34"/>
                     <state key="normal" title="⬆"/>
                     <connections>
                         <action selector="upvoteButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="BOD-L8-JQ0"/>
@@ -58,7 +57,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="69" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z2b-aX-7DV">
-                    <rect key="frame" x="265.5" y="96" width="19" height="20"/>
+                    <rect key="frame" x="249.5" y="79" width="50" height="20"/>
                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -72,9 +71,9 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="z2b-aX-7DV" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" constant="-8" id="2JD-ga-0a4"/>
                 <constraint firstItem="fAd-YR-Dyg" firstAttribute="leading" secondItem="YR9-hk-CIA" secondAttribute="trailing" constant="8" id="3Mz-13-n9w"/>
                 <constraint firstItem="kyx-mF-Gl7" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="4EC-MK-tJw"/>
+                <constraint firstItem="z2b-aX-7DV" firstAttribute="width" secondItem="fAd-YR-Dyg" secondAttribute="width" id="BdG-YT-yOe"/>
                 <constraint firstItem="fAd-YR-Dyg" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="EqX-ya-3cN"/>
                 <constraint firstItem="1EU-bF-VI0" firstAttribute="leading" secondItem="kyx-mF-Gl7" secondAttribute="trailing" constant="8" id="LpQ-BN-2wr"/>
                 <constraint firstItem="z2b-aX-7DV" firstAttribute="top" secondItem="fAd-YR-Dyg" secondAttribute="bottom" id="NDw-UM-pvp"/>

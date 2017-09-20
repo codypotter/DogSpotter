@@ -321,7 +321,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             let userValues = ["username": username,
                               "email": email,
                               "name": name,
-                              "startDate": dateFormatter.string(from: currentDateTime)]
+                              "startDate": dateFormatter.string(from: currentDateTime),
+                              "reputation": "0"]
             
             userRef.updateChildValues(userValues, withCompletionBlock: { (error, ref) in
                 if error != nil {

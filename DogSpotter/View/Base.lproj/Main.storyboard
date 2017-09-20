@@ -161,21 +161,26 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Reputation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="y1J-GB-1D9">
-                                                    <rect key="frame" x="16" y="12" width="89" height="20"/>
+                                                    <rect key="frame" x="16" y="12" width="89" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="1243" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sc8-hI-uYA">
-                                                    <rect key="frame" x="267" y="12" width="38" height="20"/>
+                                                    <rect key="frame" x="267" y="12" width="38" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" red="0.91372549020000005" green="0.4549019608" blue="0.31764705879999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="1" green="0.6470588235294118" blue="0.49411764705882355" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="tru-TB-Yjc" detailTextLabel="wyg-jD-Bdr" style="IBUITableViewCellStyleValue1" id="nzG-Hm-57b">
                                         <rect key="frame" x="0.0" y="243.5" width="320" height="44"/>
@@ -255,6 +260,12 @@
                         <connections>
                             <outlet property="dataSource" destination="wXD-QN-NwH" id="WBP-1W-X3b"/>
                             <outlet property="delegate" destination="wXD-QN-NwH" id="2l6-7N-R75"/>
+                            <outlet property="dogsPostedLabel" destination="wyg-jD-Bdr" id="jgg-u8-aJq"/>
+                            <outlet property="emailLabel" destination="NIS-Bd-lLi" id="efT-gH-NXv"/>
+                            <outlet property="followersLabel" destination="ola-1T-sE4" id="oNa-PA-qf5"/>
+                            <outlet property="followingLabel" destination="ByU-JH-2fa" id="AR6-cw-7fr"/>
+                            <outlet property="reputationLabel" destination="sc8-hI-uYA" id="Eqw-W5-c5t"/>
+                            <outlet property="usernameLabel" destination="gGg-sx-Iuf" id="XZX-Cs-Nzp"/>
                         </connections>
                     </tableView>
                 </tableViewController>
