@@ -35,7 +35,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAd-YR-Dyg">
-                    <rect key="frame" x="250" y="0.0" width="50" height="88"/>
+                    <rect key="frame" x="250" y="27" width="50" height="69"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="50" id="c8E-DV-36h"/>
                     </constraints>
@@ -58,7 +58,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="69" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z2b-aX-7DV">
-                    <rect key="frame" x="258" y="96" width="34" height="20"/>
+                    <rect key="frame" x="265.5" y="96" width="19" height="20"/>
                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -75,18 +75,17 @@
                 <constraint firstItem="z2b-aX-7DV" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" constant="-8" id="2JD-ga-0a4"/>
                 <constraint firstItem="fAd-YR-Dyg" firstAttribute="leading" secondItem="YR9-hk-CIA" secondAttribute="trailing" constant="8" id="3Mz-13-n9w"/>
                 <constraint firstItem="kyx-mF-Gl7" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="4EC-MK-tJw"/>
-                <constraint firstItem="z2b-aX-7DV" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" constant="-8" id="DuQ-7E-cPx"/>
                 <constraint firstItem="fAd-YR-Dyg" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="EqX-ya-3cN"/>
                 <constraint firstItem="1EU-bF-VI0" firstAttribute="leading" secondItem="kyx-mF-Gl7" secondAttribute="trailing" constant="8" id="LpQ-BN-2wr"/>
-                <constraint firstItem="z2b-aX-7DV" firstAttribute="top" secondItem="fAd-YR-Dyg" secondAttribute="bottom" constant="8" id="NDw-UM-pvp"/>
+                <constraint firstItem="z2b-aX-7DV" firstAttribute="top" secondItem="fAd-YR-Dyg" secondAttribute="bottom" id="NDw-UM-pvp"/>
                 <constraint firstItem="YR9-hk-CIA" firstAttribute="top" secondItem="rHQ-Gl-xyt" secondAttribute="bottom" constant="8" id="NpR-ZO-Ejw"/>
                 <constraint firstItem="kyx-mF-Gl7" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Qzs-Is-VN4"/>
                 <constraint firstItem="9Pn-M5-ADc" firstAttribute="top" secondItem="1EU-bF-VI0" secondAttribute="bottom" constant="8" id="SzN-Wj-pRb"/>
                 <constraint firstItem="1EU-bF-VI0" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="8" id="U3I-dI-fFg"/>
+                <constraint firstItem="z2b-aX-7DV" firstAttribute="centerX" secondItem="fAd-YR-Dyg" secondAttribute="centerX" id="VeZ-8o-rEY"/>
                 <constraint firstItem="fAd-YR-Dyg" firstAttribute="leading" secondItem="1EU-bF-VI0" secondAttribute="trailing" constant="8" id="fvN-0K-tNv"/>
+                <constraint firstItem="fAd-YR-Dyg" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="g9v-kG-RcM"/>
                 <constraint firstItem="YR9-hk-CIA" firstAttribute="leading" secondItem="kyx-mF-Gl7" secondAttribute="trailing" constant="8" id="hiB-mM-VZn"/>
-                <constraint firstItem="fAd-YR-Dyg" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="iBT-1L-knD"/>
-                <constraint firstItem="z2b-aX-7DV" firstAttribute="leading" secondItem="fAd-YR-Dyg" secondAttribute="leading" constant="8" id="kaS-Nn-gaQ"/>
                 <constraint firstItem="fAd-YR-Dyg" firstAttribute="leading" secondItem="9Pn-M5-ADc" secondAttribute="trailing" constant="8" id="nmt-vP-PUu"/>
                 <constraint firstItem="kyx-mF-Gl7" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="p0l-sc-vTy"/>
                 <constraint firstItem="fAd-YR-Dyg" firstAttribute="leading" secondItem="rHQ-Gl-xyt" secondAttribute="trailing" constant="8" id="pA0-Oj-o3F"/>
