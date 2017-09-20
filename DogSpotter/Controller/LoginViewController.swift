@@ -25,6 +25,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     let passwordTextField = UITextField()
     let emailTextField = UITextField()
     
+
+    
     // Constraint variables to be used w/ animation
     var loginCredentialsViewCenterXConstraint: NSLayoutConstraint!
     var loginCredentialsViewHeightConstraint: NSLayoutConstraint!
@@ -174,6 +176,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @objc func loginButtonTapped() {
         
+        let textFieldsArray = [userNameTextField,
+                               nameTextField,
+                               passwordTextField,
+                               emailTextField]
+        let buttonsArray = [signupButton,
+                            loginButton]
+        
         if !isInLoginMode {
             UIView.animate(withDuration: 0.2, animations: {
                 self.userNameTextField.isHidden = true
@@ -211,23 +220,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         guard let email = emailTextField.text, let password = passwordTextField.text else {
-            //TODO: Add alert view for invalid form.
-            print("Form is not valid.")
+            createAlertView(withTitle: "Oops!", andMessage: "Please enter email and password.")
             return
         }
         
         //MARK: Sign In to Firebase Authentication
         SVProgressHUD.show()
-        self.emailTextField.isEnabled = false
-        self.passwordTextField.isEnabled = false
-        self.userNameTextField.isEnabled = false
+        self.toggleEnableTextFields(named: textFieldsArray, to: false)
+        self.toggleEnableButtons(named: buttonsArray, to: false)
         Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
             //this is a git test
             if error != nil {
-                print(error!)
                 SVProgressHUD.dismiss()
+                self.createAlertView(withTitle: "Oops!", andMessage: error!.localizedDescription)
+                self.toggleEnableTextFields(named: textFieldsArray, to: true)
+                self.toggleEnableButtons(named: buttonsArray, to: true)
                 return
-                //TODO: Handle incorrect credentials w/ alert
             } else {
                 print("User signed in successfully!")
                 self.navigationController?.popViewController(animated: true)
@@ -236,13 +244,25 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.emailTextField.text = ""
             self.passwordTextField.text = ""
             self.userNameTextField.text = ""
-            self.emailTextField.isEnabled = true
-            self.passwordTextField.isEnabled = true
-            self.userNameTextField.isEnabled = true
+            self.toggleEnableTextFields(named: textFieldsArray, to: true)
+            self.toggleEnableButtons(named: buttonsArray, to: true)
         })
     }
     
     @objc func signupButtonTapped() {
+        let textFieldsArray = [userNameTextField,
+                               nameTextField,
+                               passwordTextField,
+                               emailTextField]
+        
+        let buttonsArray = [signupButton,
+                            loginButton]
+        
+        let currentDateTime = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .none
+        dateFormatter.dateStyle = .short
+        
         if !isInSignupMode {
             UIView.animate(withDuration: 0.2, animations: {
                 self.userNameTextField.isHidden = false
@@ -278,66 +298,63 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        guard let email = emailTextField.text, let password = passwordTextField.text, let userName = userNameTextField.text , let name = nameTextField.text else {
-            //TODO: Add alert view for invalid form.
-            print("Form is not valid.")
+        guard let email = emailTextField.text, let password = passwordTextField.text, let username = userNameTextField.text , let name = nameTextField.text else {
+            createAlertView(withTitle: "Oops!", andMessage: "It looks like you're missing some data.")
+            
             return
         }
         
         //MARK: Create user using Firebase Authentication
         SVProgressHUD.show()
-        self.nameTextField.isEnabled = false
-        self.emailTextField.isEnabled = false
-        self.passwordTextField.isEnabled = false
-        self.userNameTextField.isEnabled = false
-        
+        toggleEnableTextFields(named: textFieldsArray, to: false)
+        toggleEnableButtons(named: buttonsArray, to: false)
         Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
-                print(error!)
                 SVProgressHUD.dismiss()
+                self.createAlertView(withTitle: "Oops!", andMessage: error!.localizedDescription)
+                self.toggleEnableTextFields(named: textFieldsArray, to: true)
+                self.toggleEnableButtons(named: buttonsArray, to: true)
                 return
-                //TODO: Handle create user error w/ alert
             }
             print("Created user successfully!")
             
             let userRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!)
-            let userValues = ["username": userName,
+            let userValues = ["username": username,
                               "email": email,
-                              "name": name]
+                              "name": name,
+                              "startDate": dateFormatter.string(from: currentDateTime)]
             
             userRef.updateChildValues(userValues, withCompletionBlock: { (error, ref) in
                 if error != nil {
-                    print(error!.localizedDescription)
                     SVProgressHUD.dismiss()
+                    self.createAlertView(withTitle: "Oops!", andMessage: error!.localizedDescription)
+                    self.toggleEnableTextFields(named: textFieldsArray, to: true)
+                    self.toggleEnableButtons(named: buttonsArray, to: true)
                     return
                 }
             })
             
             let changeRequest = user?.createProfileChangeRequest()
-            changeRequest?.displayName = userName
+            changeRequest?.displayName = username
             changeRequest?.commitChanges(completion: { (err) in
                 if err != nil {
-                    print(err!)
                     SVProgressHUD.dismiss()
+                    self.createAlertView(withTitle: "Oops!", andMessage: error!.localizedDescription)
+                    self.toggleEnableTextFields(named: textFieldsArray, to: true)
+                    self.toggleEnableButtons(named: buttonsArray, to: true)
                     return
-                    //TODO: Handle save displayName error w/ alert
                 }
                 print("Created displayName successfully!")
                 self.navigationController?.popViewController(animated: true)
-                    
             })
-            
-            
-            
             
             SVProgressHUD.dismiss()
             self.emailTextField.text = ""
             self.passwordTextField.text = ""
             self.userNameTextField.text = ""
             self.nameTextField.text = ""
-            self.emailTextField.isEnabled = true
-            self.passwordTextField.isEnabled = true
-            self.userNameTextField.isEnabled = true
+            self.toggleEnableTextFields(named: textFieldsArray, to: true)
+            self.toggleEnableButtons(named: buttonsArray, to: true)
         })
     }
     
@@ -348,5 +365,36 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    
+    func createAlertView(withTitle title: String, andMessage message: String ) {
+        let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let releaseAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            self.resignFirstResponder()
+            self.dismiss(animated: true, completion: nil)
+        }
+        alertView.addAction(releaseAction)
+        present(alertView, animated: true, completion: nil)
+    }
+    
+    func toggleEnableTextFields(named textFields: [UITextField],to enabled: Bool ) {
+        for textField in textFields {
+            if enabled {
+                textField.isEnabled = true
+            } else {
+                textField.isEnabled = false
+            }
+            
+        }
+    }
+    
+    func toggleEnableButtons(named buttons: [UIButton], to enabled: Bool) {
+        for button in buttons {
+            if enabled {
+                button.isEnabled = true
+            } else {
+                button.isEnabled = false
+            }
+        }
     }
 }
