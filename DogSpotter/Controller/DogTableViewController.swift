@@ -12,12 +12,16 @@ class DogTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        let userProfileImageView = UIImageView()
+        userProfileImageView.translatesAutoresizingMaskIntoConstraints = false
+        userProfileImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        userProfileImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        userProfileImageView.layer.cornerRadius = 20
+        userProfileImageView.clipsToBounds = true
+        userProfileImageView.contentMode = .scaleAspectFill
+        userProfileImageView.image = UIImage(named: "AppIcon")
+        navigationItem.titleView = userProfileImageView
     }
 
     override func didReceiveMemoryWarning() {
