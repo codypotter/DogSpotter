@@ -92,4 +92,12 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
         
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "showDogTableViewController", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDogTableViewController" {
+        }
+    }
 }
