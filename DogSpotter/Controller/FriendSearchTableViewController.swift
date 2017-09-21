@@ -17,6 +17,8 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
 
     var databaseRef = Database.database().reference()
     
+    var chosenUID: String?
+    
     let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
@@ -92,12 +94,23 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
         
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            chosenUID = filteredUsers[indexPath.row]?.value(forKey: "uid") as? String
+        } else {
+            chosenUID = usersArray[indexPath.row]?.value(forKey: "uid") as? String
+        }
         performSegue(withIdentifier: "showDogTableViewController", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDogTableViewController" {
+            let destinationController = segue.destination as! DogTableViewController
+            destinationController.uid = chosenUID
         }
     }
 }
+
+
+
+

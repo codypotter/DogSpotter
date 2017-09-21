@@ -14,6 +14,7 @@
 		557028E61F33DF67007ADC87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 557028E51F33DF67007ADC87 /* Assets.xcassets */; };
 		557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */; };
 		5581FCD81F734F1C00AF3454 /* DogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */; };
+		558F10BB1F7389EF006679CF /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */; };
 		55957A931F72E4070083C0C4 /* CustomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */; };
 		55957A951F72E7A10083C0C4 /* CustomCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */; };
 		55957A971F72EFA00083C0C4 /* CustomCalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */; };
@@ -45,6 +46,7 @@
 		557028E81F33DF67007ADC87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		557028EA1F33DF67007ADC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogTableViewController.swift; sourceTree = "<group>"; };
+		558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotationView.swift; sourceTree = "<group>"; };
 		55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCalloutView.xib; sourceTree = "<group>"; };
 		55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalloutView.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 			children = (
 				55D8E5851F5B38E900FD6A3A /* Fonts */,
 				557028E21F33DF67007ADC87 /* Main.storyboard */,
+				558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */,
 				55D8E58B1F5B3C1F00FD6A3A /* DesignableView.swift */,
 				55D8E5911F5CF25300FD6A3A /* DesignableButton.swift */,
 				55B273C41F62353B0088BF27 /* ShadowedView.swift */,
@@ -340,6 +343,7 @@
 				55B273C51F62353B0088BF27 /* ShadowedView.swift in Sources */,
 				557028E11F33DF67007ADC87 /* MapViewController.swift in Sources */,
 				557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */,
+				558F10BB1F7389EF006679CF /* ProfileTableViewCell.swift in Sources */,
 				55CFC92C1F70C4A3007789D2 /* AccountTableViewController.swift in Sources */,
 				5581FCD81F734F1C00AF3454 /* DogTableViewController.swift in Sources */,
 				55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */,
