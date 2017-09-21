@@ -18,35 +18,26 @@ class AccountTableViewController: UITableViewController {
     @IBOutlet weak var followersLabel: UILabel!
     @IBOutlet weak var followingLabel: UILabel!
     
+    let uid = Auth.auth().currentUser?.uid
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
         
-        var userRef: DatabaseReference?
-        if let uid = Auth.auth().currentUser?.uid {
-            userRef = Database().reference().child("users").child(uid)
-        } else {
-            let alertView = UIAlertController(title: "Not Logged In", message: "Looks like you're not logged in.", preferredStyle: .alert)
-            alertView.addAction(UIAlertAction(title: "#sorrynotsorry", style: .default, handler: { (action) in
-                self.dismiss(animated: true, completion: nil)
-            }))
-            present(alertView, animated: true, completion: nil)
+        let userRef = Database.database().reference().child("users").child(uid!)
+        userRef.observe(.value) { (snapshot) in
+            let postDict = snapshot.value as? [String : AnyObject] ?? [:]
+            self.usernameLabel.text = postDict["username"] as? String
+            self.emailLabel.text = postDict["email"] as? String
+            self.reputationLabel.text = postDict["reputation"] as? String
         }
-        
-        userRef?.observeSingleEvent(of: .value, with: { (snapshot) in
-            self.usernameLabel.text = String(describing: snapshot.value(forKey: "username"))
-            self.emailLabel.text = String(describing: snapshot.value(forKey: "email"))
-            self.reputationLabel.text = String(describing: snapshot.value(forKey: "reputation"))
-            
-            
-            
-        })
+
 
     }
 

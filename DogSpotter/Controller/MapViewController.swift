@@ -147,39 +147,8 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
             annotationView!.annotation = annotation
         }
         annotationView?.image = UIImage(named: "pin")
-        //Set the annotationView image here annotationView.image
-//        configureDetailView(annotationView!)
         return annotationView
     }
-    
-//    func configureDetailView(_ annotationView: MKAnnotationView) {
-//        let width = 300
-//        let height = 100
-//
-//        let dogPhotoView = UIView()
-//        let views = ["dogPhotoView": dogPhotoView]
-//
-//        dogPhotoView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[dogPhotoView(\(width))]", options: [], metrics: nil, views: views))
-//        dogPhotoView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[dogPhotoView(\(height))]", options: [], metrics: nil, views: views))
-//
-//        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-//        let creatorLabel = UILabel()
-//        let breedLabel = UILabel()
-//        let scoreLabel = UILabel()
-//
-//        for dog in self.dogs {
-//            imageView.image = dog.picture
-//
-//            DispatchQueue.main.async {
-//                dogPhotoView.addSubview(imageView)
-//
-//                self.view.layoutIfNeeded()
-//            }
-//
-//        }
-//
-//        annotationView.detailCalloutAccessoryView = dogPhotoView
-//    }
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
         for aView in views {

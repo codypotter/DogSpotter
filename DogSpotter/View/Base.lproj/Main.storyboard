@@ -93,8 +93,8 @@
         <!--Account-->
         <scene sceneID="8Pg-rF-DJh">
             <objects>
-                <tableViewController title="Account" id="wXD-QN-NwH" customClass="AccountTableViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="Ud2-Dv-NjF" customClass="AccountTableViewController">
+                <tableViewController title="Account" useStoryboardIdentifierAsRestorationIdentifier="YES" id="wXD-QN-NwH" customClass="AccountTableViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="Ud2-Dv-NjF">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -260,14 +260,16 @@
                         <connections>
                             <outlet property="dataSource" destination="wXD-QN-NwH" id="WBP-1W-X3b"/>
                             <outlet property="delegate" destination="wXD-QN-NwH" id="2l6-7N-R75"/>
-                            <outlet property="dogsPostedLabel" destination="wyg-jD-Bdr" id="jgg-u8-aJq"/>
-                            <outlet property="emailLabel" destination="NIS-Bd-lLi" id="efT-gH-NXv"/>
-                            <outlet property="followersLabel" destination="ola-1T-sE4" id="oNa-PA-qf5"/>
-                            <outlet property="followingLabel" destination="ByU-JH-2fa" id="AR6-cw-7fr"/>
-                            <outlet property="reputationLabel" destination="sc8-hI-uYA" id="Eqw-W5-c5t"/>
-                            <outlet property="usernameLabel" destination="gGg-sx-Iuf" id="XZX-Cs-Nzp"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="dogsPostedLabel" destination="wyg-jD-Bdr" id="K84-Qz-J1G"/>
+                        <outlet property="emailLabel" destination="NIS-Bd-lLi" id="BUN-0Q-YjY"/>
+                        <outlet property="followersLabel" destination="ola-1T-sE4" id="1BC-0v-iGz"/>
+                        <outlet property="followingLabel" destination="ByU-JH-2fa" id="yOH-C8-2qX"/>
+                        <outlet property="reputationLabel" destination="sc8-hI-uYA" id="4FJ-TM-EY5"/>
+                        <outlet property="usernameLabel" destination="gGg-sx-Iuf" id="ZCf-dh-jnk"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LpR-2E-9ck" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
