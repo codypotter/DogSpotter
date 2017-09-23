@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		553EB1F31F757F9E0023F27D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553EB1F21F757F9E0023F27D /* User.swift */; };
 		556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556A8B8E1F3A9C2800A24A7A /* Dog.swift */; };
 		557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557028DE1F33DF67007ADC87 /* AppDelegate.swift */; };
 		557028E11F33DF67007ADC87 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557028E01F33DF67007ADC87 /* MapViewController.swift */; };
@@ -15,6 +16,7 @@
 		557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */; };
 		5581FCD81F734F1C00AF3454 /* DogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */; };
 		558F10BB1F7389EF006679CF /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */; };
+		558F10BD1F74E1C6006679CF /* DogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */; };
 		55957A931F72E4070083C0C4 /* CustomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */; };
 		55957A951F72E7A10083C0C4 /* CustomCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */; };
 		55957A971F72EFA00083C0C4 /* CustomCalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */; };
@@ -37,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		553EB1F21F757F9E0023F27D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		556A8B8E1F3A9C2800A24A7A /* Dog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 		557028DB1F33DF67007ADC87 /* DogSpotter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DogSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		557028DE1F33DF67007ADC87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +50,7 @@
 		557028EA1F33DF67007ADC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogTableViewController.swift; sourceTree = "<group>"; };
 		558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
+		558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogTableViewCell.swift; sourceTree = "<group>"; };
 		55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotationView.swift; sourceTree = "<group>"; };
 		55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCalloutView.xib; sourceTree = "<group>"; };
 		55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalloutView.swift; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 			children = (
 				55CEF8C21F57BF0F001F1C85 /* CustomAnnotation.swift */,
 				556A8B8E1F3A9C2800A24A7A /* Dog.swift */,
+				553EB1F21F757F9E0023F27D /* User.swift */,
 				55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */,
 			);
 			path = Model;
@@ -181,6 +186,7 @@
 				55B273C41F62353B0088BF27 /* ShadowedView.swift */,
 				55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */,
 				55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */,
+				558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -347,6 +353,7 @@
 				55CFC92C1F70C4A3007789D2 /* AccountTableViewController.swift in Sources */,
 				5581FCD81F734F1C00AF3454 /* DogTableViewController.swift in Sources */,
 				55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */,
+				553EB1F31F757F9E0023F27D /* User.swift in Sources */,
 				55D8E58C1F5B3C1F00FD6A3A /* DesignableView.swift in Sources */,
 				55CFC9281F70BD8E007789D2 /* FriendSearchTableViewController.swift in Sources */,
 				55957A971F72EFA00083C0C4 /* CustomCalloutView.swift in Sources */,
@@ -354,6 +361,7 @@
 				55CEF8C31F57BF0F001F1C85 /* CustomAnnotation.swift in Sources */,
 				556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */,
 				55957A931F72E4070083C0C4 /* CustomAnnotationView.swift in Sources */,
+				558F10BD1F74E1C6006679CF /* DogTableViewCell.swift in Sources */,
 				55D8E5841F5B38D400FD6A3A /* NewDogViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

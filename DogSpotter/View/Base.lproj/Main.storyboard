@@ -523,7 +523,7 @@
                                     <outlet property="usernameLabel" destination="9MP-C4-05m" id="fFD-my-siu"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DogCell" rowHeight="454" id="dWT-AU-1tS">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="dogCell" rowHeight="454" id="dWT-AU-1tS" customClass="DogTableViewCell" customModule="DogSpotter" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="214" width="320" height="454"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dWT-AU-1tS" id="AZx-pX-Dcx">
@@ -602,6 +602,14 @@
                                         <constraint firstAttribute="trailing" secondItem="LFx-0E-h6o" secondAttribute="trailing" id="j0M-gJ-r9D"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="dogBreedLabel" destination="LHb-5V-qu9" id="Vav-YK-24d"/>
+                                    <outlet property="dogCreatorButton" destination="9Tc-Us-aS8" id="I4n-zH-t6x"/>
+                                    <outlet property="dogImageView" destination="yRM-dK-k8U" id="C5s-yI-FPb"/>
+                                    <outlet property="dogNameLabel" destination="NmD-1A-geC" id="CM2-uJ-nIg"/>
+                                    <outlet property="dogScoreLabel" destination="pwR-er-eOp" id="Byh-FF-BOv"/>
+                                    <outlet property="dogVotesLabel" destination="1fT-Hy-BP1" id="8v7-CC-5uO"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -741,13 +749,13 @@
                                                     <rect key="frame" x="0.0" y="92" width="268" height="37"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="MfX-tx-gVj">
-                                                            <rect key="frame" x="0.0" y="0.0" width="25.5" height="37"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="37"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="gf1-8k-BJ2">
-                                                            <rect key="frame" x="31.5" y="0.0" width="238.5" height="38"/>
+                                                            <rect key="frame" x="6" y="0.0" width="264" height="38"/>
                                                             <color key="minimumTrackTintColor" red="1" green="0.64705882349999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="maximumTrackTintColor" red="0.69803921570000005" green="0.27058823529999998" blue="0.1529411765" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="thumbTintColor" red="1" green="0.64705882349999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>

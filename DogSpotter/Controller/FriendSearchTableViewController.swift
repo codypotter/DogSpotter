@@ -12,12 +12,12 @@ import Firebase
 class FriendSearchTableViewController: UITableViewController, UISearchResultsUpdating {
     
     @IBOutlet var followUsersTableView: UITableView!
-    var usersArray = [NSDictionary?]()
-    var filteredUsers = [NSDictionary?]()
+    var usersArray = [User]()
+    var filteredUsers = [User]()
 
     var databaseRef = Database.database().reference()
     
-    var chosenUID: String?
+    var chosenUser = User()
     
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -30,7 +30,16 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
         tableView.tableHeaderView = searchController.searchBar
 
         databaseRef.child("users").queryOrdered(byChild: "username").observe(.childAdded) { (snapshot) in
-            self.usersArray.append(snapshot.value as? NSDictionary)
+            let queriedUser = User()
+            
+            let value = snapshot.value as? NSDictionary
+            queriedUser.email = value?["email"] as? String ?? ""
+            queriedUser.name = value?["name"] as? String ?? ""
+            queriedUser.reputation = Int(value?["reputation"] as? String ?? "0")
+            queriedUser.timestamp = Int(value?["timestamp"] as? String ?? "0")
+            queriedUser.uid = snapshot.key
+            queriedUser.username = value?["username"] as? String ?? ""
+            self.usersArray.append(queriedUser)
             
             //insert the rows
             
@@ -62,7 +71,7 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        let user: NSDictionary?
+        var user = User()
         if searchController.isActive && searchController.searchBar.text != "" {
             user = filteredUsers[indexPath.row]
             
@@ -70,8 +79,8 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
             user = self.usersArray[indexPath.row]
         }
         
-        cell.textLabel?.text = user?["username"] as? String
-        cell.detailTextLabel?.text = user?["email"] as? String
+        cell.textLabel?.text = user.username
+        cell.detailTextLabel?.text = user.name
         
         return cell
     }
@@ -87,7 +96,7 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
     
     func filterContent(searchText: String) {
         self.filteredUsers = self.usersArray.filter{ user in
-            let username = user!["username"] as? String
+            let username = user.username
             return(username?.lowercased().contains(searchText.lowercased()))!
         }
         tableView.reloadData()
@@ -96,9 +105,9 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {        
         if searchController.isActive && searchController.searchBar.text != "" {
-            chosenUID = filteredUsers[indexPath.row]?.value(forKey: "uid") as? String
+            chosenUser = filteredUsers[indexPath.row]
         } else {
-            chosenUID = usersArray[indexPath.row]?.value(forKey: "uid") as? String
+            chosenUser = usersArray[indexPath.row]
         }
         performSegue(withIdentifier: "showDogTableViewController", sender: self)
     }
@@ -106,7 +115,7 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDogTableViewController" {
             let destinationController = segue.destination as! DogTableViewController
-            destinationController.uid = chosenUID
+            destinationController.user = chosenUser
         }
     }
 }

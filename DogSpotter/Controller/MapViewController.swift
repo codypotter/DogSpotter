@@ -32,8 +32,28 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.mapType = .hybrid
         self.map.addSubview(newDogButton)
         
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
         let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
         
+        //MARK: Setup newDogButton attributes
+        newDogButton.setTitle("+", for: .normal)
+        newDogButton.sizeToFit()
+        newDogButton.addTarget(self, action: #selector(newDogButtonTapped), for: .touchUpInside)
+        newDogButton.backgroundColor = UIColor(red: 233/255, green: 116/255, blue: 81/255, alpha: 1)
+        
+        //MARK: Setup newDogButton layout
+        newDogButton.translatesAutoresizingMaskIntoConstraints = false
+        newDogButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
+        newDogButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        
+        
+        //MARK: Download dogs from firebase
         userDogRef.observe(.childAdded, with: { (snapshot) in
             if snapshot.value == nil {
                 print("no new dog found")
@@ -47,7 +67,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 dogRef.observeSingleEvent(of: .value, with: { (snap) in
                     print("Found dog data!")
                     let value = snap.value as! Dictionary<String, String>
-
+                    
                     let newDog = Dog()
                     newDog.name = value["name"]!
                     newDog.breed = value["breed"]!
@@ -55,19 +75,19 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                     newDog.score = Int(value["score"]!)!
                     newDog.imageURL = value["imageURL"]!
                     newDog.location = CLLocationCoordinate2D(latitude: Double(value["latitude"]!)!, longitude: Double(value["longitude"]!)!)
-
-                    URLSession.shared.dataTask(with: URL(string: newDog.imageURL)!, completionHandler: { (data, response, error) in
+                    
+                    URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
                         if error != nil {
                             print(error!)
                             return
                         }
                         newDog.picture = UIImage(data: data!)!
                         self.dogs.append(newDog)
-                        let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name, subtitle: newDog.creator)
-                        annotation.name = newDog.name
-                        annotation.breed = newDog.breed
-                        annotation.score = newDog.score
-                        annotation.creator = newDog.creator
+                        let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name!, subtitle: newDog.creator!)
+                        annotation.name = newDog.name!
+                        annotation.breed = newDog.breed!
+                        annotation.score = newDog.score!
+                        annotation.creator = newDog.creator!
                         annotation.picture = newDog.picture
                         DispatchQueue.main.async {
                             self.map.addAnnotation(annotation)
@@ -77,22 +97,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 })
             }
         })
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
-        //MARK: Setup newDogButton attributes
-        newDogButton.setTitle("+", for: .normal)
-        newDogButton.sizeToFit()
-        newDogButton.addTarget(self, action: #selector(newDogButtonTapped), for: .touchUpInside)
-        newDogButton.backgroundColor = UIColor(red: 233/255, green: 116/255, blue: 81/255, alpha: 1)
-        
-        //MARK: Setup newDogButton layout
-        newDogButton.translatesAutoresizingMaskIntoConstraints = false
-        newDogButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
-        newDogButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
         
         //MARK: Auto-Logout handler
