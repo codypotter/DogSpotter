@@ -12,7 +12,6 @@ import Firebase
 class DogTableViewController: UITableViewController {
 
     var user = User()
-    let profileCell = ProfileTableViewCell()
     var dogs = [Dog]()
     
     override func viewDidLoad() {
@@ -89,12 +88,23 @@ class DogTableViewController: UITableViewController {
             let dogCell = tableView.dequeueReusableCell(withIdentifier: "dogCell", for: indexPath) as! DogTableViewCell
             dogCell.dogBreedLabel.text = dogs[indexPath.row - 1].breed
             dogCell.dogNameLabel.text = dogs[indexPath.row - 1].name
-            dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row - 1].score)
+            dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row - 1].score!)
             dogCell.dogImageView.image = dogs[indexPath.row - 1].picture
-            dogCell.dogCreatorButton.titleLabel?.text = dogs[indexPath.row - 1].creator
+            dogCell.dogCreatorLabel.text = dogs[indexPath.row - 1].creator
             dogCell.dogVotesLabel.text = "0"
             return dogCell
         }
-        
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 186.0
+        } else {
+            let imageHeight = Int(view.bounds.width)
+            let labelsHeight = 3 * 20
+            let spacing = 12 + 24
+            let creatorHeight = 30
+            return CGFloat(imageHeight + labelsHeight + spacing + creatorHeight + 8)
+        }
     }
 }

@@ -19,6 +19,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     let newDogButton = MDCFloatingButton()
     var authHandle: AuthStateDidChangeListenerHandle?
     var dogs: [Dog] = [Dog]()
+    var user = User()
     
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -31,15 +32,11 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.delegate = self
         self.map.mapType = .hybrid
         self.map.addSubview(newDogButton)
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
-        let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
         
         //MARK: Setup newDogButton attributes
         newDogButton.setTitle("+", for: .normal)
@@ -52,8 +49,26 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         newDogButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
         newDogButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
-        
+        //MARK: Check if signed in then load dogs
+        if Auth.auth().currentUser == nil {
+            performSegue(withIdentifier: "showLoginViewController", sender: self)
+        } else {
+            loadDogs()
+        }
+    }
+    
+    @objc func newDogButtonTapped() {
+        // Get current location
+        DispatchQueue.global(qos: .background).async {
+            self.delegate.locationManager.requestLocation()
+        }
+        performSegue(withIdentifier: "showNewDogViewController", sender: self)
+    }
+    
+    fileprivate func loadDogs() {
         //MARK: Download dogs from firebase
+        let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
+        
         userDogRef.observe(.childAdded, with: { (snapshot) in
             if snapshot.value == nil {
                 print("no new dog found")
@@ -92,28 +107,10 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                         DispatchQueue.main.async {
                             self.map.addAnnotation(annotation)
                         }
-                        
                     }).resume()
                 })
             }
         })
-        
-        
-        //MARK: Auto-Logout handler
-        authHandle = Auth.auth().addStateDidChangeListener({ (auth, user) in
-            if Auth.auth().currentUser == nil {
-                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
-            }
-        })
-    }
-    
-    @objc func newDogButtonTapped() {
-        // Get current location
-        DispatchQueue.global(qos: .background).async {
-            self.delegate.locationManager.requestLocation()
-        }
-        
-        performSegue(withIdentifier: "showNewDogViewController", sender: self)
     }
     
     @IBAction func logOutTapped(_ sender: Any) {

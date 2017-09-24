@@ -14,19 +14,7 @@ class DogTableViewCell: UITableViewCell {
     @IBOutlet weak var dogNameLabel: UILabel!
     @IBOutlet weak var dogBreedLabel: UILabel!
     @IBOutlet weak var dogScoreLabel: UILabel!
-    @IBOutlet weak var dogCreatorButton: UIButton!
+    @IBOutlet weak var dogCreatorLabel: UILabel!
     @IBOutlet weak var dogVotesLabel: UILabel!
-    
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 
 }

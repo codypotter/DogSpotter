@@ -20,16 +20,9 @@ class AccountTableViewController: UITableViewController {
     
     let uid = Auth.auth().currentUser?.uid
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        
         let userRef = Database.database().reference().child("users").child(uid!)
         userRef.observe(.value) { (snapshot) in
             let postDict = snapshot.value as? [String : AnyObject] ?? [:]
@@ -37,15 +30,10 @@ class AccountTableViewController: UITableViewController {
             self.emailLabel.text = postDict["email"] as? String
             self.reputationLabel.text = postDict["reputation"] as? String
         }
-
-
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
-
-    // MARK: - Table view data source
-
 }
