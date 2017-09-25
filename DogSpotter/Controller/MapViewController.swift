@@ -12,7 +12,7 @@ import MapKit
 import Firebase
 import MaterialComponents
 
-class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate, NewDogInfo {
+class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
 
     @IBOutlet var map: MKMapView!
     
@@ -117,13 +117,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         performSegue(withIdentifier: "showLoginViewController", sender: self)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showNewDogViewController" {
-            let newDogViewController = segue.destination as! NewDogViewController
-            newDogViewController.dogInfoDelegate = self
-        }
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -194,10 +187,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 subview.removeFromSuperview()
             }
         }
-    }
-    
-    func dogDataReceived(name: String, breed: String, score: Int, image: UIImage) {
-        
     }
     
     @IBAction func accountButtonTapped(_ sender: Any) {

@@ -10,16 +10,11 @@ import UIKit
 import MaterialComponents
 import Firebase
 
-protocol NewDogInfo {
-	func dogDataReceived(name: String, breed: String, score: Int, image: UIImage)
-}
-
 class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     let delegate = UIApplication.shared.delegate as! AppDelegate
 	let storageRef = Storage.storage().reference()
 	let uid = Auth.auth().currentUser?.uid
-	var dogInfoDelegate: NewDogInfo?
 	
     var dogScore: Int = 1
     var image: UIImage?
