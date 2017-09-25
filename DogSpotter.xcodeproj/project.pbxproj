@@ -97,6 +97,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		5504E0D51F789D44005A9833 /* Designables */ = {
+			isa = PBXGroup;
+			children = (
+				55D8E58B1F5B3C1F00FD6A3A /* DesignableView.swift */,
+				55D8E5911F5CF25300FD6A3A /* DesignableButton.swift */,
+			);
+			path = Designables;
+			sourceTree = "<group>";
+		};
 		557028D21F33DF67007ADC87 = {
 			isa = PBXGroup;
 			children = (
@@ -178,15 +187,14 @@
 		55D8E58A1F5B3BF100FD6A3A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				5504E0D51F789D44005A9833 /* Designables */,
 				55D8E5851F5B38E900FD6A3A /* Fonts */,
 				557028E21F33DF67007ADC87 /* Main.storyboard */,
 				558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */,
-				55D8E58B1F5B3C1F00FD6A3A /* DesignableView.swift */,
-				55D8E5911F5CF25300FD6A3A /* DesignableButton.swift */,
+				558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */,
 				55B273C41F62353B0088BF27 /* ShadowedView.swift */,
 				55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */,
 				55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */,
-				558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

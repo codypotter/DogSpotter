@@ -257,11 +257,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let buttonsArray = [signupButton,
                             loginButton]
         
-        let currentDateTime = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .none
-        dateFormatter.dateStyle = .short
-        
         if !isInSignupMode {
             UIView.animate(withDuration: 0.2, animations: {
                 self.userNameTextField.isHidden = false
@@ -321,7 +316,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             let userValues = ["username": username,
                               "email": email,
                               "name": name,
-                              "startDate": dateFormatter.string(from: currentDateTime),
+                              "startDate": String(describing: NSDate.timeIntervalSinceReferenceDate),
                               "reputation": "0",
                               "uid": user?.uid]
             
