@@ -186,10 +186,11 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        if view.isKind(of: CustomAnnotationView.self)
-        {
-            for subview in view.subviews
-            {
+        if view.isKind(of: CustomAnnotationView.self){
+            for subview in view.subviews{
+                UIView.animate(withDuration: 0.2, animations: {
+                    subview.alpha = 0
+                })
                 subview.removeFromSuperview()
             }
         }
