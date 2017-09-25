@@ -11,24 +11,34 @@ import Firebase
 
 class DogTableViewController: UITableViewController {
 
+    var currentUserIsFollowing = false
     var user = User()
     var dogs = [Dog]()
+    
+    @IBOutlet weak var followBarButtonItem: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let userDogRef = Database.database().reference().child("users").child(user.uid!).child("dogs")
         
-        let userProfileImageView = UIImageView()
-        userProfileImageView.translatesAutoresizingMaskIntoConstraints = false
-        userProfileImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        userProfileImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        userProfileImageView.layer.cornerRadius = 20
-        userProfileImageView.clipsToBounds = true
-        userProfileImageView.contentMode = .scaleAspectFill
-        userProfileImageView.image = UIImage(named: "AppIcon")
+        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
         
-        navigationItem.titleView = userProfileImageView
+        followingRef.observeSingleEvent(of: .childAdded) { (snapshot) in
+            if snapshot.value == nil {
+                print("no following found")
+                return
+            }
+            let value = snapshot.value as? NSDictionary
+            let followingUserUID = String(describing: value!["uid"]!)
+            if self.user.uid == followingUserUID {
+                self.currentUserIsFollowing = true
+                DispatchQueue.main.async {
+                    self.followBarButtonItem.title = "Unfollow"
+                }
+            }
+            
+        }
         
         //MARK: Download dogs from firebase
         userDogRef.observe(.childAdded, with: { (snapshot) in
@@ -101,6 +111,66 @@ class DogTableViewController: UITableViewController {
             let spacing = 12 + 24
             let creatorHeight = 30
             return CGFloat(imageHeight + labelsHeight + spacing + creatorHeight + 8)
+        }
+    }
+    
+    fileprivate func unfollowUser() {
+        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
+        let followersRef = Database.database().reference().child("users").child(user.uid!).child("followers")
+        
+        followingRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
+            if snapshot.value == nil {
+                print("no following found")
+            }
+            let value = snapshot.value as? NSDictionary
+            let followingUserUID = String(describing: value!["uid"]!)
+            if self.user.uid == followingUserUID {
+                snapshot.ref.removeValue()
+            }
+        })
+        
+        followersRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
+            if snapshot.value == nil {
+                print("no followers found")
+            }
+            let value = snapshot.value as? NSDictionary
+            let followerUserUID = String(describing: value!["uid"]!)
+            if Auth.auth().currentUser?.uid == followerUserUID {
+                snapshot.ref.removeValue()
+            }
+        })
+
+        currentUserIsFollowing = false
+        followBarButtonItem.title = "Follow"
+    }
+    
+    fileprivate func followUser() {
+        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
+        let followersRef = Database.database().reference().child("users").child(user.uid!).child("followers")
+        
+        followingRef.childByAutoId().updateChildValues(["uid": user.uid as Any]) { (error, ref) in
+            if error != nil {
+                print(String(describing: error?.localizedDescription))
+            }
+        }
+        
+        followersRef.childByAutoId().updateChildValues(["uid": Auth.auth().currentUser?.uid as Any]) { (error, ref) in
+            if error != nil {
+                print(String(describing: error?.localizedDescription))
+            }
+        }
+        currentUserIsFollowing = true
+        followBarButtonItem.title = "Unfollow"
+    }
+    
+    @IBAction func followUserButtonPressed(_ sender: Any) {
+        if !currentUserIsFollowing {
+            followUser()
+            return
+        }
+        if currentUserIsFollowing {
+            unfollowUser()
+            return
         }
     }
 }

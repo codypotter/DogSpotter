@@ -162,7 +162,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dogLoginPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="2Tu-GN-dht">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profilePlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="2Tu-GN-dht">
                                                     <rect key="frame" x="207" y="8" width="72" height="72"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="2Tu-GN-dht" secondAttribute="height" multiplier="1:1" id="1ov-fb-G91"/>
@@ -301,11 +301,12 @@
                         <outlet property="profileImageView" destination="2Tu-GN-dht" id="Woq-Zw-AIS"/>
                         <outlet property="reputationLabel" destination="sc8-hI-uYA" id="4FJ-TM-EY5"/>
                         <outlet property="usernameLabel" destination="gGg-sx-Iuf" id="ZCf-dh-jnk"/>
+                        <segue destination="hqI-38-7kW" kind="show" identifier="showSearchFromAccountController" id="Tpa-re-lmD"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LpR-2E-9ck" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1027.5" y="-934.85915492957747"/>
+            <point key="canvasLocation" x="921" y="-932"/>
         </scene>
         <!--Find Users-->
         <scene sceneID="JjM-M9-Fl3">
@@ -361,7 +362,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hom-cr-Cgf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1028" y="-165"/>
+            <point key="canvasLocation" x="1764" y="-431"/>
         </scene>
         <!--User-->
         <scene sceneID="jyt-ny-4aK">
@@ -630,12 +631,19 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="Yty-Gs-qi4">
-                        <barButtonItem key="rightBarButtonItem" title="Follow" id="G4J-sD-Vhi"/>
+                        <barButtonItem key="rightBarButtonItem" title="Follow" id="G4J-sD-Vhi">
+                            <connections>
+                                <action selector="followUserButtonPressed:" destination="8gY-bM-ubw" id="E4F-Wn-MDc"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="followBarButtonItem" destination="G4J-sD-Vhi" id="vd4-X8-BTl"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XY0-F1-Atd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1882.5" y="-166.90140845070422"/>
+            <point key="canvasLocation" x="2535" y="-610"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -876,5 +884,9 @@
     <resources>
         <image name="Dog-Spoter-Logo" width="297" height="58"/>
         <image name="dogLoginPhoto" width="360" height="640"/>
+        <image name="profilePlaceholder" width="180" height="180"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Tpa-re-lmD"/>
+    </inferredMetricsTieBreakers>
 </document>
