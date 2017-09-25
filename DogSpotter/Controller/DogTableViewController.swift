@@ -67,11 +67,7 @@ class DogTableViewController: UITableViewController {
                 })
             }
         })
-
-        tableView.estimatedRowHeight = 454
     }
-
-    // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dogs.count + 1

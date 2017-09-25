@@ -165,7 +165,8 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 							                 "score": String(self.dogScore),
 							                 "latitude": String(describing: latitude!),
 							                 "longitude": String(describing: longitude!),
-							                 "imageURL":dogDownloadURL]
+							                 "imageURL": dogDownloadURL,
+							                 "timestamp": String(describing: NSDate.timeIntervalSinceReferenceDate)]
 							
 							let userDogListValues = ["dogID": dogRef.key]
 							
