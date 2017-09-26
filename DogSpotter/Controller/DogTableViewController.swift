@@ -21,24 +21,7 @@ class DogTableViewController: UITableViewController {
         super.viewDidLoad()
         
         let userDogRef = Database.database().reference().child("users").child(user.uid!).child("dogs")
-        
-        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
-        
-        followingRef.observeSingleEvent(of: .childAdded) { (snapshot) in
-            if snapshot.value == nil {
-                print("no following found")
-                return
-            }
-            let value = snapshot.value as? NSDictionary
-            let followingUserUID = String(describing: value!["uid"]!)
-            if self.user.uid == followingUserUID {
-                self.currentUserIsFollowing = true
-                DispatchQueue.main.async {
-                    self.followBarButtonItem.title = "Unfollow"
-                }
-            }
-            
-        }
+
         
         //MARK: Download dogs from firebase
         userDogRef.observe(.childAdded, with: { (snapshot) in
@@ -114,63 +97,97 @@ class DogTableViewController: UITableViewController {
         }
     }
     
-    fileprivate func unfollowUser() {
-        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
-        let followersRef = Database.database().reference().child("users").child(user.uid!).child("followers")
-        
-        followingRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
-            if snapshot.value == nil {
-                print("no following found")
-            }
-            let value = snapshot.value as? NSDictionary
-            let followingUserUID = String(describing: value!["uid"]!)
-            if self.user.uid == followingUserUID {
-                snapshot.ref.removeValue()
-            }
-        })
-        
-        followersRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
-            if snapshot.value == nil {
-                print("no followers found")
-            }
-            let value = snapshot.value as? NSDictionary
-            let followerUserUID = String(describing: value!["uid"]!)
-            if Auth.auth().currentUser?.uid == followerUserUID {
-                snapshot.ref.removeValue()
-            }
-        })
-
-        currentUserIsFollowing = false
-        followBarButtonItem.title = "Follow"
-    }
-    
-    fileprivate func followUser() {
-        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
-        let followersRef = Database.database().reference().child("users").child(user.uid!).child("followers")
-        
-        followingRef.childByAutoId().updateChildValues(["uid": user.uid as Any]) { (error, ref) in
-            if error != nil {
-                print(String(describing: error?.localizedDescription))
-            }
-        }
-        
-        followersRef.childByAutoId().updateChildValues(["uid": Auth.auth().currentUser?.uid as Any]) { (error, ref) in
-            if error != nil {
-                print(String(describing: error?.localizedDescription))
-            }
-        }
-        currentUserIsFollowing = true
-        followBarButtonItem.title = "Unfollow"
-    }
+//    fileprivate func unfollowUser() {
+//        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
+//        let followersRef = Database.database().reference().child("users").child(user.uid!).child("followers")
+//
+//        followingRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
+//            if snapshot.value == nil {
+//                print("no following found")
+//            }
+//            let value = snapshot.value as? NSDictionary
+//            let followingUserUID = String(describing: value!["uid"]!)
+//            if self.user.uid == followingUserUID {
+//                snapshot.ref.removeValue()
+//            }
+//        })
+//
+//        followersRef.observeSingleEvent(of: .childAdded, with: { (snapshot) in
+//            if snapshot.value == nil {
+//                print("no followers found")
+//            }
+//            let value = snapshot.value as? NSDictionary
+//            let followerUserUID = String(describing: value!["uid"]!)
+//            if Auth.auth().currentUser?.uid == followerUserUID {
+//                snapshot.ref.removeValue()
+//            }
+//        })
+//
+//        currentUserIsFollowing = false
+//        followBarButtonItem.title = "Follow"
+//    }
+//
+//    fileprivate func followUser() {
+//        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
+//        let followersRef = Database.database().reference().child("users").child(user.uid!).child("followers")
+//
+//        followingRef.childByAutoId().updateChildValues(["uid": user.uid as Any]) { (error, ref) in
+//            if error != nil {
+//                print(String(describing: error?.localizedDescription))
+//            }
+//        }
+//
+//        followersRef.childByAutoId().updateChildValues(["uid": Auth.auth().currentUser?.uid as Any]) { (error, ref) in
+//            if error != nil {
+//                print(String(describing: error?.localizedDescription))
+//            }
+//        }
+//        currentUserIsFollowing = true
+//        followBarButtonItem.title = "Unfollow"
+//    }
     
     @IBAction func followUserButtonPressed(_ sender: Any) {
-        if !currentUserIsFollowing {
-            followUser()
-            return
-        }
-        if currentUserIsFollowing {
-            unfollowUser()
-            return
-        }
+        followOrUnfollow()
+    }
+    
+    func followOrUnfollow() {
+
+        let followingRef = Database.database().reference().child("users/\(Auth.auth().currentUser!.uid)/following/\(user.uid!)")
+        let followersRef = Database.database().reference().child("users/\(user.uid!)/followers/\(Auth.auth().currentUser!.uid)")
+        
+        followingRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if !snapshot.exists() {
+                print("no following found")
+                followingRef.updateChildValues([self.user.uid!: "true"]) { (error, ref) in
+                    if error != nil {
+                        print(String(describing: error?.localizedDescription))
+                    }
+                    
+                }
+            } else {
+                print("unfollowing")
+                snapshot.ref.child(self.user.uid!).removeValue()
+            }
+        })
+        
+        followersRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if !snapshot.exists() {
+                print("no followers found")
+                followersRef.updateChildValues([(Auth.auth().currentUser?.uid)!: "true"]) { (error, ref) in
+                    if error != nil {
+                        print(String(describing: error?.localizedDescription))
+                    }
+                    DispatchQueue.main.async {
+                        self.followBarButtonItem.title = "Unfollow"
+                    }
+                }
+            } else {
+                print("unfollowing")
+                snapshot.ref.child(Auth.auth().currentUser!.uid).removeValue()
+                DispatchQueue.main.async {
+                    self.followBarButtonItem.title = "Follow"
+                }
+            }
+        })
     }
 }
