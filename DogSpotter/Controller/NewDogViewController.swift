@@ -146,54 +146,47 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 			
 			dogPhotosReference.putData(imageData!, metadata: metadata, completion: { (metatada, error) in
 				if error != nil {
-					print(error!)
-					//TODO: Handle upload error
-				} else {
-					// Image upload was success! Let's get a reference to the dogPhoto URL.
-					dogPhotosReference.downloadURL(completion: { (url, error) in
-						if error != nil {
-							print(error!)
-							return
-							//TODO: Handle download url error
-						} else {
-							// Successfuly got a URL, let's save that along with our dog info to the DB.
-							dogDownloadURL = (url?.absoluteString)!
-							
-							let dogValues = ["creator": user!,
-							                 "name": self.dogNameTextField.text!,
-							                 "breed": self.dogBreedTextField.text!,
-							                 "score": String(self.dogScore),
-							                 "latitude": String(describing: latitude!),
-							                 "longitude": String(describing: longitude!),
-							                 "imageURL": dogDownloadURL,
-							                 "timestamp": String(describing: NSDate.timeIntervalSinceReferenceDate)]
-							
-							let userDogListValues = ["dogID": dogRef.key]
-							
-							dogRef.updateChildValues(dogValues, withCompletionBlock: { (error, ref) in
-								if error != nil {
-									print(error!)
-									return
-									//TODO: Handle malfunction of database update
-								} else {
-									print("Saved dog successfully!")
-								}
-								
-							})
-							
-							// At the same time, let's update the user's list of dogs with the dog we've made
-							userRef.childByAutoId().updateChildValues(userDogListValues, withCompletionBlock: { (error, ref) in
-								if error != nil {
-									print(error!)
-									return
-									//TODO: Handle malfunction of database update
-								} else {
-									print("User-Dog list updated successfully!")
-								}
-							})
-						}
-					})
+					print(error!.localizedDescription)
+					return
 				}
+			})
+			
+			// Image upload was success! Let's get a reference to the dogPhoto URL.
+			dogPhotosReference.downloadURL(completion: { (url, error) in
+				if error != nil {
+					print(error!)
+					return
+					//TODO: Handle download url error
+				}
+				// Successfuly got a URL, let's save that along with our dog info to the DB.
+				dogDownloadURL = (url?.absoluteString)!
+				
+				let dogValues = ["creator": user!,
+				                 "name": self.dogNameTextField.text!,
+				                 "breed": self.dogBreedTextField.text!,
+				                 "score": String(self.dogScore),
+				                 "latitude": String(describing: latitude!),
+				                 "longitude": String(describing: longitude!),
+				                 "imageURL": dogDownloadURL,
+				                 "timestamp": String(describing: NSDate.timeIntervalSinceReferenceDate)]
+				
+				let dogKey = dogRef.key
+				
+				dogRef.updateChildValues(dogValues, withCompletionBlock: { (error, ref) in
+					if error != nil {
+						print(error!.localizedDescription)
+						return
+					}
+					
+				})
+				
+				// At the same time, let's update the user's list of dogs with the dog we've made
+				userRef.child(dogKey).setValue("true", withCompletionBlock: { (error, ref) in
+					if error != nil {
+						print(error!.localizedDescription)
+						return
+					}
+				})
 			})
 		} else {
 			return
