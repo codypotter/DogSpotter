@@ -108,6 +108,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         loginCredentialsView.backgroundColor = UIColor.white
         loginCredentialsView.layer.cornerRadius = 2.0
         loginCredentialsView.shadowLayer.elevation = 2.0
+        loginCredentialsView.isHidden = true
         
         //MARK: Username Text Field Layout
         userNameTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -175,7 +176,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func loginButtonTapped() {
-        
+        loginCredentialsView.isHidden = false
         let textFieldsArray = [userNameTextField,
                                nameTextField,
                                passwordTextField,
@@ -249,6 +250,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func signupButtonTapped() {
+        loginCredentialsView.isHidden = false
         let textFieldsArray = [userNameTextField,
                                nameTextField,
                                passwordTextField,

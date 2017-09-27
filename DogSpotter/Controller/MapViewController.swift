@@ -17,7 +17,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     @IBOutlet var map: MKMapView!
     
     let newDogButton = MDCFloatingButton()
-    var authHandle: AuthStateDidChangeListenerHandle?
     var dogs: [Dog] = [Dog]()
     var user = User()
     
@@ -51,18 +50,28 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         
         //MARK: Check if signed in then load dogs
         if Auth.auth().currentUser == nil {
-            performSegue(withIdentifier: "showLoginViewController", sender: self)
+//            let alert = UIAlertController(title: "Welcome!", message: "It looks like you're not logged in! Let's fix that!", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "Log In", style: .default, handler: { (action) in
+//                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
+//            }))
+//            present(alert, animated: true, completion: nil)
         } else {
             loadDogs()
         }
     }
     
     @objc func newDogButtonTapped() {
-        // Get current location
-        DispatchQueue.global(qos: .background).async {
-            self.delegate.locationManager.requestLocation()
+        Auth.auth().addStateDidChangeListener { (auth, user) in
+            if user != nil {
+                // Get current location
+                DispatchQueue.global(qos: .background).async {
+                    self.delegate.locationManager.requestLocation()
+                }
+                self.performSegue(withIdentifier: "showNewDogViewController", sender: self)
+            } else {
+                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
+            }
         }
-        performSegue(withIdentifier: "showNewDogViewController", sender: self)
     }
     
     fileprivate func loadDogs() {
@@ -113,6 +122,11 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     @IBAction func logOutTapped(_ sender: Any) {
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print("an error has occurred")
+        }
         performSegue(withIdentifier: "showLoginViewController", sender: self)
     }
     
@@ -189,10 +203,11 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     @IBAction func accountButtonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "showAccountViewController", sender: self)
+        self.performSegue(withIdentifier: "showAccountViewController", sender: self)
     }
+    
     @IBAction func disoverButtonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "showUserSearch", sender: self)
+        self.performSegue(withIdentifier: "showUserSearch", sender: self)
     }
     
     @objc func upvoteTapped(_ sender: UIButton) {

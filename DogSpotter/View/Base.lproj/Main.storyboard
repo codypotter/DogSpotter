@@ -21,7 +21,7 @@
         <!--Login View Controller-->
         <scene sceneID="Hn0-mK-h7R">
             <objects>
-                <viewController id="B35-es-3Ib" customClass="LoginViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="B35-es-3Ib" customClass="LoginViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Mh8-gJ-xm7"/>
                         <viewControllerLayoutGuide type="bottom" id="cuv-jl-W2E"/>
@@ -88,7 +88,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OX1-IM-W0l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="122" y="-1080"/>
+            <point key="canvasLocation" x="-1536" y="431"/>
         </scene>
         <!--Account-->
         <scene sceneID="8Pg-rF-DJh">
@@ -306,7 +306,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LpR-2E-9ck" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="921" y="-932"/>
+            <point key="canvasLocation" x="917" y="-630"/>
         </scene>
         <!--Find Users-->
         <scene sceneID="JjM-M9-Fl3">
@@ -362,7 +362,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hom-cr-Cgf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1764" y="-431"/>
+            <point key="canvasLocation" x="1785" y="18"/>
         </scene>
         <!--User-->
         <scene sceneID="jyt-ny-4aK">
@@ -648,7 +648,7 @@
         <!--Map View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MapViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MapViewController" id="BYZ-38-t0r" customClass="MapViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7iq-AS-f3E"/>
                         <viewControllerLayoutGuide type="bottom" id="ydc-bE-mZO"/>
@@ -694,14 +694,14 @@
                     <connections>
                         <outlet property="map" destination="2Yf-Jh-Mlf" id="hjL-zV-FrG"/>
                         <segue destination="KsA-vq-xzT" kind="presentation" identifier="showNewDogViewController" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="Fwm-jb-LkS"/>
-                        <segue destination="B35-es-3Ib" kind="show" identifier="showLoginViewController" id="XBv-7h-ndn"/>
                         <segue destination="wXD-QN-NwH" kind="show" identifier="showAccountViewController" id="BvD-XB-Cqf"/>
                         <segue destination="hqI-38-7kW" kind="show" identifier="showUserSearch" id="wGe-TU-Q4T"/>
+                        <segue destination="B35-es-3Ib" kind="show" identifier="showLoginViewController" id="1Lj-WF-1sN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="121.875" y="-394.01408450704224"/>
+            <point key="canvasLocation" x="15" y="-394"/>
         </scene>
         <!--New Dog View Controller-->
         <scene sceneID="b82-Pf-g2u">
@@ -865,7 +865,7 @@
         <!--Navigation Controller-->
         <scene sceneID="6UK-7A-hi5">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="svN-fF-E4S" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NavigationController" automaticallyAdjustsScrollViewInsets="NO" id="svN-fF-E4S" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="8X2-Sx-PIK">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
