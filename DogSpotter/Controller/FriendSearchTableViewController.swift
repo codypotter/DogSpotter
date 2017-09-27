@@ -56,7 +56,6 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         if searchController.isActive && searchController.searchBar.text != "" {
             return filteredUsers.count
         }
