@@ -21,7 +21,6 @@ class DogTableViewController: UITableViewController {
         super.viewDidLoad()
         
         let userDogRef = Database.database().reference().child("users").child(user.uid!).child("dogs")
-
         
         //MARK: Download dogs from firebase
         userDogRef.observe(.childAdded, with: { (snapshot) in
@@ -30,8 +29,7 @@ class DogTableViewController: UITableViewController {
             } else {
                 print("new dog found")
                 
-                let snapshotValue = snapshot.value as? NSDictionary
-                let dogID = snapshotValue?["dogID"] as? String ?? ""
+                let dogID = snapshot.key
                 
                 let dogRef = Database.database().reference().child("dogs").child(dogID)
                 dogRef.observeSingleEvent(of: .value, with: { (snap) in
