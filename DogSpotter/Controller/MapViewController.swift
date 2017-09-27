@@ -75,8 +75,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
             } else {
                 print("new dog found")
                 
-                let snapshotValue = snapshot.value as! Dictionary<String, String>
-                let dogID = snapshotValue["dogID"]!
+                let dogID = snapshot.key
                 
                 let dogRef = Database.database().reference().child("dogs").child(dogID)
                 dogRef.observeSingleEvent(of: .value, with: { (snap) in
