@@ -32,7 +32,7 @@ class DogTableViewController: UITableViewController {
                 let dogID = snapshot.key
                 
                 let dogRef = Database.database().reference().child("dogs").child(dogID)
-                dogRef.observeSingleEvent(of: .value, with: { (snap) in
+                dogRef.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snap) in
                     print("Found dog data!")
                     let value  = snap.value as? NSDictionary
                     let newDog = Dog()
@@ -50,11 +50,13 @@ class DogTableViewController: UITableViewController {
                             return
                         }
                         newDog.picture = UIImage(data: data!)!
-                        self.dogs.append(newDog)
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                         }
                     }).resume()
+                    
+                    self.dogs.insert(newDog, at: 0)
+                    
                 })
             }
         })
@@ -94,8 +96,6 @@ class DogTableViewController: UITableViewController {
             return CGFloat(imageHeight + labelsHeight + spacing + creatorHeight + 8)
         }
     }
-    
-
     
     @IBAction func followUserButtonPressed(_ sender: Any) {
         followOrUnfollow()
