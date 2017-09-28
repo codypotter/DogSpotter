@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="svN-fF-E4S">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -84,11 +84,12 @@
                     <connections>
                         <outlet property="blurView" destination="3OA-FR-TCk" id="KJo-t2-tR2"/>
                         <outlet property="imageView" destination="8JW-QD-p5n" id="gDS-IA-TTK"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="showMapViewControllerFromLoginViewController" id="vDq-n4-OsS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OX1-IM-W0l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1536" y="431"/>
+            <point key="canvasLocation" x="-698" y="-394"/>
         </scene>
         <!--Account-->
         <scene sceneID="8Pg-rF-DJh">
@@ -696,12 +697,11 @@
                         <segue destination="KsA-vq-xzT" kind="presentation" identifier="showNewDogViewController" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="Fwm-jb-LkS"/>
                         <segue destination="wXD-QN-NwH" kind="show" identifier="showAccountViewController" id="BvD-XB-Cqf"/>
                         <segue destination="hqI-38-7kW" kind="show" identifier="showUserSearch" id="wGe-TU-Q4T"/>
-                        <segue destination="B35-es-3Ib" kind="show" identifier="showLoginViewController" id="1Lj-WF-1sN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="15" y="-394"/>
+            <point key="canvasLocation" x="122" y="-394"/>
         </scene>
         <!--New Dog View Controller-->
         <scene sceneID="b82-Pf-g2u">
@@ -873,12 +873,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="IDH-d0-QX9"/>
+                        <segue destination="B35-es-3Ib" kind="relationship" relationship="rootViewController" id="Fsk-mu-TCW"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iRG-4R-I1O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-724" y="-393"/>
+            <point key="canvasLocation" x="-1438" y="-394"/>
         </scene>
     </scenes>
     <resources>
@@ -887,6 +887,6 @@
         <image name="profilePlaceholder" width="180" height="180"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Tpa-re-lmD"/>
+        <segue reference="wGe-TU-Q4T"/>
     </inferredMetricsTieBreakers>
 </document>

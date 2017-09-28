@@ -28,6 +28,13 @@
 	<string>Dog Spotter needs your location to plot your dog photos on the map.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Dog Spotter needs to save photos to your Photo Library.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>PT_Serif-Web-Bold.ttf</string>
+		<string>PT_Serif-Web-BoldItalic.ttf</string>
+		<string>PT_Serif-Web-Regular.ttf</string>
+		<string>PT_Sans-Web-Regular.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -39,13 +46,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>PT_Serif-Web-Bold.ttf</string>
-		<string>PT_Serif-Web-BoldItalic.ttf</string>
-		<string>PT_Serif-Web-Regular.ttf</string>
-		<string>PT_Sans-Web-Regular.ttf</string>
 	</array>
 </dict>
 </plist>

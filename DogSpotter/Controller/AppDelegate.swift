@@ -20,20 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         
-//        Auth.auth().addStateDidChangeListener { (auth, user) in
-//            if user == nil {
-//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//                let loginController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-//                self.window?.makeKeyAndVisible()
-//                self.window?.rootViewController?.present(loginController, animated: true, completion: nil)
-//            } else {
-//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//                let navController = storyboard.instantiateViewController(withIdentifier: "NavigationController")
-//                self.window?.makeKeyAndVisible()
-//                self.window?.rootViewController?.present(navController, animated: true, completion: nil)
-//            }
-//        }
-        
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
