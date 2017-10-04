@@ -121,14 +121,14 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         })
     }
     
-    @IBAction func logOutTapped(_ sender: Any) {
-        do {
-            try Auth.auth().signOut()
-        } catch {
-            print("an error has occurred")
-        }
-        performSegue(withIdentifier: "showLoginViewController", sender: self)
-    }
+//    @IBAction func logOutTapped(_ sender: Any) {
+//        do {
+//            try Auth.auth().signOut()
+//        } catch {
+//            print("an error has occurred")
+//        }
+//        performSegue(withIdentifier: "showLoginViewController", sender: self)
+//    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -153,7 +153,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         } else {
             annotationView!.annotation = annotation
         }
-        annotationView?.image = UIImage(named: "pin")
+        annotationView?.image = UIImage(named: "pin-bone")
         return annotationView
     }
     
@@ -202,13 +202,13 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         }
     }
     
-    @IBAction func accountButtonTapped(_ sender: Any) {
-        self.performSegue(withIdentifier: "showAccountViewController", sender: self)
-    }
+//    @IBAction func accountButtonTapped(_ sender: Any) {
+//        self.performSegue(withIdentifier: "showAccountViewController", sender: self)
+//    }
     
-    @IBAction func disoverButtonTapped(_ sender: Any) {
-        self.performSegue(withIdentifier: "showUserSearch", sender: self)
-    }
+//    @IBAction func disoverButtonTapped(_ sender: Any) {
+//        self.performSegue(withIdentifier: "showUserSearch", sender: self)
+//    }
     
     @objc func upvoteTapped(_ sender: UIButton) {
         

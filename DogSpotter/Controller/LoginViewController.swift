@@ -62,9 +62,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        
+                
         //MARK: Login Button Setup
         loginButton.setTitle("Log in", for: .normal)
         loginButton.setBackgroundColor(UIColor.white, for: .normal)

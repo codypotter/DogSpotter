@@ -49,7 +49,7 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
 
