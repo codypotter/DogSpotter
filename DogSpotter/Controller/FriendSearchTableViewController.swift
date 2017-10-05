@@ -23,9 +23,12 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.searchBarStyle = .minimal
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.tintColor = UIColor(red: 229/255, green: 75/255, blue: 75/255, alpha: 1)
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
 
@@ -49,7 +52,7 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.navigationBar.isHidden = true
     }
 
 
@@ -77,10 +80,6 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
         cell.detailTextLabel?.text = user.name
         
         return cell
-    }
-
-    @IBAction func stopButtonTapped(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
     }
     
     func updateSearchResults(for searchController: UISearchController) {

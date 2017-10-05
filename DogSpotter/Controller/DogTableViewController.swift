@@ -20,6 +20,7 @@ class DogTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBar.isHidden = false
         let userDogRef = Database.database().reference().child("users").child(user.uid!).child("dogs")
         
         //MARK: Download dogs from firebase
