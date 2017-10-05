@@ -355,7 +355,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="followUsersTableView" destination="Pkg-Co-D8S" id="dP6-TH-qzW"/>
                         <segue destination="8gY-bM-ubw" kind="show" identifier="showDogTableViewController" id="dqJ-R9-XBV"/>
@@ -644,7 +643,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XY0-F1-Atd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2214" y="-357"/>
+            <point key="canvasLocation" x="1316" y="419"/>
         </scene>
         <!--Dog Spotter-->
         <scene sceneID="tne-QT-ifu">
@@ -668,7 +667,6 @@
                     <tabBarItem key="tabBarItem" title="Map" image="map-bar-button-item" selectedImage="map-bar-button-item-active" id="i9L-aU-98y"/>
                     <navigationItem key="navigationItem" title="Dog Spotter" id="hIg-9M-Ge1"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="map" destination="2Yf-Jh-Mlf" id="hjL-zV-FrG"/>
                         <segue destination="KsA-vq-xzT" kind="popoverPresentation" identifier="showNewDogViewController" popoverAnchorView="2Yf-Jh-Mlf" id="Fwm-jb-LkS">
@@ -747,13 +745,13 @@
                                                     <rect key="frame" x="0.0" y="92" width="268" height="37"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="MfX-tx-gVj">
-                                                            <rect key="frame" x="0.0" y="0.0" width="33.5" height="37"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="21.5" height="37"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="gf1-8k-BJ2">
-                                                            <rect key="frame" x="39.5" y="0.0" width="230.5" height="38"/>
+                                                            <rect key="frame" x="27.5" y="0.0" width="242.5" height="38"/>
                                                             <color key="minimumTrackTintColor" red="1" green="0.64705882349999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="maximumTrackTintColor" red="0.69803921570000005" green="0.27058823529999998" blue="0.1529411765" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="thumbTintColor" red="1" green="0.64705882349999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
@@ -840,6 +838,36 @@
             </objects>
             <point key="canvasLocation" x="519" y="420"/>
         </scene>
+        <!--Leaderboard-->
+        <scene sceneID="pGQ-Wc-8TR">
+            <objects>
+                <viewController id="eJM-xq-xqN" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="u7S-at-YbJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="YeW-MG-E8Z"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="TlT-I9-1RB">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xWt-Xl-hOW">
+                                <rect key="frame" x="0.0" y="283" width="320" height="285"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="podium" translatesAutoresizingMaskIntoConstraints="NO" id="RAh-zc-OyF">
+                                <rect key="frame" x="0.0" y="64" width="320" height="219"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Leaderboard" image="leaderboard-bar-button-item" selectedImage="leaderboard-bar-button-item-active" id="OBG-da-WXe"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Lxc-Dc-3Mv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2199.375" y="-394.01408450704224"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="6UK-7A-hi5">
             <objects>
@@ -866,6 +894,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="fY6-7X-jQF"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0Yk-0a-oeX">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.89803921568627454" green="0.29411764705882354" blue="0.29411764705882354" alpha="1" colorSpace="calibratedRGB"/>
@@ -878,11 +907,12 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="EJ2-Uw-GtG"/>
                         <segue destination="hqI-38-7kW" kind="relationship" relationship="viewControllers" id="M9y-fR-zp4"/>
+                        <segue destination="eJM-xq-xqN" kind="relationship" relationship="viewControllers" id="gMW-bb-qkd"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tes-fb-Sqo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-178.125" y="-394.01408450704224"/>
+            <point key="canvasLocation" x="-163" y="-394"/>
         </scene>
     </scenes>
     <resources>
@@ -890,8 +920,11 @@
         <image name="dogLoginPhoto" width="360" height="640"/>
         <image name="feed-bar-button-item" width="24" height="23"/>
         <image name="feed-bar-button-item-active" width="24" height="23"/>
+        <image name="leaderboard-bar-button-item" width="30" height="26"/>
+        <image name="leaderboard-bar-button-item-active" width="30" height="25"/>
         <image name="map-bar-button-item" width="27" height="27"/>
         <image name="map-bar-button-item-active" width="27" height="25"/>
+        <image name="podium" width="335" height="171"/>
         <image name="profilePlaceholder" width="180" height="180"/>
     </resources>
     <inferredMetricsTieBreakers>
