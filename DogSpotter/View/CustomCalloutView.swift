@@ -9,7 +9,7 @@
 import UIKit
 
 class CustomCalloutView: UIView {
-
+    
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var breedLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
@@ -18,9 +18,7 @@ class CustomCalloutView: UIView {
     @IBOutlet weak var upvoteButton: UIButton!
     @IBOutlet weak var dogImageView: UIImageView!
     
-    
     @IBAction func upvoteButtonTapped(_ sender: Any) {
     }
-    
 
 }

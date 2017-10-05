@@ -153,18 +153,20 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         } else {
             annotationView!.annotation = annotation
         }
-        annotationView?.image = UIImage(named: "pin-bone")
+        let image = UIImage(cgImage: (UIImage(named: "pin-bone")?.cgImage)!, scale: 2.5, orientation: UIImageOrientation(rawValue: 0)!)
+        annotationView?.image = image
         return annotationView
     }
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
         for aView in views {
             if aView.reuseIdentifier == "pin" {
-                aView.transform = CGAffineTransform(scaleX: 0, y: 0)
+                aView.transform = CGAffineTransform(scaleX: 0.25, y: 0.25)
                 aView.alpha = 0
-                UIView.animate(withDuration:0.8) {
+                UIView.animate(withDuration:0.5) {
                     aView.alpha = 1
                     aView.transform = .identity
+                    
                 }
             }
         }
@@ -187,7 +189,9 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         
         calloutView.center = CGPoint(x: view.bounds.size.width/2, y: -calloutView.bounds.size.height*0.52)
         view.addSubview(calloutView)
-        mapView.setCenter((view.annotation?.coordinate)!, animated: true)
+        let center = CGPoint(x: calloutView.center.x, y: calloutView.center.y)
+        let newCenter = mapView.convert(center, toCoordinateFrom: view)
+        mapView.setCenter(newCenter, animated: true)
         
     }
     

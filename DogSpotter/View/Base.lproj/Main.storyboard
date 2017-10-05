@@ -33,41 +33,16 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1wY-c8-CSP">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.45000000000000001" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dogLoginPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="8JW-QD-p5n">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_background" translatesAutoresizingMaskIntoConstraints="NO" id="sMg-Kk-Cxu">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                     </imageView>
-                                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3OA-FR-TCk">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="GvK-L1-wYb">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Dog-Spoter-Logo" translatesAutoresizingMaskIntoConstraints="NO" id="svm-Fm-KIp">
-                                                    <rect key="frame" x="8" y="43" width="304" height="62"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="62" id="8fz-Nr-Aly"/>
-                                                    </constraints>
-                                                </imageView>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="svm-Fm-KIp" firstAttribute="leading" secondItem="GvK-L1-wYb" secondAttribute="leadingMargin" id="G1h-7n-2bN"/>
-                                                <constraint firstItem="svm-Fm-KIp" firstAttribute="trailing" secondItem="GvK-L1-wYb" secondAttribute="trailingMargin" id="OE7-p5-VQe"/>
-                                                <constraint firstItem="svm-Fm-KIp" firstAttribute="top" secondItem="GvK-L1-wYb" secondAttribute="topMargin" constant="35" id="ZcD-tb-QSe"/>
-                                            </constraints>
-                                        </view>
-                                        <blurEffect style="light"/>
-                                    </visualEffectView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.91372549020000005" green="0.4549019608" blue="0.31764705879999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="3OA-FR-TCk" firstAttribute="top" secondItem="1wY-c8-CSP" secondAttribute="top" id="2NL-RD-cxQ"/>
-                                    <constraint firstItem="8JW-QD-p5n" firstAttribute="leading" secondItem="1wY-c8-CSP" secondAttribute="leading" id="2aX-Hb-5tR"/>
-                                    <constraint firstItem="8JW-QD-p5n" firstAttribute="top" secondItem="1wY-c8-CSP" secondAttribute="top" id="2ua-Qw-8Ry"/>
-                                    <constraint firstAttribute="trailing" secondItem="3OA-FR-TCk" secondAttribute="trailing" id="6O6-Ug-FJ1"/>
-                                    <constraint firstAttribute="bottom" secondItem="8JW-QD-p5n" secondAttribute="bottom" id="aBx-rI-1sA"/>
-                                    <constraint firstAttribute="bottom" secondItem="3OA-FR-TCk" secondAttribute="bottom" id="bTR-z4-nIN"/>
-                                    <constraint firstAttribute="trailing" secondItem="8JW-QD-p5n" secondAttribute="trailing" id="fkT-4R-5Ny"/>
-                                    <constraint firstItem="3OA-FR-TCk" firstAttribute="leading" secondItem="1wY-c8-CSP" secondAttribute="leading" id="oW6-cl-mkF"/>
+                                    <constraint firstItem="sMg-Kk-Cxu" firstAttribute="leading" secondItem="1wY-c8-CSP" secondAttribute="leading" id="IYP-Oe-vdl"/>
+                                    <constraint firstItem="sMg-Kk-Cxu" firstAttribute="top" secondItem="1wY-c8-CSP" secondAttribute="top" id="bzT-Yx-Poo"/>
+                                    <constraint firstAttribute="trailing" secondItem="sMg-Kk-Cxu" secondAttribute="trailing" id="cP5-SB-3eg"/>
+                                    <constraint firstAttribute="bottom" secondItem="sMg-Kk-Cxu" secondAttribute="bottom" id="jZs-ZX-hhM"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -81,8 +56,6 @@
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <outlet property="blurView" destination="3OA-FR-TCk" id="KJo-t2-tR2"/>
-                        <outlet property="imageView" destination="8JW-QD-p5n" id="gDS-IA-TTK"/>
                         <segue destination="svN-fF-E4S" kind="show" identifier="showMapViewControllerFromLoginViewController" id="Ef7-m5-ttd"/>
                     </connections>
                 </viewController>
@@ -657,8 +630,20 @@
                                 <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xM5-5U-40w">
+                                <rect key="frame" x="254" y="28" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="5Tm-IA-8AH"/>
+                                    <constraint firstAttribute="height" constant="50" id="V5s-No-z0b"/>
+                                </constraints>
+                                <state key="normal" image="profile-button-icon"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="xM5-5U-40w" firstAttribute="top" secondItem="7iq-AS-f3E" secondAttribute="bottom" constant="8" id="OpH-U8-wvn"/>
+                            <constraint firstItem="xM5-5U-40w" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="m7s-zq-qZN"/>
+                        </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <tabBarItem key="tabBarItem" title="Map" image="map-bar-button-item" selectedImage="map-bar-button-item-active" id="i9L-aU-98y"/>
@@ -936,15 +921,15 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Dog-Spoter-Logo" width="297" height="58"/>
-        <image name="dogLoginPhoto" width="360" height="640"/>
         <image name="feed-bar-button-item" width="24" height="23"/>
         <image name="feed-bar-button-item-active" width="24" height="23"/>
         <image name="leaderboard-bar-button-item" width="30" height="26"/>
         <image name="leaderboard-bar-button-item-active" width="30" height="25"/>
+        <image name="login_background" width="375" height="667"/>
         <image name="map-bar-button-item" width="27" height="27"/>
         <image name="map-bar-button-item-active" width="27" height="25"/>
         <image name="podium" width="335" height="171"/>
+        <image name="profile-button-icon" width="58" height="58"/>
         <image name="profilePlaceholder" width="180" height="180"/>
     </resources>
     <inferredMetricsTieBreakers>

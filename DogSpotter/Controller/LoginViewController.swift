@@ -14,7 +14,6 @@ import SVProgressHUD
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet var imageView: UIImageView!
-    @IBOutlet var blurView: UIVisualEffectView!
     
     // Properties
     let loginButton = MDCRaisedButton()
@@ -169,8 +168,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.isSecureTextEntry = true
         passwordTextField.font = UIFont(name: "Helvetica", size: 17)
         
-        //MARK: Blur View Setup
-        blurView.alpha = 0
     }
     
     @objc func loginButtonTapped() {
@@ -195,7 +192,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if !isInCredentialsMode {
                 UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseInOut, animations: {
                     self.loginCredentialsViewCenterXConstraint.constant = 0
-                    self.blurView.alpha = 1
                     self.view.layoutIfNeeded()
                 }, completion: nil)
             }
@@ -270,7 +266,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if !isInCredentialsMode {
                 UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseInOut, animations: {
                     self.loginCredentialsViewCenterXConstraint.constant = 0
-                    self.blurView.alpha = 1
                     self.view.layoutIfNeeded()
                 }, completion: nil)
             }
