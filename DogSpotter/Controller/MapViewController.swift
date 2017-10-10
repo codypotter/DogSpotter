@@ -41,12 +41,12 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         newDogButton.setTitle("+", for: .normal)
         newDogButton.sizeToFit()
         newDogButton.addTarget(self, action: #selector(newDogButtonTapped), for: .touchUpInside)
-        newDogButton.backgroundColor = UIColor(red: 233/255, green: 116/255, blue: 81/255, alpha: 1)
+        newDogButton.backgroundColor = UIColor(red: 229/255, green: 75/255, blue: 75/255, alpha: 1)
         
         //MARK: Setup newDogButton layout
         newDogButton.translatesAutoresizingMaskIntoConstraints = false
-        newDogButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
-        newDogButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        newDogButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60).isActive = true
+        newDogButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         //MARK: Check if signed in then load dogs
         if Auth.auth().currentUser == nil {
@@ -185,7 +185,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         calloutView.scoreLabel.text = String(describing: customAnnotation.score)
         calloutView.creatorLabel.text = customAnnotation.creator
         calloutView.dogImageView.image = customAnnotation.picture
-        calloutView.upvoteButton.addTarget(self, action: #selector(upvoteTapped(_:)), for: .touchUpInside)
+        calloutView.upvoteButton.addTarget(self, action: #selector(upvoteTapped), for: .touchUpInside)
         
         calloutView.center = CGPoint(x: view.bounds.size.width/2, y: -calloutView.bounds.size.height*0.52)
         view.addSubview(calloutView)
@@ -206,16 +206,12 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         }
     }
     
-//    @IBAction func accountButtonTapped(_ sender: Any) {
-//        self.performSegue(withIdentifier: "showAccountViewController", sender: self)
-//    }
+    @IBAction func accountButtonTapped(_ sender: Any) {
+        self.performSegue(withIdentifier: "showAccountViewController", sender: self)
+    }
     
-//    @IBAction func disoverButtonTapped(_ sender: Any) {
-//        self.performSegue(withIdentifier: "showUserSearch", sender: self)
-//    }
-    
-    @objc func upvoteTapped(_ sender: UIButton) {
-        
+    @objc func upvoteTapped() {
+        print("upvote tapped")
     }
 }
 

@@ -56,7 +56,7 @@
                     </constraints>
                     <state key="normal" image="like-heart"/>
                     <connections>
-                        <action selector="upvoteButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="ozU-uG-wD8"/>
+                        <action selector="upvoteButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="aL6-zC-z9F"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6NM-mS-zFp">
@@ -98,13 +98,13 @@
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
             <connections>
-                <outlet property="breedLabel" destination="JH6-4p-lsH" id="ztg-Uj-fdB"/>
-                <outlet property="creatorLabel" destination="kgt-cr-6ny" id="CxB-PH-bEE"/>
-                <outlet property="dogImageView" destination="kyx-mF-Gl7" id="TSB-HQ-ChE"/>
-                <outlet property="nameLabel" destination="Cg2-AX-uIe" id="R9L-zN-LJJ"/>
-                <outlet property="scoreLabel" destination="iuN-lB-LRp" id="njy-Xn-R3v"/>
-                <outlet property="upvoteButton" destination="aKb-uL-Qlz" id="tLV-75-fqi"/>
-                <outlet property="upvoteCounterLabel" destination="6NM-mS-zFp" id="6XC-gr-rGf"/>
+                <outlet property="breedLabel" destination="JH6-4p-lsH" id="Xha-jM-dys"/>
+                <outlet property="creatorLabel" destination="kgt-cr-6ny" id="ayr-YK-fWR"/>
+                <outlet property="dogImageView" destination="kyx-mF-Gl7" id="RvT-lc-F3z"/>
+                <outlet property="nameLabel" destination="Cg2-AX-uIe" id="L5L-wU-or7"/>
+                <outlet property="scoreLabel" destination="iuN-lB-LRp" id="6gM-T4-aYY"/>
+                <outlet property="upvoteButton" destination="aKb-uL-Qlz" id="Ig4-SH-yDh"/>
+                <outlet property="upvoteCounterLabel" destination="6NM-mS-zFp" id="Nn3-5B-1qb"/>
             </connections>
             <point key="canvasLocation" x="1" y="30"/>
         </view>
