@@ -21,6 +21,8 @@
 		55957A951F72E7A10083C0C4 /* CustomCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */; };
 		55957A971F72EFA00083C0C4 /* CustomCalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */; };
 		55A8C93D1F650AA4008B8B22 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55A8C93C1F650A93008B8B22 /* GoogleService-Info.plist */; };
+		55AA1DB91FAA558A005922DC /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA1DB81FAA558A005922DC /* LeaderboardViewController.swift */; };
+		55AA1DBB1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA1DBA1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift */; };
 		55B273C51F62353B0088BF27 /* ShadowedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B273C41F62353B0088BF27 /* ShadowedView.swift */; };
 		55C606461F62063D00B3F870 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C606451F62063D00B3F870 /* LoginViewController.swift */; };
 		55C9A22E1F3D3EAB00232476 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C9A22D1F3D3EAB00232476 /* MapKit.framework */; };
@@ -55,6 +57,8 @@
 		55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCalloutView.xib; sourceTree = "<group>"; };
 		55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalloutView.swift; sourceTree = "<group>"; };
 		55A8C93C1F650A93008B8B22 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		55AA1DB81FAA558A005922DC /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
+		55AA1DBA1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardUserTableViewCell.swift; sourceTree = "<group>"; };
 		55B273C41F62353B0088BF27 /* ShadowedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowedView.swift; sourceTree = "<group>"; };
 		55C606451F62063D00B3F870 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		55C9A22D1F3D3EAB00232476 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -159,6 +163,7 @@
 				55CFC9271F70BD8E007789D2 /* FriendSearchTableViewController.swift */,
 				55CFC92B1F70C4A3007789D2 /* AccountTableViewController.swift */,
 				5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */,
+				55AA1DB81FAA558A005922DC /* LeaderboardViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -195,6 +200,7 @@
 				55B273C41F62353B0088BF27 /* ShadowedView.swift */,
 				55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */,
 				55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */,
+				55AA1DBA1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -358,6 +364,8 @@
 				557028E11F33DF67007ADC87 /* MapViewController.swift in Sources */,
 				557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */,
 				558F10BB1F7389EF006679CF /* ProfileTableViewCell.swift in Sources */,
+				55AA1DBB1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift in Sources */,
+				55AA1DB91FAA558A005922DC /* LeaderboardViewController.swift in Sources */,
 				55CFC92C1F70C4A3007789D2 /* AccountTableViewController.swift in Sources */,
 				5581FCD81F734F1C00AF3454 /* DogTableViewController.swift in Sources */,
 				55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */,

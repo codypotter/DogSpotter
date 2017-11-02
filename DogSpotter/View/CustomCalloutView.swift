@@ -19,6 +19,6 @@ class CustomCalloutView: UIView {
     @IBOutlet weak var dogImageView: UIImageView!
     
     @IBAction func upvoteButtonTapped(_ sender: Any) {
+        
     }
-
 }
