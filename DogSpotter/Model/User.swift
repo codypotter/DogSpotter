@@ -15,5 +15,5 @@ class User: NSObject {
     var reputation: Int?
     var timestamp: Int?
     var uid: String?
-    var dogIDList = [Int]()
+    var dogIDList = [String]()
 }
