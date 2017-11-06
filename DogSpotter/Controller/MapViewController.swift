@@ -50,11 +50,11 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         
         //MARK: Check if signed in then load dogs
         if Auth.auth().currentUser == nil {
-//            let alert = UIAlertController(title: "Welcome!", message: "It looks like you're not logged in! Let's fix that!", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Log In", style: .default, handler: { (action) in
-//                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
-//            }))
-//            present(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Welcome!", message: "It looks like you're not logged in! Let's fix that!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Log In", style: .default, handler: { (action) in
+                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
+            }))
+            present(alert, animated: true, completion: nil)
         } else {
             loadDogs()
         }

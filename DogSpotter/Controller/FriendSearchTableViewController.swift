@@ -14,11 +14,8 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
     @IBOutlet var followUsersTableView: UITableView!
     var usersArray = [User]()
     var filteredUsers = [User]()
-
     var databaseRef = Database.database().reference()
-    
     var chosenUser = User()
-    
     let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
@@ -52,7 +49,7 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.navigationBar.isHidden = false
     }
 
 

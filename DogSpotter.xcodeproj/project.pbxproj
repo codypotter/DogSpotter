@@ -14,6 +14,7 @@
 		557028E41F33DF67007ADC87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E21F33DF67007ADC87 /* Main.storyboard */; };
 		557028E61F33DF67007ADC87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 557028E51F33DF67007ADC87 /* Assets.xcassets */; };
 		557028E91F33DF67007ADC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */; };
+		5578A4E41FB10CCE00DDFD10 /* FeedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578A4E31FB10CCE00DDFD10 /* FeedTableViewController.swift */; };
 		5581FCD81F734F1C00AF3454 /* DogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */; };
 		558F10BB1F7389EF006679CF /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */; };
 		558F10BD1F74E1C6006679CF /* DogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */; };
@@ -50,6 +51,7 @@
 		557028E51F33DF67007ADC87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		557028E81F33DF67007ADC87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		557028EA1F33DF67007ADC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5578A4E31FB10CCE00DDFD10 /* FeedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewController.swift; sourceTree = "<group>"; };
 		5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogTableViewController.swift; sourceTree = "<group>"; };
 		558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogTableViewCell.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				55CFC92B1F70C4A3007789D2 /* AccountTableViewController.swift */,
 				5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */,
 				55AA1DB81FAA558A005922DC /* LeaderboardViewController.swift */,
+				5578A4E31FB10CCE00DDFD10 /* FeedTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 				55AA1DBB1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift in Sources */,
 				55AA1DB91FAA558A005922DC /* LeaderboardViewController.swift in Sources */,
 				55CFC92C1F70C4A3007789D2 /* AccountTableViewController.swift in Sources */,
+				5578A4E41FB10CCE00DDFD10 /* FeedTableViewController.swift in Sources */,
 				5581FCD81F734F1C00AF3454 /* DogTableViewController.swift in Sources */,
 				55D8E5921F5CF25300FD6A3A /* DesignableButton.swift in Sources */,
 				553EB1F31F757F9E0023F27D /* User.swift in Sources */,
