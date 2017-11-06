@@ -1347,10 +1347,10 @@ void VersionSet::SetupOtherInputs(Compaction* c) {
   }
 
   if (false) {
-    Log(options_->info_log, "Compacting %d '%s' .. '%s'",
-        level,
-        smallest.DebugString().c_str(),
-        largest.DebugString().c_str());
+//    Log(options_->info_log, "Compacting %d '%s' .. '%s'",
+//        level,
+//        smallest.DebugString().c_str(),
+//        largest.DebugString().c_str());
   }
 
   // Update the place where we will do the next compaction for this level.

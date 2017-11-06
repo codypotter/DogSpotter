@@ -120,6 +120,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         userNameTextField.placeholder = "Username"
         userNameTextField.autocapitalizationType = .none
         userNameTextField.autocorrectionType = .no
+        userNameTextField.textContentType = .username
         userNameTextField.font = UIFont(name: "Helvetica", size: 17)
         
         //MARK: Name Text Field Layout
@@ -135,6 +136,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         nameTextField.placeholder = "Name"
         nameTextField.autocapitalizationType = .words
         nameTextField.autocorrectionType = .no
+        nameTextField.textContentType = .name
         nameTextField.font = UIFont(name: "Helvetica", size: 17)
         
         //MARK: Email Text Field Layout
@@ -151,6 +153,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         emailTextField.autocapitalizationType = .none
         emailTextField.autocorrectionType = .no
         emailTextField.keyboardType = .emailAddress
+        emailTextField.textContentType = .emailAddress
         emailTextField.font = UIFont(name: "Helvetica", size: 17)
         
         //MARK: Password Text Field Layout
@@ -166,6 +169,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.autocorrectionType = .no
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
+        passwordTextField.textContentType = .password
         passwordTextField.font = UIFont(name: "Helvetica", size: 17)
         
     }
@@ -315,7 +319,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                               "reputation": "0" ,
                               "uid": user?.uid]
             
-            userRef.updateChildValues(userValues, withCompletionBlock: { (error, ref) in
+            userRef.updateChildValues(userValues as Any as! [AnyHashable : Any], withCompletionBlock: { (error, ref) in
                 if error != nil {
                     SVProgressHUD.dismiss()
                     self.createAlertView(withTitle: "Oops!", andMessage: error!.localizedDescription)
