@@ -1033,7 +1033,7 @@
         <!--Feed-->
         <scene sceneID="3QM-aC-a2x">
             <objects>
-                <tableViewController title="Feed" id="4il-qv-9cD" customClass="FeedTableViewController" sceneMemberID="viewController">
+                <tableViewController title="Feed" id="4il-qv-9cD" customClass="FeedTableViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="oov-zz-PrZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

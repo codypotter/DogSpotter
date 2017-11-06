@@ -57,7 +57,7 @@ class DogTableViewController: UITableViewController {
                     }).resume()
                     
                     self.dogs.insert(newDog, at: 0)
-                    
+                    self.tableView.reloadData()
                 })
             }
         })

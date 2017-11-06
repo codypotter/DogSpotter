@@ -16,9 +16,6 @@ class FeedTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        
         self.navigationController?.navigationBar.isHidden = false
         let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
         
@@ -56,49 +53,46 @@ class FeedTableViewController: UITableViewController {
                     }).resume()
                     
                     self.dogs.insert(newDog, at: 0)
-                    
+                    self.tableView.reloadData()
                 })
             }
         })
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dogs.count + 1
+        return dogs.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let dogCell = tableView.dequeueReusableCell(withIdentifier: "dogCell", for: indexPath) as! DogTableViewCell
-        dogCell.dogBreedLabel.text = dogs[indexPath.row - 1].breed
-        dogCell.dogNameLabel.text = dogs[indexPath.row - 1].name
-        dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row - 1].score!)
-        var score = (dogs[indexPath.row - 1].score!)
-        if score == 0 {
-            score = 1
-        }
-        var text = ""
-        for _ in 0 ..< score {
-            if text.isEmpty {
-                text = "🔥"
-            } else {
-                text += "🔥"
+            let dogCell = tableView.dequeueReusableCell(withIdentifier: "dogCell", for: indexPath) as! DogTableViewCell
+            dogCell.dogBreedLabel.text = dogs[indexPath.row].breed
+            dogCell.dogNameLabel.text = dogs[indexPath.row].name
+            dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row].score!)
+            var score = (dogs[indexPath.row].score!)
+            if score == 0 {
+                score = 1
             }
-        }
-        dogCell.dogScoreLabel.text = text
-        dogCell.dogImageView.image = dogs[indexPath.row - 1].picture
-        dogCell.dogCreatorLabel.text = dogs[indexPath.row - 1].creator
-        dogCell.dogVotesLabel.text = "0"
-        return dogCell
+            var text = ""
+            for _ in 0 ..< score {
+                if text.isEmpty {
+                    text = "🔥"
+                } else {
+                    text += "🔥"
+                }
+            }
+            dogCell.dogScoreLabel.text = text
+            dogCell.dogImageView.image = dogs[indexPath.row].picture
+            dogCell.dogCreatorLabel.text = dogs[indexPath.row].creator
+            dogCell.dogVotesLabel.text = "0"
+            return dogCell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 186.0
-        } else {
+
             let imageHeight = Int(view.bounds.width)
             let labelsHeight = 3 * 20
             let spacing = 12 + 24
             let creatorHeight = 30
             return CGFloat(imageHeight + labelsHeight + spacing + creatorHeight + 8)
-        }
     }
 }
