@@ -238,7 +238,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
             print("User signed in successfully!")
             SVProgressHUD.dismiss()
-            self.performSegue(withIdentifier: "showMapViewControllerFromLoginViewController", sender: self)
+            self.performSegue(withIdentifier: "showTabBarController", sender: self)
             self.emailTextField.text = ""
             self.passwordTextField.text = ""
             self.userNameTextField.text = ""
@@ -340,7 +340,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     return
                 }
                 print("Created displayName successfully!")
-                self.performSegue(withIdentifier: "showMapViewControllerFromLoginViewController", sender: self)
+                self.performSegue(withIdentifier: "showTabBarController", sender: self)
             })
             
             SVProgressHUD.dismiss()
