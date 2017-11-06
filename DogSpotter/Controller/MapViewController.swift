@@ -76,7 +76,59 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     
     fileprivate func loadDogs() {
         //MARK: Download dogs from firebase
+        var friendID = ""
         let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
+        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
+        
+        followingRef.observe(.childAdded) { (snapshot) in
+            if snapshot.value == nil {
+                print("not following any users")
+            } else {
+                friendID = snapshot.key
+                Database.database().reference().child("users").child(friendID).child("dogs").observe(.childAdded, with: { (snap1) in
+                    if snap1.value == nil {
+                        print("no new dog found")
+                    } else {
+                        print("new dog found")
+                        
+                        let dogID = snap1.key
+                        
+                        let dogRef = Database.database().reference().child("dogs").child(dogID)
+                        dogRef.observeSingleEvent(of: .value, with: { (snap2) in
+                            print("Found dog data!")
+                            let value = snap2.value as! Dictionary<String, String>
+                            
+                            let newDog = Dog()
+                            newDog.name = value["name"]!
+                            newDog.breed = value["breed"]!
+                            newDog.creator = value["creator"]!
+                            newDog.score = Int(value["score"]!)!
+                            newDog.imageURL = value["imageURL"]!
+                            newDog.location = CLLocationCoordinate2D(latitude: Double(value["latitude"]!)!, longitude: Double(value["longitude"]!)!)
+                            
+                            URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+                                if error != nil {
+                                    print(error!)
+                                    return
+                                }
+                                newDog.picture = UIImage(data: data!)!
+                                self.dogs.append(newDog)
+                                let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name!, subtitle: newDog.creator!)
+                                annotation.name = newDog.name!
+                                annotation.breed = newDog.breed!
+                                annotation.score = newDog.score!
+                                annotation.creator = newDog.creator!
+                                annotation.picture = newDog.picture
+                                DispatchQueue.main.async {
+                                    self.map.addAnnotation(annotation)
+                                }
+                            }).resume()
+                        })
+                    }
+                })
+                
+            }
+        }
         
         userDogRef.observe(.childAdded, with: { (snapshot) in
             if snapshot.value == nil {
@@ -183,6 +235,19 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         calloutView.nameLabel.text = customAnnotation.name
         calloutView.breedLabel.text = customAnnotation.breed
         calloutView.scoreLabel.text = String(describing: customAnnotation.score)
+        var score = customAnnotation.score
+        if score == 0 {
+            score = 1
+        }
+        var text = ""
+        for _ in 0 ..< score {
+            if text.isEmpty {
+                text = "🔥"
+            } else {
+                text += "🔥"
+            }
+        }
+        calloutView.scoreLabel.text = text
         calloutView.creatorLabel.text = customAnnotation.creator
         calloutView.dogImageView.image = customAnnotation.picture
         calloutView.upvoteButton.addTarget(self, action: #selector(upvoteTapped), for: .touchUpInside)

@@ -79,6 +79,19 @@ class DogTableViewController: UITableViewController {
             dogCell.dogBreedLabel.text = dogs[indexPath.row - 1].breed
             dogCell.dogNameLabel.text = dogs[indexPath.row - 1].name
             dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row - 1].score!)
+            var score = (dogs[indexPath.row - 1].score!)
+            if score == 0 {
+                score = 1
+            }
+            var text = ""
+            for _ in 0 ..< score {
+                if text.isEmpty {
+                    text = "🔥"
+                } else {
+                    text += "🔥"
+                }
+            }
+            dogCell.dogScoreLabel.text = text
             dogCell.dogImageView.image = dogs[indexPath.row - 1].picture
             dogCell.dogCreatorLabel.text = dogs[indexPath.row - 1].creator
             dogCell.dogVotesLabel.text = "0"
