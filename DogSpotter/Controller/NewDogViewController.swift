@@ -138,7 +138,7 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 			
 			let databaseRef = Database.database().reference()
 			let dogRef = databaseRef.child("dogs").childByAutoId()
-			let userRef = databaseRef.child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
+			let userRef = databaseRef.child("users").child((Auth.auth().currentUser?.uid)!)
 			
 			let user = Auth.auth().currentUser?.displayName!
 			
@@ -180,11 +180,17 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 					})
 					
 					// At the same time, let's update the user's list of dogs with the dog we've made
-					userRef.child(dogKey).setValue("true", withCompletionBlock: { (error, ref) in
+					userRef.child("dogs").child(dogKey).setValue("true", withCompletionBlock: { (error, ref) in
 						if error != nil {
 							print(error!.localizedDescription)
 							return
 						}
+					})
+					
+					userRef.child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+						var currentRep = Int(snap.value as! String)!
+						currentRep += 25
+						userRef.child("reputation").setValue(String(currentRep))
 					})
 				})
 			})
