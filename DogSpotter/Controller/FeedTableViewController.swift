@@ -13,10 +13,11 @@ class FeedTableViewController: UITableViewController {
     var user = User()
     var dogs = [Dog]()
     
-    @IBOutlet weak var followBarButtonItem: UIBarButtonItem!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
         
         self.navigationController?.navigationBar.isHidden = false
         let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")

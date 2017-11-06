@@ -319,7 +319,7 @@
                             <outlet property="delegate" destination="hqI-38-7kW" id="3bf-ZW-9HO"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="ySr-RB-R6B"/>
+                    <navigationItem key="navigationItem" title="Search" id="ySr-RB-R6B"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="followUsersTableView" destination="Pkg-Co-D8S" id="dP6-TH-qzW"/>
