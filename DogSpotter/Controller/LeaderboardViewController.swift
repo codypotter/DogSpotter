@@ -57,13 +57,13 @@ class LeaderboardViewController: UIViewController, UITableViewDataSource, UITabl
                     switch self.folllowersFollowingSegmentedControl.selectedSegmentIndex {
                     case 0:
                         if self.myFollowersUsersArray.indices.contains(0) {
-                            self.topUserLabel.text = "\(String(describing: self.myFollowersUsersArray[0].username!))\n\(String(describing: self.myFollowersUsersArray[0].reputation!))"
+                            self.topUserLabel.text = "\(String(describing: self.myFollowersUsersArray[0].username!))\n👑\(String(describing: self.myFollowersUsersArray[0].reputation!))"
                         }
                         if self.myFollowersUsersArray.indices.contains(1) {
-                            self.secondUserLabel.text = "\(String(describing: self.myFollowersUsersArray[1].username!))\n\(String(describing: self.myFollowersUsersArray[1].reputation!))"
+                            self.secondUserLabel.text = "\(String(describing: self.myFollowersUsersArray[1].username!))\n👑\(String(describing: self.myFollowersUsersArray[1].reputation!))"
                         }
                         if self.myFollowersUsersArray.indices.contains(2) {
-                            self.thirdUserLabel.text = "\(String(describing: self.myFollowersUsersArray[2].username!))\n\(String(describing: self.myFollowersUsersArray[2].reputation!))"
+                            self.thirdUserLabel.text = "\(String(describing: self.myFollowersUsersArray[2].username!))\n👑\(String(describing: self.myFollowersUsersArray[2].reputation!))"
                         }
                     case 1:
                         if self.myFollowingUsersArray.indices.contains(0) {
