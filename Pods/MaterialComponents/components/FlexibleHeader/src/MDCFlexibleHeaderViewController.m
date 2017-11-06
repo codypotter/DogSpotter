@@ -16,6 +16,7 @@
 
 #import "MDCFlexibleHeaderViewController.h"
 
+#import "MaterialApplication.h"
 #import "MDCFlexibleHeaderContainerViewController.h"
 #import "MDCFlexibleHeaderView.h"
 #import "MDFTextAccessibility.h"
@@ -102,7 +103,19 @@ static NSString *const MDCFlexibleHeaderViewControllerLayoutDelegateKey =
 - (void)willMoveToParentViewController:(UIViewController *)parent {
   [super willMoveToParentViewController:parent];
 
-  parent.automaticallyAdjustsScrollViewInsets = NO;
+  BOOL shouldDisableAutomaticInsetting = YES;
+#if defined(__IPHONE_11_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0)
+  // Prior to iOS 11 there was no way to know whether UIKit had injected insets into our
+  // UIScrollView, so we disable automatic insetting on these devices. iOS 11 provides
+  // the adjustedContentInset API which allows us to respond to changes in the safe area
+  // insets, so on iOS 11 we actually expect iOS to manage the safe area insets.
+  if (@available(iOS 11.0, *)) {
+    shouldDisableAutomaticInsetting = NO;
+  }
+#endif
+  if (shouldDisableAutomaticInsetting) {
+    parent.automaticallyAdjustsScrollViewInsets = NO;
+  }
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
@@ -145,7 +158,9 @@ static NSString *const MDCFlexibleHeaderViewControllerLayoutDelegateKey =
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-  return (ShouldUseLightStatusBarOnBackgroundColor(_headerView.backgroundColor)
+  UIColor *backgroundColor =
+      [MDCFlexibleHeaderView appearance].backgroundColor ?: _headerView.backgroundColor;
+  return (ShouldUseLightStatusBarOnBackgroundColor(backgroundColor)
               ? UIStatusBarStyleLightContent
               : UIStatusBarStyleDefault);
 }
@@ -189,6 +204,12 @@ static NSString *const MDCFlexibleHeaderViewControllerLayoutDelegateKey =
 }
 #endif  // #if !defined(__IPHONE_8_0) || (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0)
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+  [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+
+  [_headerView viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -223,9 +244,13 @@ static NSString *const MDCFlexibleHeaderViewControllerLayoutDelegateKey =
 }
 
 - (CGFloat)headerViewControllerHeight {
+  BOOL shiftEnabledForStatusBar =
+      _headerView.shiftBehavior == MDCFlexibleHeaderShiftBehaviorEnabledWithStatusBar;
+  CGFloat statusBarHeight =
+      [UIApplication mdc_safeSharedApplication].statusBarFrame.size.height;
   CGFloat height =
       MAX(_headerView.frame.origin.y + _headerView.frame.size.height,
-          _headerView.shiftBehavior == MDCFlexibleHeaderShiftBehaviorEnabledWithStatusBar ? 0 : 20);
+          shiftEnabledForStatusBar ? 0 : statusBarHeight);
   return height;
 }
 

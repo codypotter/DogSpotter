@@ -16,6 +16,7 @@
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
 
 /**
  The possible kinds of motion curves that can be used to describe an animation.
@@ -76,6 +77,11 @@ FOUNDATION_EXTERN MDMMotionCurve MDMMotionCurveMakeBezier(float p1x, float p1y, 
     NS_SWIFT_NAME(MotionCurveMakeBezier(p1x:p1y:p2x:p2y:));
 // clang-format on
 
+// clang-format off
+FOUNDATION_EXTERN MDMMotionCurve MDMMotionCurveFromTimingFunction(CAMediaTimingFunction * _Nonnull timingFunction)
+    NS_SWIFT_NAME(MotionCurve(fromTimingFunction:));
+// clang-format on
+
 /**
  Creates a spring curve with the provided configuration.
 
@@ -86,6 +92,15 @@ FOUNDATION_EXTERN MDMMotionCurve MDMMotionCurveMakeBezier(float p1x, float p1y, 
 // clang-format off
 FOUNDATION_EXTERN MDMMotionCurve MDMMotionCurveMakeSpring(float mass, float tension, float friction)
     NS_SWIFT_NAME(MotionCurveMakeSpring(mass:tension:friction:));
+// clang-format on
+
+/**
+ For cubic bezier curves, returns a reversed cubic bezier curve. For all other curve types, a copy
+ of the original curve is returned.
+ */
+// clang-format off
+FOUNDATION_EXTERN MDMMotionCurve MDMMotionCurveReversedBezier(MDMMotionCurve motionCurve)
+    NS_SWIFT_NAME(MotionCurveReversedBezier(fromMotionCurve:));
 // clang-format on
 
 /**
@@ -125,3 +140,10 @@ typedef NS_ENUM(NSUInteger, MDMSpringMotionCurveDataIndex) {
               tension,                      \
               friction }                    \
   }
+
+/**
+ Timing information for an iOS modal presentation slide animation.
+ */
+#define MDMModalMovementTiming { \
+  .delay = 0.000, .duration = 0.500, .curve = _MDMSpring(3, 1000, 500) \
+}

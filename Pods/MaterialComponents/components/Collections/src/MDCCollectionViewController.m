@@ -85,6 +85,12 @@ NSString *const MDCCollectionInfoBarKindFooter = @"MDCCollectionInfoBarKindFoote
 - (void)viewDidLoad {
   [super viewDidLoad];
 
+#if defined(__IPHONE_11_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0)
+  if (@available(iOS 11.0, *)) {
+    self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAlways;
+  }
+#endif
+
   [self.collectionView setCollectionViewLayout:self.collectionViewLayout];
   self.collectionView.backgroundColor = [UIColor whiteColor];
   self.collectionView.alwaysBounceVertical = YES;
@@ -213,8 +219,15 @@ NSString *const MDCCollectionInfoBarKindFooter = @"MDCCollectionInfoBarKindFoote
 
 - (CGFloat)cellWidthAtSectionIndex:(NSInteger)section
                     collectionView:(UICollectionView *)collectionView {
-  CGFloat bounds =
-      CGRectGetWidth(UIEdgeInsetsInsetRect(collectionView.bounds, collectionView.contentInset));
+  UIEdgeInsets contentInset = collectionView.contentInset;
+// On the iPhone X, we need to use the offset which might take into account the safe area.
+#if defined(__IPHONE_11_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0)
+  if (@available(iOS 11.0, *)) {
+    contentInset = collectionView.adjustedContentInset;
+  }
+#endif
+
+  CGFloat bounds = CGRectGetWidth(UIEdgeInsetsInsetRect(collectionView.bounds, contentInset));
   UIEdgeInsets sectionInsets = [self collectionView:collectionView
                                              layout:collectionView.collectionViewLayout
                              insetForSectionAtIndex:section];
@@ -241,6 +254,16 @@ NSString *const MDCCollectionInfoBarKindFooter = @"MDCCollectionInfoBarKindFoote
   if (isCardStyle) {
     insets.left = inset;
     insets.right = inset;
+#if defined(__IPHONE_11_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0)
+    if (@available(iOS 11.0, *)) {
+      if (collectionView.contentInsetAdjustmentBehavior
+          == UIScrollViewContentInsetAdjustmentAlways) {
+        // We don't need section insets if there are already safe area insets.
+        insets.left = MAX(0, insets.left - collectionView.safeAreaInsets.left);
+        insets.right = MAX(0, insets.right - collectionView.safeAreaInsets.right);
+      }
+    }
+#endif
   }
   // Set top/bottom insets.
   if (isCardStyle || isGroupedStyle) {
@@ -309,8 +332,15 @@ NSString *const MDCCollectionInfoBarKindFooter = @"MDCCollectionInfoBarKindFoote
  that method recalculates section insets which we don't want to do.
  */
 - (CGFloat)cellWidthAtSectionIndex:(NSInteger)section {
+  UIEdgeInsets contentInset = self.collectionView.contentInset;
+  // On the iPhone X, we need to use the offset which might take into account the safe area.
+#if defined(__IPHONE_11_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0)
+  if (@available(iOS 11.0, *)) {
+    contentInset = self.collectionView.adjustedContentInset;
+  }
+#endif
   CGFloat bounds = CGRectGetWidth(
-      UIEdgeInsetsInsetRect(self.collectionView.bounds, self.collectionView.contentInset));
+      UIEdgeInsetsInsetRect(self.collectionView.bounds, contentInset));
   UIEdgeInsets sectionInsets = [self collectionView:self.collectionView
                                              layout:self.collectionView.collectionViewLayout
                              insetForSectionAtIndex:section];
@@ -405,8 +435,8 @@ NSString *const MDCCollectionInfoBarKindFooter = @"MDCCollectionInfoBarKindFoote
 
 - (void)collectionView:(UICollectionView *)collectionView
     didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-  if ([_styler.delegate respondsToSelector:@selector(collectionView:hidesInkViewAtIndexPath:)]
-      && [_styler.delegate collectionView:collectionView hidesInkViewAtIndexPath:indexPath]) {
+  if ([_styler.delegate respondsToSelector:@selector(collectionView:hidesInkViewAtIndexPath:)] &&
+      [_styler.delegate collectionView:collectionView hidesInkViewAtIndexPath:indexPath]) {
     return;
   }
   UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];

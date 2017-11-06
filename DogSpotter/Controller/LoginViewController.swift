@@ -104,7 +104,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         loginCredentialsView.widthAnchor.constraint(equalToConstant: view.bounds.width - 40).isActive = true
         loginCredentialsView.backgroundColor = UIColor.white
         loginCredentialsView.layer.cornerRadius = 2.0
-        loginCredentialsView.shadowLayer.elevation = 2.0
+        loginCredentialsView.shadowLayer.elevation = ShadowElevation(rawValue: 2.0)
         loginCredentialsView.isHidden = true
         
         //MARK: Username Text Field Layout

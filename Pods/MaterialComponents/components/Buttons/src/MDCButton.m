@@ -42,6 +42,7 @@ static NSString *const MDCButtonUppercaseTitleKey = @"MDCButtonShouldCapitalizeT
 // Previous value kept for backwards compatibility.
 static NSString *const MDCButtonUnderlyingColorHintKey = @"MDCButtonUnderlyingColorKey";
 static NSString *const MDCButtonDisableAlphaKey = @"MDCButtonDisableAlphaKey";
+static NSString *const MDCButtonEnableAlphaKey = @"MDCButtonEnableAlphaKey";
 static NSString *const MDCButtonCustomTitleColorKey = @"MDCButtonCustomTitleColorKey";
 static NSString *const MDCButtonAreaInsetKey = @"MDCButtonAreaInsetKey";
 
@@ -52,6 +53,8 @@ static NSString *const MDCButtonNontransformedTitlesKey = @"MDCButtonAccessibili
 
 static NSString *const MDCButtonBorderColorsKey = @"MDCButtonBorderColorsKey";
 static NSString *const MDCButtonBorderWidthsKey = @"MDCButtonBorderWidthsKey";
+
+static NSString *const MDCButtonShadowColorsKey = @"MDCButtonShadowColorsKey";
 
 // Specified in Material Guidelines
 // https://material.io/guidelines/layout/metrics-keylines.html#metrics-keylines-touch-target-size
@@ -106,7 +109,9 @@ static NSAttributedString *uppercaseAttributedString(NSAttributedString *string)
   NSMutableDictionary<NSNumber *, UIColor *> *_backgroundColors;
   NSMutableDictionary<NSNumber *, UIColor *> *_borderColors;
   NSMutableDictionary<NSNumber *, NSNumber *> *_borderWidths;
+  NSMutableDictionary<NSNumber *, UIColor *> *_shadowColors;
 
+  CGFloat _enabledAlpha;
   BOOL _hasCustomDisabledTitleColor;
 
   // Cached accessibility settings.
@@ -177,6 +182,10 @@ static NSAttributedString *uppercaseAttributedString(NSAttributedString *string)
       _disabledAlpha = (CGFloat)[aDecoder decodeDoubleForKey:MDCButtonDisableAlphaKey];
     }
 
+    if ([aDecoder containsValueForKey:MDCButtonEnableAlphaKey]) {
+      _enabledAlpha = (CGFloat)[aDecoder decodeDoubleForKey:MDCButtonEnableAlphaKey];
+    }
+
     if ([aDecoder containsValueForKey:MDCButtonAreaInsetKey]) {
       self.hitAreaInsets = [aDecoder decodeUIEdgeInsetsForKey:MDCButtonAreaInsetKey];
     }
@@ -205,6 +214,10 @@ static NSAttributedString *uppercaseAttributedString(NSAttributedString *string)
     if ([aDecoder containsValueForKey:MDCButtonNontransformedTitlesKey]) {
       _nontransformedTitles = [aDecoder decodeObjectForKey:MDCButtonNontransformedTitlesKey];
     }
+
+    if ([aDecoder containsValueForKey:MDCButtonShadowColorsKey]) {
+      _shadowColors = [aDecoder decodeObjectForKey:MDCButtonShadowColorsKey];
+    }
   }
   return self;
 }
@@ -224,16 +237,21 @@ static NSAttributedString *uppercaseAttributedString(NSAttributedString *string)
     [aCoder encodeObject:_underlyingColorHint forKey:MDCButtonUnderlyingColorHintKey];
   }
   [aCoder encodeDouble:self.disabledAlpha forKey:MDCButtonDisableAlphaKey];
+  [aCoder encodeDouble:_enabledAlpha forKey:MDCButtonEnableAlphaKey];
   [aCoder encodeUIEdgeInsets:self.hitAreaInsets forKey:MDCButtonAreaInsetKey];
   [aCoder encodeObject:_userElevations forKey:MDCButtonUserElevationsKey];
   [aCoder encodeObject:_backgroundColors forKey:MDCButtonBackgroundColorsKey];
   [aCoder encodeObject:_nontransformedTitles forKey:MDCButtonNontransformedTitlesKey];
   [aCoder encodeObject:_borderColors forKey:MDCButtonBorderColorsKey];
   [aCoder encodeObject:_borderWidths forKey:MDCButtonBorderWidthsKey];
+  if (_shadowColors) {
+    [aCoder encodeObject:_shadowColors forKey:MDCButtonShadowColorsKey];
+  }
 }
 
 - (void)commonMDCButtonInit {
   _disabledAlpha = MDCButtonDisabledAlpha;
+  _enabledAlpha = self.alpha;
   _shouldRaiseOnTouch = YES;
   _uppercaseTitle = YES;
   _userElevations = [NSMutableDictionary dictionary];
@@ -261,6 +279,9 @@ static NSAttributedString *uppercaseAttributedString(NSAttributedString *string)
   shadowLayer.shadowPath = [self boundingPath].CGPath;
   shadowLayer.shadowColor = [UIColor blackColor].CGColor;
   shadowLayer.elevation = [self elevationForState:self.state];
+
+  _shadowColors = [NSMutableDictionary dictionary];
+  _shadowColors[@(UIControlStateNormal)] = [UIColor colorWithCGColor:shadowLayer.shadowColor];
 
   // Set up ink layer.
   _inkView = [[MDCInkView alloc] initWithFrame:self.bounds];
@@ -298,6 +319,13 @@ static NSAttributedString *uppercaseAttributedString(NSAttributedString *string)
 - (void)setUnderlyingColorHint:(UIColor *)underlyingColorHint {
   _underlyingColorHint = underlyingColorHint;
   [self updateAlphaAndBackgroundColorAnimated:NO];
+}
+
+- (void)setAlpha:(CGFloat)alpha {
+  if (self.enabled) {
+    _enabledAlpha = alpha;
+  }
+  [super setAlpha:alpha];
 }
 
 - (void)setDisabledAlpha:(CGFloat)disabledAlpha {
@@ -415,6 +443,7 @@ static NSAttributedString *uppercaseAttributedString(NSAttributedString *string)
   [self animateButtonToHeightForState:self.state];
   [self updateBorderColor];
   [self updateBorderWidth];
+  [self updateShadowColor];
 }
 
 #pragma mark - Title Uppercasing
@@ -437,6 +466,30 @@ static NSAttributedString *uppercaseAttributedString(NSAttributedString *string)
       [self setTitle:title forState:state];
     }
   }
+}
+
+- (void)updateShadowColor {
+  self.layer.shadowColor = [self shadowColorForState:self.state].CGColor;
+}
+
+- (void)setShadowColor:(UIColor *)shadowColor forState:(UIControlState)state {
+  if (shadowColor) {
+    _shadowColors[@(state)] = shadowColor;
+  } else {
+    [_shadowColors removeObjectForKey:@(state)];
+  }
+
+  if (state == self.state) {
+    [self updateShadowColor];
+  }
+}
+
+- (UIColor *)shadowColorForState:(UIControlState)state {
+  UIColor *shadowColor = _shadowColors[@(state)];
+  if (state != UIControlStateNormal && !shadowColor) {
+    shadowColor = _shadowColors[@(UIControlStateNormal)];
+  }
+  return shadowColor;
 }
 
 - (void)setTitle:(NSString *)title forState:(UIControlState)state {
@@ -717,7 +770,7 @@ static NSAttributedString *uppercaseAttributedString(NSAttributedString *string)
 
 - (void)updateAlphaAndBackgroundColorAnimated:(BOOL)animated {
   void (^animations)(void) = ^{
-    self.alpha = self.enabled ? 1.0f : _disabledAlpha;
+    self.alpha = self.enabled ? _enabledAlpha : _disabledAlpha;
     [self updateBackgroundColor];
   };
 

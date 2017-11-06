@@ -18,9 +18,9 @@
 
 #import "MDCNumericValueLabel.h"
 #import "MDCThumbView.h"
+#import "MDFInternationalization.h"
 #import "MaterialInk.h"
 #import "MaterialMath.h"
-#import "MaterialRTL.h"
 
 static const CGFloat kAnimationDuration = 0.25f;
 static const CGFloat kThumbChangeAnimationDuration = 0.12f;
@@ -635,7 +635,10 @@ static inline CGFloat DistanceFromPointToPoint(CGPoint point1, CGPoint point2) {
     if ([_delegate respondsToSelector:@selector(thumbTrack:stringForValue:)]) {
       _valueLabel.text = [_delegate thumbTrack:self stringForValue:_value];
       if (CGRectGetWidth(_valueLabel.frame) > 1) {
-        _valueLabel.frame = MDCRectAlignToScale(_valueLabel.frame, [UIScreen mainScreen].scale);
+        // Reset the size prior to pixel alignement since previous alignement likely increased it
+        CGRect valueLabelFrame = CGRectMake(_valueLabel.frame.origin.x, _valueLabel.frame.origin.y,
+                                            kValueLabelWidth, kValueLabelHeight);
+        _valueLabel.frame = MDCRectAlignToScale(valueLabelFrame, [UIScreen mainScreen].scale);
       }
     }
   }
@@ -821,7 +824,7 @@ static inline CGFloat DistanceFromPointToPoint(CGPoint point1, CGPoint point2) {
   CGFloat relValue = (position.x - _thumbRadius) / self.thumbPanRange;
   relValue = MAX(0, MIN(relValue, 1));
   // For RTL we invert the value
-  if (self.mdc_effectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
+  if (self.mdf_effectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
     relValue = 1 - relValue;
   }
   return (1 - relValue) * _minimumValue + relValue * _maximumValue;
@@ -865,7 +868,7 @@ static inline CGFloat DistanceFromPointToPoint(CGPoint point1, CGPoint point2) {
   }
   CGFloat relValue = (value - _minimumValue) / MDCFabs(_minimumValue - _maximumValue);
   // For RTL we invert the value
-  if (self.mdc_effectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
+  if (self.mdf_effectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
     relValue = 1 - relValue;
   }
   return relValue;
@@ -889,37 +892,6 @@ static inline CGFloat DistanceFromPointToPoint(CGPoint point1, CGPoint point2) {
   [_dummyPanRecognizer.view removeGestureRecognizer:_dummyPanRecognizer];
   UIView *panTarget = _panningAllowedOnEntireControl ? self : _thumbView;
   [panTarget addGestureRecognizer:_dummyPanRecognizer];
-}
-
-#pragma mark - Color Helpers
-
-- (UIColor *)colorInterpolatedFromColor:(UIColor *)fromColor
-                                toColor:(UIColor *)toColor
-                                percent:(CGFloat)percent {
-  // Clamp percent to [0.0, 1.0]
-  percent = MAX(0, percent);
-  percent = MIN(1, percent);
-
-  CGFloat r1, g1, b1, a1;
-  r1 = g1 = b1 = a1 = 1;
-  if (![fromColor getRed:&r1 green:&g1 blue:&b1 alpha:&a1]) {
-    [fromColor getWhite:&r1 alpha:&a1];
-    g1 = b1 = r1;
-  };
-
-  CGFloat r2, g2, b2, a2;
-  r2 = g2 = b2 = a2 = 1;
-  if (![toColor getRed:&r2 green:&g2 blue:&b2 alpha:&a2]) {
-    [toColor getWhite:&r2 alpha:&a2];
-    g2 = b2 = r2;
-  }
-
-  CGFloat rfinal = r1 * (1 - percent) + r2 * percent;
-  CGFloat gfinal = g1 * (1 - percent) + g2 * percent;
-  CGFloat bfinal = b1 * (1 - percent) + b2 * percent;
-  CGFloat afinal = a1 * (1 - percent) + a2 * percent;
-
-  return [UIColor colorWithRed:rfinal green:gfinal blue:bfinal alpha:afinal];
 }
 
 #pragma mark - UIResponder Events

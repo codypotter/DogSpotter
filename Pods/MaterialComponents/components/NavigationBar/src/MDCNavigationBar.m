@@ -16,10 +16,10 @@
 
 #import "MDCNavigationBar.h"
 
+#import "MDFInternationalization.h"
 #import "MDFTextAccessibility.h"
 #import "MaterialButtonBar.h"
 #import "MaterialMath.h"
-#import "MaterialRTL.h"
 #import "MaterialTypography.h"
 
 #import <objc/runtime.h>
@@ -278,24 +278,52 @@ static NSString *const MDCNavigationBarTitleAlignmentKey = @"MDCNavigationBarTit
 - (void)layoutSubviews {
   [super layoutSubviews];
 
-  CGSize leadingButtonBarSize = [_leadingButtonBar sizeThatFits:self.bounds.size];
-  CGRect leadingButtonBarFrame =
-      CGRectMake(0, self.bounds.origin.y, leadingButtonBarSize.width, leadingButtonBarSize.height);
-  _leadingButtonBar.frame = MDCRectFlippedForRTL(leadingButtonBarFrame, self.bounds.size.width,
-                                                 self.mdc_effectiveUserInterfaceLayoutDirection);
+  // For pre iOS 11 devices, it's safe to assume that the Safe Area insets' left and right
+  // values are zero. DO NOT use this to get the top or bottom Safe Area insets.
+  UIEdgeInsets RTLFriendlySafeAreaInsets = UIEdgeInsetsZero;
+#if defined(__IPHONE_11_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0)
+  if (@available(iOS 11.0, *)) {
+    RTLFriendlySafeAreaInsets =
+        MDFInsetsMakeWithLayoutDirection(self.safeAreaInsets.top,
+                                         self.safeAreaInsets.left,
+                                         self.safeAreaInsets.bottom,
+                                         self.safeAreaInsets.right,
+                                         self.mdf_effectiveUserInterfaceLayoutDirection);
+  }
+#endif
 
+  CGSize leadingButtonBarSize = [_leadingButtonBar sizeThatFits:self.bounds.size];
+  CGRect leadingButtonBarFrame = CGRectMake(RTLFriendlySafeAreaInsets.left,
+                                            CGRectGetMinY(self.bounds),
+                                            leadingButtonBarSize.width,
+                                            leadingButtonBarSize.height);
   CGSize trailingButtonBarSize = [_trailingButtonBar sizeThatFits:self.bounds.size];
-  CGRect trailingButtonBarFrame =
-      CGRectMake(self.bounds.size.width - trailingButtonBarSize.width, self.bounds.origin.y,
-                 trailingButtonBarSize.width, trailingButtonBarSize.height);
-  _trailingButtonBar.frame = MDCRectFlippedForRTL(trailingButtonBarFrame, self.bounds.size.width,
-                                                  self.mdc_effectiveUserInterfaceLayoutDirection);
+  CGFloat xOrigin =
+      CGRectGetWidth(self.bounds) - RTLFriendlySafeAreaInsets.right - trailingButtonBarSize.width;
+  CGRect trailingButtonBarFrame = CGRectMake(xOrigin,
+                                             CGRectGetMinY(self.bounds),
+                                             trailingButtonBarSize.width,
+                                             trailingButtonBarSize.height);
+  if (self.mdf_effectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
+    leadingButtonBarFrame = MDFRectFlippedHorizontally(leadingButtonBarFrame,
+                                                       CGRectGetWidth(self.bounds));
+    trailingButtonBarFrame = MDFRectFlippedHorizontally(trailingButtonBarFrame,
+                                                        CGRectGetWidth(self.bounds));
+  }
+  _leadingButtonBar.frame = leadingButtonBarFrame;
+  _trailingButtonBar.frame = trailingButtonBarFrame;
 
   UIEdgeInsets textInsets = [self usePadInsets] ? kTextPadInsets : kTextInsets;
 
   CGRect textFrame = UIEdgeInsetsInsetRect(self.bounds, textInsets);
   textFrame.origin.x += _leadingButtonBar.frame.size.width;
   textFrame.size.width -= _leadingButtonBar.frame.size.width + _trailingButtonBar.frame.size.width;
+#if defined(__IPHONE_11_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0)
+  if (@available(iOS 11.0, *)) {
+    textFrame.origin.x += self.safeAreaInsets.left;
+    textFrame.size.width -= self.safeAreaInsets.left + self.safeAreaInsets.right;
+  }
+#endif
 
   NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
   paraStyle.lineBreakMode = _titleLabel.lineBreakMode;
@@ -311,14 +339,16 @@ static NSString *const MDCNavigationBarTitleAlignmentKey = @"MDCNavigationBarTit
   titleSize.width = MDCCeil(titleSize.width);
   titleSize.height = MDCCeil(titleSize.height);
   CGRect titleFrame = CGRectMake(textFrame.origin.x, 0, titleSize.width, titleSize.height);
-  titleFrame = MDCRectFlippedForRTL(titleFrame, self.bounds.size.width,
-                                    self.mdc_effectiveUserInterfaceLayoutDirection);
+  if (self.mdf_effectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
+    titleFrame = MDFRectFlippedHorizontally(titleFrame, CGRectGetWidth(self.bounds));
+  }
   UIControlContentVerticalAlignment titleVerticalAlignment = UIControlContentVerticalAlignmentTop;
   CGRect alignedFrame = [self mdc_frameAlignedVertically:titleFrame
                                             withinBounds:textFrame
                                                alignment:titleVerticalAlignment];
-  _titleLabel.frame =
-      [self mdc_frameAlignedHorizontally:alignedFrame alignment:self.titleAlignment];
+  alignedFrame = [self mdc_frameAlignedHorizontally:alignedFrame alignment:self.titleAlignment];
+
+  _titleLabel.frame = MDCRectAlignToScale(alignedFrame, self.window.screen.scale);
   self.titleView.frame = textFrame;
 
   // Button and title label alignment
@@ -449,22 +479,23 @@ static NSString *const MDCNavigationBarTitleAlignmentKey = @"MDCNavigationBarTit
                            alignment:(UIControlContentVerticalAlignment)alignment {
   switch (alignment) {
     case UIControlContentVerticalAlignmentBottom:
-      return CGRectMake(frame.origin.x, CGRectGetMaxY(bounds) - frame.size.height, frame.size.width,
-                        frame.size.height);
+      return CGRectMake(CGRectGetMinX(frame), CGRectGetMaxY(bounds) - CGRectGetHeight(frame),
+                        CGRectGetWidth(frame),
+                        CGRectGetHeight(frame));
 
     case UIControlContentVerticalAlignmentCenter: {
-      CGFloat centeredY = MDCFloor((bounds.size.height - frame.size.height) / 2) + bounds.origin.y;
-      return CGRectMake(frame.origin.x, centeredY, frame.size.width, frame.size.height);
+      CGFloat centeredY = MDCFloor((CGRectGetHeight(bounds) - CGRectGetHeight(frame)) / 2) + CGRectGetMinY(bounds);
+      return CGRectMake(CGRectGetMinX(frame), centeredY, CGRectGetWidth(frame), CGRectGetHeight(frame));
     }
 
     case UIControlContentVerticalAlignmentTop: {
       // The title frame is vertically centered with the back button but will stick to the top of
       // the header regardless of the header's height.
       CGFloat navigationBarCenteredY =
-          MDCFloor(([self intrinsicContentSize].height - frame.size.height) / 2);
+          MDCFloor(([self intrinsicContentSize].height - CGRectGetHeight(frame)) / 2);
       navigationBarCenteredY = MAX(0, navigationBarCenteredY);
-      return CGRectMake(frame.origin.x, navigationBarCenteredY, frame.size.width,
-                        frame.size.height);
+      return CGRectMake(CGRectGetMinX(frame), navigationBarCenteredY, CGRectGetWidth(frame),
+                        CGRectGetHeight(frame));
     }
 
     case UIControlContentVerticalAlignmentFill: {
@@ -478,7 +509,7 @@ static NSString *const MDCNavigationBarTitleAlignmentKey = @"MDCNavigationBarTit
   switch (alignment) {
     // Center align title
     case MDCNavigationBarTitleAlignmentCenter: {
-      BOOL isRTL = [self mdc_effectiveUserInterfaceLayoutDirection] ==
+      BOOL isRTL = [self mdf_effectiveUserInterfaceLayoutDirection] ==
                    UIUserInterfaceLayoutDirectionRightToLeft;
 
       MDCButtonBar *leftButtonBar = self.leadingButtonBar;
@@ -510,12 +541,14 @@ static NSString *const MDCNavigationBarTitleAlignmentKey = @"MDCNavigationBarTit
       // Place the title as close to the center, shifting it slightly in to the side with more space
       if (leftMidSpaceX >= halfFrameWidth) {
         CGFloat frameMaxX = CGRectGetMinX(rightButtonBar.frame) - titleRightInset;
-        return CGRectMake(frameMaxX - frame.size.width, frame.origin.y, frame.size.width,
-                          frame.size.height);
+        return CGRectMake(frameMaxX - CGRectGetWidth(frame), CGRectGetMinY(frame),
+                          CGRectGetWidth(frame),
+                          CGRectGetHeight(frame));
       }
       if (rightMidSpaceX >= halfFrameWidth) {
         CGFloat frameOriginX = CGRectGetMaxX(leftButtonBar.frame) + titleLeftInset;
-        return CGRectMake(frameOriginX, frame.origin.y, frame.size.width, frame.size.height);
+        return CGRectMake(frameOriginX, CGRectGetMinY(frame), CGRectGetWidth(frame),
+                          CGRectGetHeight(frame));
       }
     }
     // Intentional fall through

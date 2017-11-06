@@ -47,7 +47,7 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 	}
 	
 	override func viewWillLayoutSubviews() {
-		dogInfoView?.shadowLayer.elevation = 2.0
+		dogInfoView?.shadowLayer.elevation = ShadowElevation(rawValue: 2.0)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
