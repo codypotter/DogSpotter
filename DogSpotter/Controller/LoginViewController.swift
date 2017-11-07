@@ -208,7 +208,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.loginButtonBottomConstraint.constant = 100
                 self.signupButton.setBackgroundColor(UIColor(red: 1, green: 1, blue: 1, alpha: 0), for: .normal)
                 self.signupButton.setTitleColor(UIColor.white, for: .normal)
-                self.loginButton.backgroundColor = UIColor(red: 178/255, green: 69/255, blue: 39/255, alpha: 1)
+                self.loginButton.backgroundColor = UIColor(red: 229/255, green: 75/255, blue: 75/255, alpha: 1)
                 self.loginButton.setTitleColor(UIColor.white, for: .normal)
                 self.view.layoutIfNeeded()
             }, completion: nil)
@@ -280,7 +280,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.loginButtonWidthConstraint.constant = 200
                 self.signupButtonWidthConstraint.constant = self.loginCredentialsView.bounds.width
                 self.signupButtonBottomConstraint.constant = 130
-                self.signupButton.backgroundColor = UIColor(red: 178/255, green: 69/255, blue: 39/255, alpha: 1)
+                self.signupButton.backgroundColor = UIColor(red: 229/255, green: 75/255, blue: 75/255, alpha: 1)
                 self.signupButton.setTitleColor(UIColor.white, for: .normal)
                 self.loginButton.backgroundColor = UIColor.white
                 self.loginButton.setTitleColor(UIColor.black, for: .normal)
@@ -316,7 +316,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                               "email": email,
                               "name": name,
                               "startDate": String(describing: NSDate.timeIntervalSinceReferenceDate),
-                              "reputation": "0" ,
+                              "reputation": "10",
                               "uid": user?.uid]
             
             userRef.updateChildValues(userValues as Any as! [AnyHashable : Any], withCompletionBlock: { (error, ref) in
