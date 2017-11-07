@@ -20,7 +20,7 @@
         <!--Login View Controller-->
         <scene sceneID="Hn0-mK-h7R">
             <objects>
-                <viewController storyboardIdentifier="LoginViewController" id="B35-es-3Ib" customClass="LoginViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="B35-es-3Ib" customClass="LoginViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Mh8-gJ-xm7"/>
                         <viewControllerLayoutGuide type="bottom" id="cuv-jl-W2E"/>
@@ -966,7 +966,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="9uX-K0-Grb">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="4V5-1G-DUp" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="4V5-1G-DUp" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="fY6-7X-jQF"/>

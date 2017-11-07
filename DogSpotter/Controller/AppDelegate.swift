@@ -14,6 +14,8 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate, MKMapViewDelegate {
 
     var window: UIWindow?
+    var storyboard: UIStoryboard?
+    
     let locationManager = CLLocationManager()
     var location: CLLocation?
 
@@ -24,6 +26,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
+        self.storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        let currentUser = Auth.auth().currentUser
+        if currentUser != nil {
+            self.window?.rootViewController = self.storyboard?.instantiateViewController(withIdentifier: "TabBarController")
+        } else {
+            self.window?.rootViewController = self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController")
+
+        }
         return true
     }
     
