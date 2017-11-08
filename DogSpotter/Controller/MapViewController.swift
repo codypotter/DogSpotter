@@ -16,7 +16,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
 
     @IBOutlet var map: MKMapView!
     
-    let newDogButton = MDCFloatingButton()
+    let newDogButton = UIButton()
     var dogs: [Dog] = [Dog]()
     var user = User()
     
@@ -38,15 +38,16 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         //MARK: Setup newDogButton attributes
-        newDogButton.setTitle("+", for: .normal)
-        newDogButton.sizeToFit()
         newDogButton.addTarget(self, action: #selector(newDogButtonTapped), for: .touchUpInside)
-        newDogButton.backgroundColor = UIColor(red: 229/255, green: 75/255, blue: 75/255, alpha: 1)
+        newDogButton.setBackgroundImage(UIImage(named: "add-dog"), for: .normal)
         
         //MARK: Setup newDogButton layout
         newDogButton.translatesAutoresizingMaskIntoConstraints = false
-        newDogButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60).isActive = true
-        newDogButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        newDogButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+        newDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8).isActive = true
+        newDogButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+        newDogButton.widthAnchor.constraint(equalToConstant: 50.0).isActive = true
+        newDogButton.contentMode = .scaleAspectFit
         
         //MARK: Check if signed in then load dogs
         if Auth.auth().currentUser == nil {
@@ -67,9 +68,13 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 DispatchQueue.global(qos: .background).async {
                     self.delegate.locationManager.requestLocation()
                 }
-                self.performSegue(withIdentifier: "showNewDogViewController", sender: self)
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "showNewDogViewController", sender: self)
+                }
             } else {
-                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "showLoginViewController", sender: self)
+                }
             }
         }
     }
@@ -172,15 +177,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
             }
         })
     }
-    
-//    @IBAction func logOutTapped(_ sender: Any) {
-//        do {
-//            try Auth.auth().signOut()
-//        } catch {
-//            print("an error has occurred")
-//        }
-//        performSegue(withIdentifier: "showLoginViewController", sender: self)
-//    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()

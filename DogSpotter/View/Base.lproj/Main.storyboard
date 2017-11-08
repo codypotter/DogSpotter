@@ -638,7 +638,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xM5-5U-40w">
-                                <rect key="frame" x="260" y="30" width="50" height="50"/>
+                                <rect key="frame" x="6" y="30" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="5Tm-IA-8AH"/>
                                     <constraint firstAttribute="height" constant="50" id="V5s-No-z0b"/>
@@ -652,7 +652,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="xM5-5U-40w" firstAttribute="top" secondItem="7iq-AS-f3E" secondAttribute="bottom" constant="10" id="OpH-U8-wvn"/>
-                            <constraint firstItem="xM5-5U-40w" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" constant="6" id="m7s-zq-qZN"/>
+                            <constraint firstItem="xM5-5U-40w" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="6" id="hIc-3A-7Ff"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
@@ -673,7 +673,7 @@
         <!--New Dog View Controller-->
         <scene sceneID="b82-Pf-g2u">
             <objects>
-                <viewController id="KsA-vq-xzT" customClass="NewDogViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="newDogViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KsA-vq-xzT" customClass="NewDogViewController" customModule="DogSpotter" customModuleProvider="target" sceneMemberID="viewController">
                     <visualEffectView key="view" opaque="NO" contentMode="scaleToFill" id="pkN-xE-vNa">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
