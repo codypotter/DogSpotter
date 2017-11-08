@@ -35,13 +35,13 @@ class LeaderboardViewController: UIViewController, UITableViewDataSource, UITabl
             }
         case 1:
             if self.myFollowingUsersArray.indices.contains(0) {
-                self.topUserLabel.text = "\(String(describing: self.myFollowingUsersArray[0].username!))\n\(String(describing: self.myFollowingUsersArray[0].reputation!))"
+                self.topUserLabel.text = "\(String(describing: self.myFollowingUsersArray[0].username!))\n👑\(String(describing: self.myFollowingUsersArray[0].reputation!))"
             }
             if self.myFollowingUsersArray.indices.contains(1) {
-                self.secondUserLabel.text = "\(String(describing: self.myFollowingUsersArray[1].username!))\n\(String(describing: self.myFollowingUsersArray[1].reputation!))"
+                self.secondUserLabel.text = "\(String(describing: self.myFollowingUsersArray[1].username!))\n👑\(String(describing: self.myFollowingUsersArray[1].reputation!))"
             }
             if self.myFollowingUsersArray.indices.contains(2) {
-                self.thirdUserLabel.text = "\(String(describing: self.myFollowingUsersArray[2].username!))\n\(String(describing: self.myFollowingUsersArray[2].reputation!))"
+                self.thirdUserLabel.text = "\(String(describing: self.myFollowingUsersArray[2].username!))\n👑\(String(describing: self.myFollowingUsersArray[2].reputation!))"
             }
         default:
             break
@@ -97,7 +97,7 @@ class LeaderboardViewController: UIViewController, UITableViewDataSource, UITabl
         if folllowersFollowingSegmentedControl.selectedSegmentIndex == 0 {
             return myFollowersUsersArray.count
         } else {
-            return 0
+            return myFollowingUsersArray.count
         }
     }
     
@@ -106,7 +106,15 @@ class LeaderboardViewController: UIViewController, UITableViewDataSource, UITabl
         if folllowersFollowingSegmentedControl.selectedSegmentIndex == 0 {
             cell.scoreLabel.text = String(describing: myFollowersUsersArray[indexPath.row].reputation!)
             cell.rankAndNameLabel.text = "\(indexPath.row + 1). \(String(describing: myFollowersUsersArray[indexPath.row].username!))"
+        } else {
+            cell.scoreLabel.text = String(describing: myFollowingUsersArray[indexPath.row].reputation!)
+            cell.rankAndNameLabel.text = "\(indexPath.row + 1). \(String(describing: myFollowingUsersArray[indexPath.row].username!))"
         }
         return cell
+    }
+    
+    @IBAction func followersFollowingSegmentedControlTapped(_ sender: Any) {
+        setTopLabels()
+        leaderboardTableView.reloadData()
     }
 }
