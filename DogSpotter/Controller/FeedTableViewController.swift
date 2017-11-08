@@ -12,24 +12,25 @@ import Firebase
 class FeedTableViewController: UITableViewController {
     var user = User()
     var dogs = [Dog]()
+    var dogIDs = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.isHidden = false
-        let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
         
-        //MARK: Download dogs from firebase
+        let usersRef = Database.database().reference().child("users")
+        let userDogRef = usersRef.child((Auth.auth().currentUser?.uid)!).child("dogs")
+        let followingRef = usersRef.child((Auth.auth().currentUser?.uid)!).child("following")
+        
+        //MARK: Download my dog IDs from firebase
         userDogRef.observe(.childAdded, with: { (snapshot) in
             if snapshot.value == nil {
                 print("no new dog found")
             } else {
                 print("new dog found")
-                
-                let dogID = snapshot.key
-                
-                let dogRef = Database.database().reference().child("dogs").child(dogID)
-                dogRef.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snap) in
+                let dogRef = Database.database().reference().child("dogs").child(snapshot.key)
+                dogRef.observeSingleEvent(of: .value, with: { (snap) in
                     print("Found dog data!")
                     let value  = snap.value as? NSDictionary
                     let newDog = Dog()
@@ -39,7 +40,8 @@ class FeedTableViewController: UITableViewController {
                     newDog.creator = value?["creator"] as? String ?? ""
                     newDog.score = Int(value?["score"] as? String ?? "")
                     newDog.imageURL = value?["imageURL"] as? String ?? ""
-                    newDog.dogID = snapshot.key
+                    newDog.timestamp = value?["timestamp"] as? String ?? ""
+                    newDog.dogID = snap.key
                     
                     URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
                         if error != nil {
@@ -53,10 +55,88 @@ class FeedTableViewController: UITableViewController {
                     }).resume()
                     
                     self.dogs.insert(newDog, at: 0)
+                    self.dogs = self.dogs.sorted {
+                        $0.timestamp! > $1.timestamp!
+                    }
                     self.tableView.reloadData()
                 })
             }
         })
+        
+        //MARK: Download my following dogs from firebase
+        followingRef.observe(.childAdded) { (snapshot) in
+            usersRef.child(snapshot.key).child("dogs").observe(.childAdded, with: { (snap) in
+                let dogRef = Database.database().reference().child("dogs").child(snap.key)
+                dogRef.observeSingleEvent(of: .value, with: { (snap) in
+                    print("Found dog data!")
+                    let value  = snap.value as? NSDictionary
+                    let newDog = Dog()
+                    
+                    newDog.name = value?["name"] as? String ?? ""
+                    newDog.breed = value?["breed"] as? String ?? ""
+                    newDog.creator = value?["creator"] as? String ?? ""
+                    newDog.score = Int(value?["score"] as? String ?? "")
+                    newDog.imageURL = value?["imageURL"] as? String ?? ""
+                    newDog.timestamp = value?["timestamp"] as? String ?? ""
+                    newDog.dogID = snap.key
+                    
+                    URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+                        if error != nil {
+                            print(error!)
+                            return
+                        }
+                        newDog.picture = UIImage(data: data!)!
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }).resume()
+                    
+                    self.dogs.insert(newDog, at: 0)
+                    self.dogs = self.dogs.sorted {
+                        $0.timestamp! > $1.timestamp!
+                    }
+                    self.tableView.reloadData()
+                })
+            })
+        }
+        
+        //MARK: Download
+        for dogID in dogIDs {
+            let dogRef = Database.database().reference().child("dogs").child(dogID)
+            dogRef.observeSingleEvent(of: .value, with: { (snap) in
+                print("Found dog data!")
+                let value  = snap.value as? NSDictionary
+                let newDog = Dog()
+                
+                newDog.name = value?["name"] as? String ?? ""
+                newDog.breed = value?["breed"] as? String ?? ""
+                newDog.creator = value?["creator"] as? String ?? ""
+                newDog.score = Int(value?["score"] as? String ?? "")
+                newDog.imageURL = value?["imageURL"] as? String ?? ""
+                newDog.dogID = dogID
+                
+                URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+                    if error != nil {
+                        print(error!)
+                        return
+                    }
+                    newDog.picture = UIImage(data: data!)!
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                }).resume()
+                
+                self.dogs.insert(newDog, at: 0)
+                self.dogs = self.dogs.sorted {
+                    $0.timestamp! > $1.timestamp!
+                }
+                self.tableView.reloadData()
+            })
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -88,7 +168,6 @@ class FeedTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
             let imageHeight = Int(view.bounds.width)
             let labelsHeight = 3 * 20
             let spacing = 12 + 24

@@ -12,6 +12,7 @@ import MapKit
 class Dog: NSObject {
     var creator: String?
     var name: String?
+    var timestamp: String?
     var breed: String?
     var score: Int?
     var imageURL: String?
