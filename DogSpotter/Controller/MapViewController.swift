@@ -39,6 +39,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
             DispatchQueue.main.async {
                 self.repLabel.text = "👑\(String(describing: snapshot.value as? String))"
             }
+
         }
     }
     
