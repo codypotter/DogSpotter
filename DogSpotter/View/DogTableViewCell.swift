@@ -16,5 +16,6 @@ class DogTableViewCell: UITableViewCell {
     @IBOutlet weak var dogScoreLabel: UILabel!
     @IBOutlet weak var dogCreatorLabel: UILabel!
     @IBOutlet weak var dogVotesLabel: UILabel!
-
+    @IBOutlet weak var dogUpvoteButton: UIButton!
+    
 }

@@ -52,7 +52,7 @@
 		557028E81F33DF67007ADC87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		557028EA1F33DF67007ADC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5578A4E31FB10CCE00DDFD10 /* FeedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewController.swift; sourceTree = "<group>"; };
-		5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogTableViewController.swift; sourceTree = "<group>"; };
+		5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogTableViewController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogTableViewCell.swift; sourceTree = "<group>"; };
 		55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotationView.swift; sourceTree = "<group>"; };

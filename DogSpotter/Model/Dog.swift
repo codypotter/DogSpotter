@@ -11,6 +11,7 @@ import MapKit
 
 class Dog: NSObject {
     var creator: String?
+    var upvotes: Int?
     var name: String?
     var timestamp: String?
     var breed: String?

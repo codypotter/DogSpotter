@@ -508,6 +508,9 @@
                                                 <constraint firstAttribute="width" constant="44" id="xLa-1R-Mng"/>
                                             </constraints>
                                             <state key="normal" image="like-heart"/>
+                                            <connections>
+                                                <action selector="upvoteTapped:" destination="8gY-bM-ubw" eventType="touchUpInside" id="J9C-pY-N8h"/>
+                                            </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="sPV-eE-GXR">
                                             <rect key="frame" x="24" y="429" width="150" height="20"/>
@@ -567,6 +570,7 @@
                                     <outlet property="dogImageView" destination="zPc-wW-vr3" id="FiH-0g-o2X"/>
                                     <outlet property="dogNameLabel" destination="6se-Nb-hWr" id="wQE-D7-bbY"/>
                                     <outlet property="dogScoreLabel" destination="sPV-eE-GXR" id="3MQ-2H-v2R"/>
+                                    <outlet property="dogUpvoteButton" destination="phb-Fn-RTr" id="v4J-g5-dyI"/>
                                     <outlet property="dogVotesLabel" destination="Udf-Dk-0u1" id="1uM-g4-ZGd"/>
                                 </connections>
                             </tableViewCell>
@@ -1065,6 +1069,9 @@
                                                 <constraint firstAttribute="height" constant="44" id="XHE-vg-tPx"/>
                                             </constraints>
                                             <state key="normal" image="like-heart"/>
+                                            <connections>
+                                                <action selector="upvoteTapped:" destination="4il-qv-9cD" eventType="touchUpInside" id="S25-I6-7we"/>
+                                            </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="JQk-bD-Lcg">
                                             <rect key="frame" x="24" y="429" width="150" height="20"/>

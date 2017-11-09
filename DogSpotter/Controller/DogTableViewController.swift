@@ -22,7 +22,7 @@ class DogTableViewController: UITableViewController {
         
         self.navigationController?.navigationBar.isHidden = false
         let userDogRef = Database.database().reference().child("users").child(user.uid!).child("dogs")
-        
+
         //MARK: Download dogs from firebase
         userDogRef.observe(.childAdded, with: { (snapshot) in
             if snapshot.value == nil {
@@ -41,9 +41,10 @@ class DogTableViewController: UITableViewController {
                     newDog.name = value?["name"] as? String ?? ""
                     newDog.breed = value?["breed"] as? String ?? ""
                     newDog.creator = value?["creator"] as? String ?? ""
-                    newDog.score = Int(value?["score"] as? String ?? "")
+                    newDog.score = Int(value?["score"] as? String ?? "0")
                     newDog.imageURL = value?["imageURL"] as? String ?? ""
                     newDog.dogID = snapshot.key
+                    newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
                     
                     URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
                         if error != nil {
@@ -79,6 +80,8 @@ class DogTableViewController: UITableViewController {
             dogCell.dogBreedLabel.text = dogs[indexPath.row - 1].breed
             dogCell.dogNameLabel.text = dogs[indexPath.row - 1].name
             dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row - 1].score!)
+            dogCell.dogVotesLabel.text = String(describing: dogs[indexPath.row - 1].upvotes!)
+            
             var score = (dogs[indexPath.row - 1].score!)
             if score == 0 {
                 score = 1
@@ -91,10 +94,17 @@ class DogTableViewController: UITableViewController {
                     text += "🔥"
                 }
             }
+            dogCell.dogUpvoteButton.tag = indexPath.row
             dogCell.dogScoreLabel.text = text
             dogCell.dogImageView.image = dogs[indexPath.row - 1].picture
             dogCell.dogCreatorLabel.text = dogs[indexPath.row - 1].creator
-            dogCell.dogVotesLabel.text = "0"
+            
+            let dogUpvoteRef = Database.database().reference().child("dogs").child(dogs[indexPath.row - 1].dogID!).child("upvotes")
+            dogUpvoteRef.observe(.value) { (snapshot) in
+                DispatchQueue.main.async {
+                    dogCell.dogVotesLabel.text = snapshot.value as? String
+                }
+            }
             return dogCell
         }
     }
@@ -116,7 +126,6 @@ class DogTableViewController: UITableViewController {
     }
     
     func followOrUnfollow() {
-        
         let followingRef = Database.database().reference().child("users/\(Auth.auth().currentUser!.uid)/following/\(self.user.uid!)")
         let followersRef = Database.database().reference().child("users/\(user.uid!)/followers/\(Auth.auth().currentUser!.uid)")
         
@@ -155,5 +164,20 @@ class DogTableViewController: UITableViewController {
             }
         })
     }
-
+    
+    @IBAction func upvoteTapped(_ sender: UIButton) {
+        let ref = Database.database().reference().child("dogs").child(dogs[sender.tag - 1].dogID!)
+        ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
+            var currentUpvotes = Int(snap.value as! String)!
+            currentUpvotes += 1
+            ref.child("upvotes").setValue(String(currentUpvotes))
+        })
+        UIView.animate(withDuration: 0.25) {
+            sender.transform = .init(scaleX: 0.5, y: 0.5)
+        }
+        UIView.animate(withDuration: 0.25) {
+            sender.transform = .identity
+        }
+    }
+    
 }

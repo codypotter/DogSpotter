@@ -38,9 +38,10 @@ class FeedTableViewController: UITableViewController {
                     newDog.name = value?["name"] as? String ?? ""
                     newDog.breed = value?["breed"] as? String ?? ""
                     newDog.creator = value?["creator"] as? String ?? ""
-                    newDog.score = Int(value?["score"] as? String ?? "")
+                    newDog.score = Int(value?["score"] as? String ?? "0")
                     newDog.imageURL = value?["imageURL"] as? String ?? ""
                     newDog.timestamp = value?["timestamp"] as? String ?? ""
+                    newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
                     newDog.dogID = snap.key
                     
                     URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
@@ -111,8 +112,9 @@ class FeedTableViewController: UITableViewController {
                 newDog.name = value?["name"] as? String ?? ""
                 newDog.breed = value?["breed"] as? String ?? ""
                 newDog.creator = value?["creator"] as? String ?? ""
-                newDog.score = Int(value?["score"] as? String ?? "")
+                newDog.score = Int(value?["score"] as? String ?? "0")
                 newDog.imageURL = value?["imageURL"] as? String ?? ""
+                newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
                 newDog.dogID = dogID
                 
                 URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
@@ -144,34 +146,57 @@ class FeedTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let dogCell = tableView.dequeueReusableCell(withIdentifier: "dogCell", for: indexPath) as! DogTableViewCell
-            dogCell.dogBreedLabel.text = dogs[indexPath.row].breed
-            dogCell.dogNameLabel.text = dogs[indexPath.row].name
-            dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row].score!)
-            var score = (dogs[indexPath.row].score!)
-            if score == 0 {
-                score = 1
+        let dogCell = tableView.dequeueReusableCell(withIdentifier: "dogCell", for: indexPath) as! DogTableViewCell
+        dogCell.dogBreedLabel.text = dogs[indexPath.row].breed
+        dogCell.dogNameLabel.text = dogs[indexPath.row].name
+        dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row].score!)
+        dogCell.dogVotesLabel.text = String(describing: dogs[indexPath.row].upvotes!)
+        
+        var score = (dogs[indexPath.row].score!)
+        if score == 0 {
+            score = 1
+        }
+        var text = ""
+        for _ in 0 ..< score {
+            if text.isEmpty {
+                text = "🔥"
+            } else {
+                text += "🔥"
             }
-            var text = ""
-            for _ in 0 ..< score {
-                if text.isEmpty {
-                    text = "🔥"
-                } else {
-                    text += "🔥"
-                }
+        }
+        dogCell.dogScoreLabel.text = text
+        dogCell.dogImageView.image = dogs[indexPath.row].picture
+        dogCell.dogCreatorLabel.text = dogs[indexPath.row].creator
+        
+        let dogUpvoteRef = Database.database().reference().child("dogs").child(dogs[indexPath.row].dogID!).child("upvotes")
+        dogUpvoteRef.observe(.value) { (snapshot) in
+            DispatchQueue.main.async {
+                dogCell.dogVotesLabel.text = snapshot.value as? String
             }
-            dogCell.dogScoreLabel.text = text
-            dogCell.dogImageView.image = dogs[indexPath.row].picture
-            dogCell.dogCreatorLabel.text = dogs[indexPath.row].creator
-            dogCell.dogVotesLabel.text = "0"
-            return dogCell
+        }
+        return dogCell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            let imageHeight = Int(view.bounds.width)
-            let labelsHeight = 3 * 20
-            let spacing = 12 + 24
-            let creatorHeight = 30
-            return CGFloat(imageHeight + labelsHeight + spacing + creatorHeight + 8)
+        let imageHeight = Int(view.bounds.width)
+        let labelsHeight = 3 * 20
+        let spacing = 12 + 24
+        let creatorHeight = 30
+        return CGFloat(imageHeight + labelsHeight + spacing + creatorHeight + 8)
+    }
+    
+    @IBAction func upvoteTapped(_ sender: UIButton) {
+        let ref = Database.database().reference().child("dogs").child(dogs[sender.tag].dogID!)
+        ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
+            var currentUpvotes = Int(snap.value as! String)!
+            currentUpvotes += 1
+            ref.child("upvotes").setValue(String(currentUpvotes))
+        })
+        UIView.animate(withDuration: 0.25) {
+            sender.transform = .init(scaleX: 0.5, y: 0.5)
+        }
+        UIView.animate(withDuration: 0.25) {
+            sender.transform = .identity
+        }
     }
 }
