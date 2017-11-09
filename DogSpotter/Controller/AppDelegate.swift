@@ -32,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             self.window?.rootViewController = self.storyboard?.instantiateViewController(withIdentifier: "TabBarController")
         } else {
             self.window?.rootViewController = self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController")
-
         }
         return true
     }

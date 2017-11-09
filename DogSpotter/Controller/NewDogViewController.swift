@@ -167,7 +167,8 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 					                 "latitude": String(describing: latitude!),
 					                 "longitude": String(describing: longitude!),
 					                 "imageURL": dogDownloadURL,
-					                 "timestamp": String(describing: NSDate.timeIntervalSinceReferenceDate)]
+					                 "timestamp": String(describing: NSDate.timeIntervalSinceReferenceDate),
+									 "upvotes": "0"]
 					
 					let dogKey = dogRef.key
 					
@@ -214,7 +215,6 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 	}
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
-		
 		UIView.animate(withDuration: 0.3) {
 			self.dogInfoViewBottomConstraint.constant = 250
 			self.view.layoutIfNeeded()

@@ -19,6 +19,7 @@ class CustomAnnotation: NSObject, MKAnnotation {
     var breed: String = ""
     var score: Int = 1
     var picture = UIImage()
+    var dogID: String  = ""
     
     init(location: CLLocationCoordinate2D, title: String, subtitle: String) {
         self.coordinate = location

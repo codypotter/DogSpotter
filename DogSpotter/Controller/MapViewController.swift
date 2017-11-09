@@ -19,6 +19,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     let newDogButton = UIButton()
     var dogs: [Dog] = [Dog]()
     var user = User()
+    var dogIDOfUpvoteTapped: String = ""
     
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -109,6 +110,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                             newDog.creator = value["creator"]!
                             newDog.score = Int(value["score"]!)!
                             newDog.imageURL = value["imageURL"]!
+                            newDog.dogID = snap2.key
                             newDog.location = CLLocationCoordinate2D(latitude: Double(value["latitude"]!)!, longitude: Double(value["longitude"]!)!)
                             
                             URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
@@ -124,6 +126,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                                 annotation.score = newDog.score!
                                 annotation.creator = newDog.creator!
                                 annotation.picture = newDog.picture
+                                annotation.dogID = newDog.dogID!
                                 DispatchQueue.main.async {
                                     self.map.addAnnotation(annotation)
                                 }
@@ -154,6 +157,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                     newDog.creator = value["creator"]!
                     newDog.score = Int(value["score"]!)!
                     newDog.imageURL = value["imageURL"]!
+                    newDog.dogID = snap.key
                     newDog.location = CLLocationCoordinate2D(latitude: Double(value["latitude"]!)!, longitude: Double(value["longitude"]!)!)
                     
                     URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
@@ -169,6 +173,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                         annotation.score = newDog.score!
                         annotation.creator = newDog.creator!
                         annotation.picture = newDog.picture
+                        annotation.dogID = newDog.dogID!
                         DispatchQueue.main.async {
                             self.map.addAnnotation(annotation)
                         }
@@ -243,11 +248,21 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 text += "🔥"
             }
         }
+        dogIDOfUpvoteTapped = customAnnotation.dogID
+        
         calloutView.scoreLabel.text = text
         calloutView.creatorLabel.text = customAnnotation.creator
         calloutView.dogImageView.image = customAnnotation.picture
-        calloutView.upvoteButton.addTarget(self, action: #selector(upvoteTapped), for: .touchUpInside)
+
+        let reference = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped).child("upvotes")
+        reference.observe(.value) { (snapshot) in
+            DispatchQueue.main.async {
+                calloutView.upvoteCounterLabel.text = snapshot.value as! String
+            }
+        }
         
+        calloutView.upvoteButton.addTarget(self, action: #selector(upvoteTapped(_:)), for: .touchUpInside)
+
         calloutView.center = CGPoint(x: view.bounds.size.width/2, y: -calloutView.bounds.size.height*0.52)
         view.addSubview(calloutView)
         let center = CGPoint(x: calloutView.center.x, y: calloutView.center.y)
@@ -271,8 +286,19 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.performSegue(withIdentifier: "showAccountViewController", sender: self)
     }
     
-    @objc func upvoteTapped() {
-        print("upvote tapped")
+    @objc func upvoteTapped(_ sender: UIButton) {
+        let ref = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped)
+        ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
+            var currentUpvotes = Int(snap.value as! String)!
+            currentUpvotes += 1
+            ref.child("upvotes").setValue(String(currentUpvotes))
+        })
+        UIView.animate(withDuration: 0.25) {
+            sender.transform = .init(scaleX: 0.5, y: 0.5)
+        }
+        UIView.animate(withDuration: 0.25) {
+            sender.transform = .identity
+        }
     }
 }
 
