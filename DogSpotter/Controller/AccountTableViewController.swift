@@ -18,7 +18,6 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
     @IBOutlet weak var dogsPostedLabel: UILabel!
     @IBOutlet weak var followersLabel: UILabel!
     @IBOutlet weak var followingLabel: UILabel!
-    @IBOutlet weak var profileImageView: UIImageView!
     
     let uid = Auth.auth().currentUser?.uid
     var tempImage = UIImage()
@@ -96,20 +95,6 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
                 }))
             }
             present(alertController, animated: true, completion: nil)
-        } else if indexPath.row == 2 && indexPath.section == 0 {
-            let source = UIImagePickerControllerSourceType.photoLibrary
-            guard UIImagePickerController.isSourceTypeAvailable(source)
-                else {
-                    let alert = UIAlertController(title: "Library Error", message: "Oops! Looks like Dog Spotter doesn't have access to your photo library! Please open Settings to give Dog Spotter permission to use your photo library.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                    present(alert, animated: true)
-                    return
-            }
-            let library = UIImagePickerController()
-            library.sourceType = source
-            library.allowsEditing = true
-            library.delegate = self
-            present(library, animated: true)
         }
         tableView.reloadData()
         

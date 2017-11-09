@@ -257,7 +257,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let reference = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped).child("upvotes")
         reference.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
-                calloutView.upvoteCounterLabel.text = snapshot.value as! String
+                calloutView.upvoteCounterLabel.text = (snapshot.value as? String)
             }
         }
         
