@@ -15,6 +15,7 @@ import MaterialComponents
 class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
 
     @IBOutlet var map: MKMapView!
+    @IBOutlet weak var repLabel: UILabel!
     
     let newDogButton = UIButton()
     var dogs: [Dog] = [Dog]()
@@ -32,6 +33,13 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.delegate = self
         self.map.mapType = .hybrid
         self.map.addSubview(newDogButton)
+        
+        let reference = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("reputation")
+        reference.observe(.value) { (snapshot) in
+            DispatchQueue.main.async {
+                self.repLabel.text = snapshot.value as? String
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -257,7 +265,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let reference = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped).child("upvotes")
         reference.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
-                calloutView.upvoteCounterLabel.text = (snapshot.value as? String)
+                calloutView.upvoteCounterLabel.text = snapshot.value as? String
             }
         }
         

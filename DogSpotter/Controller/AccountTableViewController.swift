@@ -99,15 +99,4 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
         tableView.reloadData()
         
     }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        tempImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
-        
-        if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            tempImageData = UIImageJPEGRepresentation(editedImage, 0.70)!
-            tempImage = editedImage
-        }
-        profileImageView.image = tempImage
-        self.dismiss(animated: true, completion: nil)
-    }
 }
