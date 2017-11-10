@@ -318,6 +318,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                               "startDate": String(describing: NSDate.timeIntervalSinceReferenceDate),
                               "reputation": "10",
                               "uid": user?.uid]
+            let usernameRef = Database.database().reference().child("usernames").child((Auth.auth().currentUser?.uid)!)
             
             userRef.updateChildValues(userValues as Any as! [AnyHashable : Any], withCompletionBlock: { (error, ref) in
                 if error != nil {
@@ -328,6 +329,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     return
                 }
             })
+            
+            usernameRef.setValue(username)
             
             let changeRequest = user?.createProfileChangeRequest()
             changeRequest?.displayName = username

@@ -140,7 +140,7 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 			let dogRef = databaseRef.child("dogs").childByAutoId()
 			let userRef = databaseRef.child("users").child((Auth.auth().currentUser?.uid)!)
 			
-			let user = Auth.auth().currentUser?.displayName!
+			let user = Auth.auth().currentUser?.uid
 			
 			let dogPhotosReference = storageRef.child("dogPhotos").child("\(String(describing: newDogUUID)).jpg")
 			

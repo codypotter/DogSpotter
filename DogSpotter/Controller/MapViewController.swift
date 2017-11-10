@@ -296,11 +296,25 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     
     @objc func upvoteTapped(_ sender: UIButton) {
         let ref = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped)
+        let userRef = Database.database().reference().child("users")
         ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
             var currentUpvotes = Int(snap.value as! String)!
             currentUpvotes += 1
             ref.child("upvotes").setValue(String(currentUpvotes))
         })
+        userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+            var currentRep = Int(snap.value as! String)!
+            currentRep += 1
+            userRef.child(Auth.auth().currentUser!.uid).child("reputation").setValue(String(currentRep))
+        })
+        ref.child("creator").observeSingleEvent(of: .value) { (snapshot) in
+            userRef.child(snapshot.value as! String).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+                var currentRep = Int(snap.value as! String)!
+                currentRep += 1
+                userRef.child(snapshot.value as! String).child("reputation").setValue(String(currentRep))
+            })
+        }
+        
         UIView.animate(withDuration: 0.25) {
             sender.transform = .init(scaleX: 0.5, y: 0.5)
         }

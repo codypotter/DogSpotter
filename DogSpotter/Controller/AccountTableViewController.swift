@@ -99,4 +99,16 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
         tableView.reloadData()
         
     }
+    @IBAction func logoutTapped(_ sender: UIBarButtonItem) {
+        let loginViewController = storyboard?.instantiateViewController(withIdentifier: "LoginViewController")
+        
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+        self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
+        navigationController?.present(loginViewController!, animated: true, completion: nil)
+    }
 }
