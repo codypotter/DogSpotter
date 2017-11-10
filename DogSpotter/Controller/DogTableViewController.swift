@@ -14,6 +14,8 @@ class DogTableViewController: UITableViewController {
     var currentUserIsFollowing = false
     var user = User()
     var dogs = [Dog]()
+    var followersCount = 0
+    var followingCount = 0
     
     @IBOutlet weak var followBarButtonItem: UIBarButtonItem!
     
@@ -22,6 +24,16 @@ class DogTableViewController: UITableViewController {
         
         self.navigationController?.navigationBar.isHidden = false
         let userDogRef = Database.database().reference().child("users").child(user.uid!).child("dogs")
+        let userRef = Database.database().reference().child("users").child(user.uid!)
+        
+        userRef.child("followers").observe(.childAdded) { (snapshot) in
+            self.followersCount += 1
+            self.tableView.reloadData()
+        }
+        userRef.child("following").observe(.childAdded) { (snapshot) in
+            self.followingCount += 1
+            self.tableView.reloadData()
+        }
 
         //MARK: Download dogs from firebase
         userDogRef.observe(.childAdded, with: { (snapshot) in
@@ -74,6 +86,8 @@ class DogTableViewController: UITableViewController {
             profileCell.nameLabel.text = user.name
             profileCell.totalReputationLabel.text = String(describing: user.reputation!)
             profileCell.usernameLabel.text = user.username
+            profileCell.totalFollowersLabel.text = String(describing: followersCount)
+            profileCell.totalFollowingLabel.text = String(describing: followingCount)
             return profileCell
         } else {
             let dogCell = tableView.dequeueReusableCell(withIdentifier: "dogCell", for: indexPath) as! DogTableViewCell
@@ -126,6 +140,9 @@ class DogTableViewController: UITableViewController {
     }
     
     func followOrUnfollow() {
+        if user.uid! == Auth.auth().currentUser?.uid {
+            return
+        }
         let followingRef = Database.database().reference().child("users/\(Auth.auth().currentUser!.uid)/following/\(self.user.uid!)")
         let followersRef = Database.database().reference().child("users/\(user.uid!)/followers/\(Auth.auth().currentUser!.uid)")
         

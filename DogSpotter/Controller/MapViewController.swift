@@ -37,9 +37,8 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let reference = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("reputation")
         reference.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
-                self.repLabel.text = "👑\(String(describing: snapshot.value as? String))"
+                self.repLabel.text = "👑\(snapshot.value ?? "0")"
             }
-
         }
     }
     

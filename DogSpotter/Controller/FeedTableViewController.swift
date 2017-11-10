@@ -76,9 +76,10 @@ class FeedTableViewController: UITableViewController {
                     newDog.name = value?["name"] as? String ?? ""
                     newDog.breed = value?["breed"] as? String ?? ""
                     newDog.creator = value?["creator"] as? String ?? ""
-                    newDog.score = Int(value?["score"] as? String ?? "")
+                    newDog.score = Int(value?["score"] as? String ?? "0")
                     newDog.imageURL = value?["imageURL"] as? String ?? ""
                     newDog.timestamp = value?["timestamp"] as? String ?? ""
+                    newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
                     newDog.dogID = snap.key
                     
                     URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
@@ -102,39 +103,39 @@ class FeedTableViewController: UITableViewController {
         }
         
         //MARK: Download
-        for dogID in dogIDs {
-            let dogRef = Database.database().reference().child("dogs").child(dogID)
-            dogRef.observeSingleEvent(of: .value, with: { (snap) in
-                print("Found dog data!")
-                let value  = snap.value as? NSDictionary
-                let newDog = Dog()
-                
-                newDog.name = value?["name"] as? String ?? ""
-                newDog.breed = value?["breed"] as? String ?? ""
-                newDog.creator = value?["creator"] as? String ?? ""
-                newDog.score = Int(value?["score"] as? String ?? "0")
-                newDog.imageURL = value?["imageURL"] as? String ?? ""
-                newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
-                newDog.dogID = dogID
-                
-                URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
-                    if error != nil {
-                        print(error!)
-                        return
-                    }
-                    newDog.picture = UIImage(data: data!)!
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                }).resume()
-                
-                self.dogs.insert(newDog, at: 0)
-                self.dogs = self.dogs.sorted {
-                    $0.timestamp! > $1.timestamp!
-                }
-                self.tableView.reloadData()
-            })
-        }
+//        for dogID in dogIDs {
+//            let dogRef = Database.database().reference().child("dogs").child(dogID)
+//            dogRef.observeSingleEvent(of: .value, with: { (snap) in
+//                print("Found dog data!")
+//                let value  = snap.value as? NSDictionary
+//                let newDog = Dog()
+//
+//                newDog.name = value?["name"] as? String ?? ""
+//                newDog.breed = value?["breed"] as? String ?? ""
+//                newDog.creator = value?["creator"] as? String ?? ""
+//                newDog.score = Int(value?["score"] as? String ?? "0")
+//                newDog.imageURL = value?["imageURL"] as? String ?? ""
+//                newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
+//                newDog.dogID = dogID
+//
+//                URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+//                    if error != nil {
+//                        print(error!)
+//                        return
+//                    }
+//                    newDog.picture = UIImage(data: data!)!
+//                    DispatchQueue.main.async {
+//                        self.tableView.reloadData()
+//                    }
+//                }).resume()
+//
+//                self.dogs.insert(newDog, at: 0)
+//                self.dogs = self.dogs.sorted {
+//                    $0.timestamp! > $1.timestamp!
+//                }
+//                self.tableView.reloadData()
+//            })
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
