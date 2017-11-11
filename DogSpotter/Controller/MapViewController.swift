@@ -13,7 +13,7 @@ import Firebase
 import MaterialComponents
 
 class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
-
+    
     @IBOutlet var map: MKMapView!
     @IBOutlet weak var repLabel: UILabel!
     
@@ -111,11 +111,15 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                         dogRef.observeSingleEvent(of: .value, with: { (snap2) in
                             print("Found dog data!")
                             let value = snap2.value as! Dictionary<String, String>
-                            
                             let newDog = Dog()
+
+                            let creatorID = value["creator"]!
+                            let userRef = Database.database().reference().child("users")
+                        userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
+                                newDog.creator = snip.value as? String
+                            })
                             newDog.name = value["name"]!
                             newDog.breed = value["breed"]!
-                            newDog.creator = value["creator"]!
                             newDog.score = Int(value["score"]!)!
                             newDog.imageURL = value["imageURL"]!
                             newDog.dogID = snap2.key
@@ -160,9 +164,14 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                     let value = snap.value as! Dictionary<String, String>
                     
                     let newDog = Dog()
+                    
+                    let creatorID = value["creator"]!
+                    let userRef = Database.database().reference().child("users")
+                    userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
+                        newDog.creator = snip.value as? String
+                    })
                     newDog.name = value["name"]!
                     newDog.breed = value["breed"]!
-                    newDog.creator = value["creator"]!
                     newDog.score = Int(value["score"]!)!
                     newDog.imageURL = value["imageURL"]!
                     newDog.dogID = snap.key
@@ -204,7 +213,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         if(annotation is MKUserLocation){
             return nil
         }
-
+        
         let ident = "pin"
         
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: ident)
@@ -261,7 +270,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         calloutView.scoreLabel.text = text
         calloutView.creatorLabel.text = customAnnotation.creator
         calloutView.dogImageView.image = customAnnotation.picture
-
+        
         let reference = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped).child("upvotes")
         reference.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
@@ -270,7 +279,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         }
         
         calloutView.upvoteButton.addTarget(self, action: #selector(upvoteTapped(_:)), for: .touchUpInside)
-
+        
         calloutView.center = CGPoint(x: view.bounds.size.width/2, y: -calloutView.bounds.size.height*0.52)
         view.addSubview(calloutView)
         let center = CGPoint(x: calloutView.center.x, y: calloutView.center.y)

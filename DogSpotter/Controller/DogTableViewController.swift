@@ -25,6 +25,13 @@ class DogTableViewController: UITableViewController {
         self.navigationController?.navigationBar.isHidden = false
         let userDogRef = Database.database().reference().child("users").child(user.uid!).child("dogs")
         let userRef = Database.database().reference().child("users").child(user.uid!)
+        let isFollowingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following").child(user.uid!)
+        
+        isFollowingRef.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.exists() {
+                self.followBarButtonItem.title = "Unfollow"
+            }
+        }
         
         userRef.child("followers").observe(.childAdded) { (snapshot) in
             self.followersCount += 1
@@ -50,9 +57,12 @@ class DogTableViewController: UITableViewController {
                     let value  = snap.value as? NSDictionary
                     let newDog = Dog()
 
+                    userRef.child("username").observeSingleEvent(of: .value, with: { (snip) in
+                        newDog.creator = snip.value as? String
+                    })
+                    
                     newDog.name = value?["name"] as? String ?? ""
                     newDog.breed = value?["breed"] as? String ?? ""
-                    newDog.creator = value?["creator"] as? String ?? ""
                     newDog.score = Int(value?["score"] as? String ?? "0")
                     newDog.imageURL = value?["imageURL"] as? String ?? ""
                     newDog.dogID = snapshot.key
