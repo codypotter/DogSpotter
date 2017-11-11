@@ -40,6 +40,18 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 self.repLabel.text = "👑\(snapshot.value ?? "0")"
             }
         }
+        
+        //MARK: Check if signed in then load dogs
+        if Auth.auth().currentUser == nil {
+            let alert = UIAlertController(title: "Welcome!", message: "It looks like you're not logged in! Let's fix that!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Log In", style: .default, handler: { (action) in
+                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
+            }))
+            present(alert, animated: true, completion: nil)
+        } else {
+            loadDogs()
+        }
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,17 +70,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         newDogButton.widthAnchor.constraint(equalToConstant: 50.0).isActive = true
         newDogButton.contentMode = .scaleAspectFit
         
-        //MARK: Check if signed in then load dogs
-        if Auth.auth().currentUser == nil {
-            let alert = UIAlertController(title: "Welcome!", message: "It looks like you're not logged in! Let's fix that!", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Log In", style: .default, handler: { (action) in
-                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
-            }))
-            present(alert, animated: true, completion: nil)
-        } else {
-            loadDogs()
         }
-    }
     
     @objc func newDogButtonTapped() {
         Auth.auth().addStateDidChangeListener { (auth, user) in
