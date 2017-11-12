@@ -195,6 +195,7 @@ class DogTableViewController: UITableViewController {
     
     @IBAction func upvoteTapped(_ sender: UIButton) {
         let ref = Database.database().reference().child("dogs").child(dogs[sender.tag - 1].dogID!)
+        let userRef = Database.database().reference().child("users")
         
         ref.child("creator").observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.value as! String != (Auth.auth().currentUser?.uid)! {
@@ -203,6 +204,7 @@ class DogTableViewController: UITableViewController {
                     currentUpvotes += 1
                     ref.child("upvotes").setValue(String(currentUpvotes))
                 })
+                
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.25) {
                         sender.transform = .init(scaleX: 0.5, y: 0.5)
@@ -211,6 +213,18 @@ class DogTableViewController: UITableViewController {
                         sender.transform = .identity
                     }
                 }
+                
+                userRef.child(snapshot.value as! String).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+                    var currentRep = Int(snap.value as! String)!
+                    currentRep += 2
+                    userRef.child(snapshot.value as! String).child("reputation").setValue(String(currentRep))
+                })
+                
+                userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+                    var currentRep = Int(snap.value as! String)!
+                    currentRep += 1
+                    userRef.child(Auth.auth().currentUser!.uid).child("reputation").setValue(String(currentRep))
+                })
             }
         }
     }

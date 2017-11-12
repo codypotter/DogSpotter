@@ -111,39 +111,39 @@ class FeedTableViewController: UITableViewController {
         }
         
         //MARK: Download
-//        for dogID in dogIDs {
-//            let dogRef = Database.database().reference().child("dogs").child(dogID)
-//            dogRef.observeSingleEvent(of: .value, with: { (snap) in
-//                print("Found dog data!")
-//                let value  = snap.value as? NSDictionary
-//                let newDog = Dog()
-//
-//                newDog.name = value?["name"] as? String ?? ""
-//                newDog.breed = value?["breed"] as? String ?? ""
-//                newDog.creator = value?["creator"] as? String ?? ""
-//                newDog.score = Int(value?["score"] as? String ?? "0")
-//                newDog.imageURL = value?["imageURL"] as? String ?? ""
-//                newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
-//                newDog.dogID = dogID
-//
-//                URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
-//                    if error != nil {
-//                        print(error!)
-//                        return
-//                    }
-//                    newDog.picture = UIImage(data: data!)!
-//                    DispatchQueue.main.async {
-//                        self.tableView.reloadData()
-//                    }
-//                }).resume()
-//
-//                self.dogs.insert(newDog, at: 0)
-//                self.dogs = self.dogs.sorted {
-//                    $0.timestamp! > $1.timestamp!
-//                }
-//                self.tableView.reloadData()
-//            })
-//        }
+        //        for dogID in dogIDs {
+        //            let dogRef = Database.database().reference().child("dogs").child(dogID)
+        //            dogRef.observeSingleEvent(of: .value, with: { (snap) in
+        //                print("Found dog data!")
+        //                let value  = snap.value as? NSDictionary
+        //                let newDog = Dog()
+        //
+        //                newDog.name = value?["name"] as? String ?? ""
+        //                newDog.breed = value?["breed"] as? String ?? ""
+        //                newDog.creator = value?["creator"] as? String ?? ""
+        //                newDog.score = Int(value?["score"] as? String ?? "0")
+        //                newDog.imageURL = value?["imageURL"] as? String ?? ""
+        //                newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
+        //                newDog.dogID = dogID
+        //
+        //                URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+        //                    if error != nil {
+        //                        print(error!)
+        //                        return
+        //                    }
+        //                    newDog.picture = UIImage(data: data!)!
+        //                    DispatchQueue.main.async {
+        //                        self.tableView.reloadData()
+        //                    }
+        //                }).resume()
+        //
+        //                self.dogs.insert(newDog, at: 0)
+        //                self.dogs = self.dogs.sorted {
+        //                    $0.timestamp! > $1.timestamp!
+        //                }
+        //                self.tableView.reloadData()
+        //            })
+        //        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -161,7 +161,7 @@ class FeedTableViewController: UITableViewController {
         dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row].score!)
         dogCell.dogVotesLabel.text = String(describing: dogs[indexPath.row].upvotes!)
         dogCell.dogUpvoteButton.tag = indexPath.row
-
+        
         var score = (dogs[indexPath.row].score!)
         if score == 0 {
             score = 1
@@ -197,6 +197,7 @@ class FeedTableViewController: UITableViewController {
     
     @IBAction func upvoteTapped(_ sender: UIButton) {
         let ref = Database.database().reference().child("dogs").child(dogs[sender.tag].dogID!)
+        let userRef = Database.database().reference().child("users")
         
         ref.child("creator").observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.value as! String != (Auth.auth().currentUser?.uid)! {
@@ -213,6 +214,18 @@ class FeedTableViewController: UITableViewController {
                         sender.transform = .identity
                     }
                 }
+                
+                userRef.child(snapshot.value as! String).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+                    var currentRep = Int(snap.value as! String)!
+                    currentRep += 2
+                    userRef.child(snapshot.value as! String).child("reputation").setValue(String(currentRep))
+                })
+                
+                userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+                    var currentRep = Int(snap.value as! String)!
+                    currentRep += 1
+                    userRef.child(Auth.auth().currentUser!.uid).child("reputation").setValue(String(currentRep))
+                })
             }
         }
     }
