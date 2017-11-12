@@ -217,17 +217,28 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         }
         
         let ident = "pin"
+        let customAnnotation = annotation as! CustomAnnotation
+        
+        let usernameRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("username")
         
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: ident)
         if annotationView == nil {
-            annotationView = CustomAnnotationView(annotation: annotation, reuseIdentifier: ident)
+            annotationView = CustomAnnotationView(annotation: customAnnotation, reuseIdentifier: ident)
             annotationView?.canShowCallout = false
         } else {
             annotationView!.annotation = annotation
         }
-        let image = UIImage(cgImage: (UIImage(named: "pin-bone")?.cgImage)!, scale: 2.5, orientation: UIImageOrientation(rawValue: 0)!)
-        annotationView?.image = image
-        return annotationView
+        
+        usernameRef.observeSingleEvent(of: .value) { (snapshot) in
+            if customAnnotation.creator == snapshot.value as! String {
+                let image = UIImage(cgImage: (UIImage(named: "pin-bone-burnt-sienna")?.cgImage)!, scale: 2.5, orientation: UIImageOrientation(rawValue: 0)!)
+                annotationView?.image = image
+            } else {
+                let image = UIImage(cgImage: (UIImage(named: "pin-bone")?.cgImage)!, scale: 2.5, orientation: UIImageOrientation(rawValue: 0)!)
+                annotationView?.image = image
+            }
+        }
+        return annotationView!
     }
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
