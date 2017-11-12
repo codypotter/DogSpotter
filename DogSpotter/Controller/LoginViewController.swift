@@ -392,4 +392,31 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    @IBAction func passwordResetButtonTapped(_ sender: UIButton) {
+        let alertController = UIAlertController(title: "Password Reset", message: "Please enter your email address.", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            self.resignFirstResponder()
+            self.dismiss(animated: true, completion: nil)
+        }
+        alertController.addTextField { (textfield) in
+            textfield.placeholder = "Your email address"
+            textfield.keyboardType = .emailAddress
+            textfield.autocapitalizationType = .none
+            
+            let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
+                // handle submission
+                Auth.auth().sendPasswordReset(withEmail: textfield.text!, completion: { (error) in
+                    if error != nil {
+                        print(error?.localizedDescription as Any)
+                    }
+                })
+            }
+            alertController.addAction(submitAction)
+            alertController.addAction(cancelAction)
+            
+            
+        }
+        present(alertController, animated: true, completion: nil)
+    }
 }

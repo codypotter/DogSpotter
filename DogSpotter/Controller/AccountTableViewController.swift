@@ -70,16 +70,24 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
                 textField.autocapitalizationType = .none
                 alertController.addAction(UIAlertAction(title: "Submit", style: .default, handler: { (action) in
                     let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-                    changeRequest?.displayName = textField.text
+                    let usernameRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("username")
+                    let usernamesNodeRef = Database.database().reference().child("usernames").child((Auth.auth().currentUser?.uid)!)
+                    usernameRef.setValue(textField.text!)
+                    usernamesNodeRef.setValue(textField.text!)
+                    changeRequest?.displayName = textField.text!
                     changeRequest?.commitChanges(completion: { (error) in
                         if error != nil {
                             print(String(describing: error?.localizedDescription))
                             return
                         }
                     })
-                    self.usernameLabel.text = textField.text
+                    self.usernameLabel.text = textField.text!
                 }))
             }
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+                self.resignFirstResponder()
+                self.dismiss(animated: true, completion: nil)
+            }))
             present(alertController, animated: true, completion: nil)
         } else if indexPath.row == 1 && indexPath.section == 0 {
             let alertController = UIAlertController(title: "Edit", message: "Please enter a new email.", preferredStyle: .alert)
