@@ -51,7 +51,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         } else {
             loadDogs()
         }
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,7 +70,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         newDogButton.widthAnchor.constraint(equalToConstant: 50.0).isActive = true
         newDogButton.contentMode = .scaleAspectFit
         
-        }
+    }
     
     @objc func newDogButtonTapped() {
         Auth.auth().addStateDidChangeListener { (auth, user) in
@@ -114,10 +114,10 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                             print("Found dog data!")
                             let value = snap2.value as! Dictionary<String, String>
                             let newDog = Dog()
-
+                            
                             let creatorID = value["creator"]!
                             let userRef = Database.database().reference().child("users")
-                        userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
+                            userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
                                 newDog.creator = snip.value as? String
                             })
                             newDog.name = value["name"]!
@@ -319,29 +319,38 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     @objc func upvoteTapped(_ sender: UIButton) {
         let ref = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped)
         let userRef = Database.database().reference().child("users")
-        ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
-            var currentUpvotes = Int(snap.value as! String)!
-            currentUpvotes += 1
-            ref.child("upvotes").setValue(String(currentUpvotes))
-        })
-        userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
-            var currentRep = Int(snap.value as! String)!
-            currentRep += 1
-            userRef.child(Auth.auth().currentUser!.uid).child("reputation").setValue(String(currentRep))
-        })
+
         ref.child("creator").observeSingleEvent(of: .value) { (snapshot) in
+            
+            if snapshot.value as! String == (Auth.auth().currentUser?.uid)! {
+                return
+            }
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.25) {
+                    sender.transform = .init(scaleX: 0.5, y: 0.5)
+                }
+                UIView.animate(withDuration: 0.25) {
+                    sender.transform = .identity
+                }
+            }
+            
             userRef.child(snapshot.value as! String).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
                 var currentRep = Int(snap.value as! String)!
                 currentRep += 1
                 userRef.child(snapshot.value as! String).child("reputation").setValue(String(currentRep))
             })
-        }
-        
-        UIView.animate(withDuration: 0.25) {
-            sender.transform = .init(scaleX: 0.5, y: 0.5)
-        }
-        UIView.animate(withDuration: 0.25) {
-            sender.transform = .identity
+            
+            ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
+                var currentUpvotes = Int(snap.value as! String)!
+                currentUpvotes += 1
+                ref.child("upvotes").setValue(String(currentUpvotes))
+            })
+        userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+                var currentRep = Int(snap.value as! String)!
+                currentRep += 1
+                userRef.child(Auth.auth().currentUser!.uid).child("reputation").setValue(String(currentRep))
+            })
+            
         }
     }
 }
