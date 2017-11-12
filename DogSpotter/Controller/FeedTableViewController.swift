@@ -160,7 +160,8 @@ class FeedTableViewController: UITableViewController {
         dogCell.dogNameLabel.text = dogs[indexPath.row].name
         dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row].score!)
         dogCell.dogVotesLabel.text = String(describing: dogs[indexPath.row].upvotes!)
-        
+        dogCell.dogUpvoteButton.tag = indexPath.row
+
         var score = (dogs[indexPath.row].score!)
         if score == 0 {
             score = 1
@@ -196,16 +197,23 @@ class FeedTableViewController: UITableViewController {
     
     @IBAction func upvoteTapped(_ sender: UIButton) {
         let ref = Database.database().reference().child("dogs").child(dogs[sender.tag].dogID!)
-        ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
-            var currentUpvotes = Int(snap.value as! String)!
-            currentUpvotes += 1
-            ref.child("upvotes").setValue(String(currentUpvotes))
-        })
-        UIView.animate(withDuration: 0.25) {
-            sender.transform = .init(scaleX: 0.5, y: 0.5)
-        }
-        UIView.animate(withDuration: 0.25) {
-            sender.transform = .identity
+        
+        ref.child("creator").observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.value as! String != (Auth.auth().currentUser?.uid)! {
+                ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
+                    var currentUpvotes = Int(snap.value as! String)!
+                    currentUpvotes += 1
+                    ref.child("upvotes").setValue(String(currentUpvotes))
+                })
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.25) {
+                        sender.transform = .init(scaleX: 0.5, y: 0.5)
+                    }
+                    UIView.animate(withDuration: 0.25) {
+                        sender.transform = .identity
+                    }
+                }
+            }
         }
     }
 }

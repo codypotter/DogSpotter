@@ -118,6 +118,7 @@ class DogTableViewController: UITableViewController {
                     text += "🔥"
                 }
             }
+            
             dogCell.dogUpvoteButton.tag = indexPath.row
             dogCell.dogScoreLabel.text = text
             dogCell.dogImageView.image = dogs[indexPath.row - 1].picture
@@ -194,17 +195,23 @@ class DogTableViewController: UITableViewController {
     
     @IBAction func upvoteTapped(_ sender: UIButton) {
         let ref = Database.database().reference().child("dogs").child(dogs[sender.tag - 1].dogID!)
-        ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
-            var currentUpvotes = Int(snap.value as! String)!
-            currentUpvotes += 1
-            ref.child("upvotes").setValue(String(currentUpvotes))
-        })
-        UIView.animate(withDuration: 0.25) {
-            sender.transform = .init(scaleX: 0.5, y: 0.5)
-        }
-        UIView.animate(withDuration: 0.25) {
-            sender.transform = .identity
+        
+        ref.child("creator").observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.value as! String != (Auth.auth().currentUser?.uid)! {
+                ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
+                    var currentUpvotes = Int(snap.value as! String)!
+                    currentUpvotes += 1
+                    ref.child("upvotes").setValue(String(currentUpvotes))
+                })
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.25) {
+                        sender.transform = .init(scaleX: 0.5, y: 0.5)
+                    }
+                    UIView.animate(withDuration: 0.25) {
+                        sender.transform = .identity
+                    }
+                }
+            }
         }
     }
-    
 }
