@@ -79,7 +79,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         //MARK: Signup Button Setup
-        signupButton.setTitle("Sign up", for: .normal)
+        signupButton.setTitle(NSLocalizedString("Sign Up", comment: "sign up"), for: .normal)
         signupButton.setBackgroundColor(UIColor(red: 1, green: 0.647, blue: 0.494, alpha: 0), for: .normal)
         signupButton.setTitleColor(UIColor.white, for: .normal)
         signupButton.sizeToFit()
@@ -117,7 +117,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         //MARK: Username Text Field Setup
         userNameTextField.borderStyle = .none
-        userNameTextField.placeholder = "Username"
+        userNameTextField.placeholder = NSLocalizedString("Username", comment: "username")
         userNameTextField.autocapitalizationType = .none
         userNameTextField.autocorrectionType = .no
         userNameTextField.textContentType = .username
@@ -133,7 +133,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         //MARK: Name Text Field Setup
         nameTextField.borderStyle = .none
-        nameTextField.placeholder = "Name"
+        nameTextField.placeholder = NSLocalizedString("Name", comment: "name")
         nameTextField.autocapitalizationType = .words
         nameTextField.autocorrectionType = .no
         nameTextField.textContentType = .name
@@ -149,7 +149,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         //MARK: Email Text Field Setup
         emailTextField.borderStyle = .none
-        emailTextField.placeholder = "Email"
+        emailTextField.placeholder = NSLocalizedString("Email", comment: "email")
         emailTextField.autocapitalizationType = .none
         emailTextField.autocorrectionType = .no
         emailTextField.keyboardType = .emailAddress
@@ -165,7 +165,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         //MARK: Password Text Field Setup
         passwordTextField.borderStyle = .none
-        passwordTextField.placeholder = "Password"
+        passwordTextField.placeholder = NSLocalizedString("Password", comment: "password")
         passwordTextField.autocorrectionType = .no
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
@@ -219,7 +219,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         guard let email = emailTextField.text, let password = passwordTextField.text else {
-            createAlertView(withTitle: "Oops!", andMessage: "Please enter email and password.")
+            createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: NSLocalizedString("Please enter email and password", comment: "ask user to enter email and password"))
             return
         }
         
@@ -231,12 +231,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             //this is a git test
             if error != nil {
                 SVProgressHUD.dismiss()
-                self.createAlertView(withTitle: "Oops!", andMessage: error!.localizedDescription)
+                self.createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: error!.localizedDescription)
                 self.toggleEnableTextFields(named: textFieldsArray, to: true)
                 self.toggleEnableButtons(named: buttonsArray, to: true)
                 return
             }
-            print("User signed in successfully!")
             SVProgressHUD.dismiss()
             self.performSegue(withIdentifier: "showTabBarController", sender: self)
             self.emailTextField.text = ""
@@ -292,7 +291,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         guard let email = emailTextField.text, let password = passwordTextField.text, let username = userNameTextField.text , let name = nameTextField.text else {
-            createAlertView(withTitle: "Oops!", andMessage: "It looks like you're missing some data.")
+            createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: NSLocalizedString("It looks like you're missing some data.", comment: "ask user for more data"))
             
             return
         }
@@ -304,12 +303,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
                 SVProgressHUD.dismiss()
-                self.createAlertView(withTitle: "Oops!", andMessage: error!.localizedDescription)
+                self.createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: error!.localizedDescription)
                 self.toggleEnableTextFields(named: textFieldsArray, to: true)
                 self.toggleEnableButtons(named: buttonsArray, to: true)
                 return
             }
-            print("Created user successfully!")
             
             let userRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!)
             let userValues = ["username": username,
@@ -323,7 +321,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             userRef.updateChildValues(userValues as Any as! [AnyHashable : Any], withCompletionBlock: { (error, ref) in
                 if error != nil {
                     SVProgressHUD.dismiss()
-                    self.createAlertView(withTitle: "Oops!", andMessage: error!.localizedDescription)
+                    self.createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: error!.localizedDescription)
                     self.toggleEnableTextFields(named: textFieldsArray, to: true)
                     self.toggleEnableButtons(named: buttonsArray, to: true)
                     return
@@ -337,12 +335,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             changeRequest?.commitChanges(completion: { (err) in
                 if err != nil {
                     SVProgressHUD.dismiss()
-                    self.createAlertView(withTitle: "Oops!", andMessage: error!.localizedDescription)
+                    self.createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: error!.localizedDescription)
                     self.toggleEnableTextFields(named: textFieldsArray, to: true)
                     self.toggleEnableButtons(named: buttonsArray, to: true)
                     return
                 }
-                print("Created displayName successfully!")
                 self.performSegue(withIdentifier: "showTabBarController", sender: self)
             })
             

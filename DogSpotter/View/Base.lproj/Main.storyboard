@@ -58,7 +58,7 @@
                             <constraint firstItem="1wY-c8-CSP" firstAttribute="top" secondItem="nSJ-OH-ZyJ" secondAttribute="top" id="jBT-Hr-icg"/>
                         </constraints>
                     </view>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <segue destination="4V5-1G-DUp" kind="show" identifier="showTabBarController" id="zyi-fp-dkI"/>
                     </connections>
