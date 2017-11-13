@@ -1,9 +1,9 @@
 
 /* Class = "UILabel"; text = "following"; ObjectID = "0PZ-R8-sJB"; */
-"0PZ-R8-sJB.text" = "following";
+"0PZ-R8-sJB.text" = "partidarios";
 
 /* Class = "UILabel"; text = "Following"; ObjectID = "3KM-5O-Llp"; */
-"3KM-5O-Llp.text" = "Following";
+"3KM-5O-Llp.text" = "Partidarios";
 
 /* Class = "UITableViewController"; title = "Feed"; ObjectID = "4il-qv-9cD"; */
 "4il-qv-9cD.title" = "Feed";
@@ -18,19 +18,19 @@
 "66z-nd-Veo.text" = "43";
 
 /* Class = "UILabel"; text = "Name"; ObjectID = "6se-Nb-hWr"; */
-"6se-Nb-hWr.text" = "Name";
+"6se-Nb-hWr.text" = "Nombre";
 
 /* Class = "UITableViewController"; title = "User"; ObjectID = "8gY-bM-ubw"; */
-"8gY-bM-ubw.title" = "User";
+"8gY-bM-ubw.title" = "Usuario";
 
 /* Class = "UILabel"; text = "username"; ObjectID = "9MP-C4-05m"; */
-"9MP-C4-05m.text" = "username";
+"9MP-C4-05m.text" = "usuario";
 
 /* Class = "UINavigationItem"; title = "Account Info"; ObjectID = "9za-EM-WOa"; */
-"9za-EM-WOa.title" = "Account Info";
+"9za-EM-WOa.title" = "Reporte";
 
 /* Class = "UITableViewSection"; headerTitle = "Statistics"; ObjectID = "AUD-Cb-rkh"; */
-"AUD-Cb-rkh.headerTitle" = "Statistics";
+"AUD-Cb-rkh.headerTitle" = "Estadística";
 
 /* Class = "UIViewController"; title = "Dog Spotter"; ObjectID = "BYZ-38-t0r"; */
 "BYZ-38-t0r.title" = "Dog Spotter";
@@ -39,70 +39,70 @@
 "ByU-JH-2fa.text" = "20";
 
 /* Class = "UIBarButtonItem"; title = "Follow"; ObjectID = "G4J-sD-Vhi"; */
-"G4J-sD-Vhi.title" = "Follow";
+"G4J-sD-Vhi.title" = "Sígue";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "Gih-Bk-885"; */
-"Gih-Bk-885.text" = "Title";
+"Gih-Bk-885.text" = "Titulo";
 
 /* Class = "UILabel"; text = "Score"; ObjectID = "JQk-bD-Lcg"; */
-"JQk-bD-Lcg.text" = "Score";
+"JQk-bD-Lcg.text" = "Puntos";
 
 /* Class = "UILabel"; text = "🔥"; ObjectID = "JeY-lA-xhw"; */
 "JeY-lA-xhw.text" = "🔥";
 
 /* Class = "UITableViewSection"; headerTitle = "Account Information"; ObjectID = "JsS-QP-E8r"; */
-"JsS-QP-E8r.headerTitle" = "Account Information";
+"JsS-QP-E8r.headerTitle" = "Reporté";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "Lga-BR-Ll3"; */
-"Lga-BR-Ll3.text" = "Label";
+"Lga-BR-Ll3.text" = "";
 
 /* Class = "UILabel"; text = "Breed"; ObjectID = "MC0-jd-zoy"; */
-"MC0-jd-zoy.text" = "Breed";
+"MC0-jd-zoy.text" = "Raza";
 
 /* Class = "UILabel"; text = "Rating"; ObjectID = "MfX-tx-gVj"; */
-"MfX-tx-gVj.text" = "Rating";
+"MfX-tx-gVj.text" = "Valuación";
 
 /* Class = "UILabel"; text = "enjoipotter@gmail.com"; ObjectID = "NIS-Bd-lLi"; */
 "NIS-Bd-lLi.text" = "enjoipotter@gmail.com";
 
 /* Class = "UITextField"; placeholder = "Add a name"; ObjectID = "Nd1-td-wdV"; */
-"Nd1-td-wdV.placeholder" = "Add a name";
+"Nd1-td-wdV.placeholder" = "Agregar un nombre";
 
 /* Class = "UITabBarItem"; title = "Leaderboard"; ObjectID = "OBG-da-WXe"; */
-"OBG-da-WXe.title" = "Leaderboard";
+"OBG-da-WXe.title" = "Marcador";
 
 /* Class = "UILabel"; text = "Followers"; ObjectID = "Qvh-wG-rQm"; */
-"Qvh-wG-rQm.text" = "Followers";
+"Qvh-wG-rQm.text" = "Seguidor";
 
 /* Class = "UILabel"; text = "votes"; ObjectID = "Udf-Dk-0u1"; */
-"Udf-Dk-0u1.text" = "votes";
+"Udf-Dk-0u1.text" = "votos";
 
 /* Class = "UIButton"; normalTitle = "Submit"; ObjectID = "WfJ-Rh-bqi"; */
-"WfJ-Rh-bqi.normalTitle" = "Submit";
+"WfJ-Rh-bqi.normalTitle" = "Enviar";
 
 /* Class = "UILabel"; text = "followers"; ObjectID = "YNb-Ij-YFW"; */
-"YNb-Ij-YFW.text" = "followers";
+"YNb-Ij-YFW.text" = "seguidores";
 
 /* Class = "UILabel"; text = "123"; ObjectID = "ZZa-bP-dbU"; */
 "ZZa-bP-dbU.text" = "123";
 
 /* Class = "UISegmentedControl"; anv-jB-XMe.segmentTitles[0] = "My Followers"; ObjectID = "anv-jB-XMe"; */
-"anv-jB-XMe.segmentTitles[0]" = "My Followers";
+"anv-jB-XMe.segmentTitles[0]" = "Mis Seguidores";
 
 /* Class = "UISegmentedControl"; anv-jB-XMe.segmentTitles[1] = "People I Follow"; ObjectID = "anv-jB-XMe"; */
-"anv-jB-XMe.segmentTitles[1]" = "People I Follow";
+"anv-jB-XMe.segmentTitles[1]" = "Gente que Sigo";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "bYi-Iy-fTy"; */
-"bYi-Iy-fTy.text" = "Title";
+"bYi-Iy-fTy.text" = "Titlo";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "d2I-N5-cEl"; */
 "d2I-N5-cEl.text" = "Label";
 
 /* Class = "UILabel"; text = "votes"; ObjectID = "flV-bV-G2a"; */
-"flV-bV-G2a.text" = "votes";
+"flV-bV-G2a.text" = "votos";
 
 /* Class = "UIBarButtonItem"; title = "Logout"; ObjectID = "fmG-DZ-2Pz"; */
-"fmG-DZ-2Pz.title" = "Logout";
+"fmG-DZ-2Pz.title" = "Desconectar";
 
 /* Class = "UILabel"; text = "enjoipotter"; ObjectID = "gGg-sx-Iuf"; */
 "gGg-sx-Iuf.text" = "enjoipotter";
@@ -111,28 +111,28 @@
 "hIg-9M-Ge1.title" = "Dog Spotter";
 
 /* Class = "UITableViewController"; title = "Find Users"; ObjectID = "hqI-38-7kW"; */
-"hqI-38-7kW.title" = "Find Users";
+"hqI-38-7kW.title" = "Encontrar Usuarios";
 
 /* Class = "UITabBarItem"; title = "Map"; ObjectID = "i9L-aU-98y"; */
-"i9L-aU-98y.title" = "Map";
+"i9L-aU-98y.title" = "Mapa";
 
 /* Class = "UILabel"; text = "Name"; ObjectID = "iPt-dP-D29"; */
-"iPt-dP-D29.text" = "Name";
+"iPt-dP-D29.text" = "Nombre";
 
 /* Class = "UILabel"; text = "10"; ObjectID = "ibQ-El-prw"; */
 "ibQ-El-prw.text" = "10";
 
 /* Class = "UILabel"; text = "name"; ObjectID = "jt0-1E-csh"; */
-"jt0-1E-csh.text" = "name";
+"jt0-1E-csh.text" = "nombre";
 
 /* Class = "UITextField"; placeholder = "Add a breed"; ObjectID = "lCW-Oe-lV5"; */
-"lCW-Oe-lV5.placeholder" = "Add a breed";
+"lCW-Oe-lV5.placeholder" = "Agregar una raza";
 
 /* Class = "UITabBarItem"; title = "Feed"; ObjectID = "lDu-N3-wwf"; */
 "lDu-N3-wwf.title" = "Feed";
 
 /* Class = "UILabel"; text = "Detail"; ObjectID = "mMU-ir-FcY"; */
-"mMU-ir-FcY.text" = "Detail";
+"mMU-ir-FcY.text" = "Detalle";
 
 /* Class = "UILabel"; text = "👑"; ObjectID = "oe3-e4-I9m"; */
 "oe3-e4-I9m.text" = "👑";
@@ -147,10 +147,10 @@
 "osA-1O-qET.text" = "Email";
 
 /* Class = "UILabel"; text = "Username"; ObjectID = "pVS-tI-sOv"; */
-"pVS-tI-sOv.text" = "Username";
+"pVS-tI-sOv.text" = "Usuario";
 
 /* Class = "UILabel"; text = "Score"; ObjectID = "sPV-eE-GXR"; */
-"sPV-eE-GXR.text" = "Score";
+"sPV-eE-GXR.text" = "Puntos";
 
 /* Class = "UILabel"; text = "1243"; ObjectID = "sc8-hI-uYA"; */
 "sc8-hI-uYA.text" = "1243";
@@ -159,16 +159,16 @@
 "tru-TB-Yjc.text" = "Dogs Posted";
 
 /* Class = "UITableViewController"; title = "Account"; ObjectID = "wXD-QN-NwH"; */
-"wXD-QN-NwH.title" = "Account";
+"wXD-QN-NwH.title" = "Reporte";
 
 /* Class = "UILabel"; text = "56"; ObjectID = "wyg-jD-Bdr"; */
 "wyg-jD-Bdr.text" = "56";
 
 /* Class = "UILabel"; text = "Reputation"; ObjectID = "y1J-GB-1D9"; */
-"y1J-GB-1D9.text" = "Reputation";
+"y1J-GB-1D9.text" = "Reputación";
 
 /* Class = "UILabel"; text = "Breed"; ObjectID = "yOD-UB-fk2"; */
-"yOD-UB-fk2.text" = "Breed";
+"yOD-UB-fk2.text" = "Raza";
 
 /* Class = "UINavigationItem"; title = "Search"; ObjectID = "ySr-RB-R6B"; */
-"ySr-RB-R6B.title" = "Search";
+"ySr-RB-R6B.title" = "Buscar";
