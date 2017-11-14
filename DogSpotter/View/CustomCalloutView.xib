@@ -21,7 +21,7 @@
             <rect key="frame" x="0.0" y="0.0" width="280" height="380"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kyx-mF-Gl7">
+                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kyx-mF-Gl7">
                     <rect key="frame" x="0.0" y="0.0" width="280" height="280"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="kyx-mF-Gl7" secondAttribute="height" multiplier="1:1" id="gDa-b9-PfF"/>
@@ -49,22 +49,16 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aKb-uL-Qlz">
-                    <rect key="frame" x="192" y="288" width="80" height="55"/>
+                    <rect key="frame" x="222" y="288" width="50" height="50"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="80" id="uwU-Kh-2x6"/>
+                        <constraint firstAttribute="height" constant="50" id="5sI-IE-vT6"/>
+                        <constraint firstAttribute="width" constant="50" id="uwU-Kh-2x6"/>
                     </constraints>
                     <state key="normal" image="like-heart"/>
                     <connections>
                         <action selector="upvoteButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="aL6-zC-z9F"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6NM-mS-zFp">
-                    <rect key="frame" x="211" y="346" width="42" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="creator" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kgt-cr-6ny">
                     <rect key="frame" x="217" y="8" width="55" height="21.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -78,14 +72,22 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6NM-mS-zFp">
+                    <rect key="frame" x="242" y="346" width="10.5" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="6NM-mS-zFp" firstAttribute="top" secondItem="aKb-uL-Qlz" secondAttribute="bottom" constant="8" id="AdB-A9-dPV"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="kyx-mF-Gl7" secondAttribute="trailing" id="D3q-lk-dky"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="kgt-cr-6ny" secondAttribute="trailing" constant="8" id="Jj9-Vy-2FQ"/>
                 <constraint firstItem="kgt-cr-6ny" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="8" id="OJ3-Dc-RhL"/>
                 <constraint firstItem="kyx-mF-Gl7" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Qzs-Is-VN4"/>
                 <constraint firstItem="aKb-uL-Qlz" firstAttribute="top" secondItem="kyx-mF-Gl7" secondAttribute="bottom" constant="8" id="h1a-Pc-Lm4"/>
+                <constraint firstItem="6NM-mS-zFp" firstAttribute="centerX" secondItem="aKb-uL-Qlz" secondAttribute="centerX" id="jzm-b0-dx1"/>
                 <constraint firstItem="kyx-mF-Gl7" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="p0l-sc-vTy"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="aKb-uL-Qlz" secondAttribute="trailing" constant="8" id="zlH-Mr-L49"/>
             </constraints>
@@ -109,6 +111,6 @@
         </view>
     </objects>
     <resources>
-        <image name="like-heart" width="59" height="55"/>
+        <image name="like-heart" width="98" height="90"/>
     </resources>
 </document>

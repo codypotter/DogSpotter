@@ -262,6 +262,10 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let customAnnotation = view.annotation as! CustomAnnotation
         let views = Bundle.main.loadNibNamed("CustomCalloutView", owner: nil, options: nil)
         let calloutView = views?[0] as! CustomCalloutView
+        let tapPhoto = UILongPressGestureRecognizer(target: self, action: #selector(dogPhotoLongPressed(_:)))
+        tapPhoto.minimumPressDuration = 1.0
+        
+        calloutView.dogImageView.addGestureRecognizer(tapPhoto)
         calloutView.nameLabel.text = customAnnotation.name
         calloutView.breedLabel.text = customAnnotation.breed
         calloutView.scoreLabel.text = String(describing: customAnnotation.score)
@@ -351,6 +355,13 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
             })
             
         }
+    }
+    
+    @objc func dogPhotoLongPressed(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            
+        }
+        
     }
 }
 
