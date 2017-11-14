@@ -26,22 +26,34 @@ class LeaderboardViewController: UIViewController, UITableViewDataSource, UITabl
         case 0:
             if self.myFollowersUsersArray.indices.contains(0) {
                 self.topUserLabel.text = "\(String(describing: self.myFollowersUsersArray[0].username!))\n👑\(String(describing: self.myFollowersUsersArray[0].reputation!))"
+            } else {
+                self.topUserLabel.text = ""
             }
             if self.myFollowersUsersArray.indices.contains(1) {
                 self.secondUserLabel.text = "\(String(describing: self.myFollowersUsersArray[1].username!))\n👑\(String(describing: self.myFollowersUsersArray[1].reputation!))"
+            } else {
+                self.secondUserLabel.text = ""
             }
             if self.myFollowersUsersArray.indices.contains(2) {
                 self.thirdUserLabel.text = "\(String(describing: self.myFollowersUsersArray[2].username!))\n👑\(String(describing: self.myFollowersUsersArray[2].reputation!))"
+            } else {
+                self.thirdUserLabel.text = ""
             }
         case 1:
             if self.myFollowingUsersArray.indices.contains(0) {
                 self.topUserLabel.text = "\(String(describing: self.myFollowingUsersArray[0].username!))\n👑\(String(describing: self.myFollowingUsersArray[0].reputation!))"
+            } else {
+                self.topUserLabel.text = ""
             }
             if self.myFollowingUsersArray.indices.contains(1) {
                 self.secondUserLabel.text = "\(String(describing: self.myFollowingUsersArray[1].username!))\n👑\(String(describing: self.myFollowingUsersArray[1].reputation!))"
+            } else {
+                self.secondUserLabel.text = ""
             }
             if self.myFollowingUsersArray.indices.contains(2) {
                 self.thirdUserLabel.text = "\(String(describing: self.myFollowingUsersArray[2].username!))\n👑\(String(describing: self.myFollowingUsersArray[2].reputation!))"
+            } else {
+                self.thirdUserLabel.text = ""
             }
         default:
             break
