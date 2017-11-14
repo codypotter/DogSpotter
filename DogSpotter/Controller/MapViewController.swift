@@ -31,7 +31,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.showsUserLocation = true
         self.map.userTrackingMode = .follow
         self.map.delegate = self
-        self.map.mapType = .hybrid
         self.map.addSubview(newDogButton)
         
         let reference = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("reputation")
