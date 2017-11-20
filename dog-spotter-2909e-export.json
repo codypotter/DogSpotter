@@ -1,0 +1,164 @@
+{
+  "dogs" : {
+    "-KybDKBKNLU5-MSvQIlM" : {
+      "breed" : "Fccvv",
+      "creator" : "y9KD4aCuP1ezc836wpeeuj2lhuz1",
+      "imageURL" : "https://firebasestorage.googleapis.com/v0/b/dog-spotter-2909e.appspot.com/o/dogPhotos%2FF981D9FD-52F0-4C27-A974-405F4D41C645.jpg?alt=media&token=dc145746-97cf-48fe-83a8-3a7152d6baf4",
+      "latitude" : "45.4874208612734",
+      "longitude" : "-122.734127407503",
+      "name" : "Ggbbh",
+      "score" : "1",
+      "timestamp" : "532031874.765722",
+      "upvotes" : "10"
+    },
+    "-KybIxL9VnK3rCfbQx5y" : {
+      "breed" : "Ffhhbv",
+      "creator" : "f6zFvVmc6TQ8Os5LqsCYPG434nu1",
+      "imageURL" : "https://firebasestorage.googleapis.com/v0/b/dog-spotter-2909e.appspot.com/o/dogPhotos%2F462DC4B0-8EF8-4296-BD78-F53180337096.jpg?alt=media&token=f4bfbaf1-75a2-456e-9cc4-be8068c34580",
+      "latitude" : "45.4874973699994",
+      "longitude" : "-122.734294679999",
+      "name" : "Fgbjgf",
+      "score" : "5",
+      "timestamp" : "532033349.808971",
+      "upvotes" : "11"
+    },
+    "-KydvC_Xo8gKCr5MpCvT" : {
+      "breed" : "Orange",
+      "creator" : "y9KD4aCuP1ezc836wpeeuj2lhuz1",
+      "imageURL" : "https://firebasestorage.googleapis.com/v0/b/dog-spotter-2909e.appspot.com/o/dogPhotos%2F8F95F0AC-8F14-47C0-B576-1FDBC359C50C.jpg?alt=media&token=75f2f58f-843e-44ab-a040-6efc56b98565",
+      "latitude" : "45.4874424624436",
+      "longitude" : "-122.734199007257",
+      "name" : "Cat",
+      "score" : "8",
+      "timestamp" : "532077194.145967",
+      "upvotes" : "17"
+    },
+    "-KydwLXfk-yK-J9JIz0B" : {
+      "breed" : "Maine Coon",
+      "creator" : "y9KD4aCuP1ezc836wpeeuj2lhuz1",
+      "imageURL" : "https://firebasestorage.googleapis.com/v0/b/dog-spotter-2909e.appspot.com/o/dogPhotos%2F7CE107AE-CDFD-431C-90CE-755C68EECDAD.jpg?alt=media&token=2d28c6d5-7e8f-42ec-a2a9-bc8e44974933",
+      "latitude" : "45.4874978151532",
+      "longitude" : "-122.734295425072",
+      "name" : "Herbeen",
+      "score" : "9",
+      "timestamp" : "532077493.274704",
+      "upvotes" : "16"
+    },
+    "-KyhtXFihs_d2EJcJHOl" : {
+      "breed" : "Cvbvc",
+      "creator" : "T8ozVQiy05VP1m3b8QBqIkrwSBQ2",
+      "imageURL" : "https://firebasestorage.googleapis.com/v0/b/dog-spotter-2909e.appspot.com/o/dogPhotos%2F15705371-BC2D-4CE6-9CA4-EA9EE880FA58.jpg?alt=media&token=5ded6de6-2fc6-430d-928f-26f299e4a6ce",
+      "latitude" : "45.4874012302816",
+      "longitude" : "-122.734109883638",
+      "name" : "Fgvcf",
+      "score" : "9",
+      "timestamp" : "532143863.686276",
+      "upvotes" : "19"
+    }
+  },
+  "usernames" : {
+    "7gv6yjN5QqaRUwafoF6nyK3pDlV2" : "enjoipotter",
+    "T8ozVQiy05VP1m3b8QBqIkrwSBQ2" : "test6",
+    "UZZCooJtMUMkkCpIQ0JHypmEK1K2" : "test34",
+    "f6zFvVmc6TQ8Os5LqsCYPG434nu1" : "test2",
+    "mFco3GjnitVoeRoDWjbNSmLZkYh1" : "test4",
+    "nPfOGpo2jZhoYIpL6kWVCR0tkku2" : "enjoipotter"
+  },
+  "users" : {
+    "7gv6yjN5QqaRUwafoF6nyK3pDlV2" : {
+      "email" : "enjoipotter@gmail.com",
+      "following" : {
+        "y9KD4aCuP1ezc836wpeeuj2lhuz1" : "true"
+      },
+      "name" : "Cody Potter ",
+      "reputation" : "10",
+      "startDate" : "532161901.608067",
+      "uid" : "7gv6yjN5QqaRUwafoF6nyK3pDlV2",
+      "username" : "enjoipotter"
+    },
+    "T8ozVQiy05VP1m3b8QBqIkrwSBQ2" : {
+      "dogs" : {
+        "-KyhtXFihs_d2EJcJHOl" : "true"
+      },
+      "email" : "test6@gmail.com",
+      "following" : {
+        "y9KD4aCuP1ezc836wpeeuj2lhuz1" : "true"
+      },
+      "name" : "Test6",
+      "reputation" : "61",
+      "startDate" : "532143822.612274",
+      "uid" : "T8ozVQiy05VP1m3b8QBqIkrwSBQ2",
+      "username" : "test6"
+    },
+    "UZZCooJtMUMkkCpIQ0JHypmEK1K2" : {
+      "email" : "ffff@gmgg.com",
+      "name" : "Test3",
+      "reputation" : "10",
+      "startDate" : "532157007.658507",
+      "uid" : "UZZCooJtMUMkkCpIQ0JHypmEK1K2",
+      "username" : "test34"
+    },
+    "f6zFvVmc6TQ8Os5LqsCYPG434nu1" : {
+      "dogs" : {
+        "-KybIxL9VnK3rCfbQx5y" : "true"
+      },
+      "email" : "test2@gmail.com",
+      "followers" : {
+        "nPfOGpo2jZhoYIpL6kWVCR0tkku2" : "true"
+      },
+      "name" : "Test2",
+      "reputation" : "57",
+      "startDate" : "532032293.704616",
+      "uid" : "f6zFvVmc6TQ8Os5LqsCYPG434nu1",
+      "username" : "test2"
+    },
+    "mFco3GjnitVoeRoDWjbNSmLZkYh1" : {
+      "email" : "test4@gmail.com",
+      "followers" : {
+        "y9KD4aCuP1ezc836wpeeuj2lhuz1" : "true"
+      },
+      "following" : {
+        "y9KD4aCuP1ezc836wpeeuj2lhuz1" : "true"
+      },
+      "name" : "Test4",
+      "reputation" : "17",
+      "startDate" : "532070692.314639",
+      "uid" : "mFco3GjnitVoeRoDWjbNSmLZkYh1",
+      "username" : "test4"
+    },
+    "nPfOGpo2jZhoYIpL6kWVCR0tkku2" : {
+      "email" : "enjoipotter@hotmail.com",
+      "following" : {
+        "f6zFvVmc6TQ8Os5LqsCYPG434nu1" : "true",
+        "y9KD4aCuP1ezc836wpeeuj2lhuz1" : "true"
+      },
+      "name" : "Cody Potter",
+      "reputation" : "10",
+      "startDate" : "532324557.660256",
+      "uid" : "nPfOGpo2jZhoYIpL6kWVCR0tkku2",
+      "username" : "enjoipotter"
+    },
+    "y9KD4aCuP1ezc836wpeeuj2lhuz1" : {
+      "dogs" : {
+        "-KybDKBKNLU5-MSvQIlM" : "true",
+        "-KydvC_Xo8gKCr5MpCvT" : "true",
+        "-KydwLXfk-yK-J9JIz0B" : "true"
+      },
+      "email" : "test3@gmail.com",
+      "followers" : {
+        "7gv6yjN5QqaRUwafoF6nyK3pDlV2" : "true",
+        "T8ozVQiy05VP1m3b8QBqIkrwSBQ2" : "true",
+        "mFco3GjnitVoeRoDWjbNSmLZkYh1" : "true",
+        "nPfOGpo2jZhoYIpL6kWVCR0tkku2" : "true"
+      },
+      "following" : {
+        "mFco3GjnitVoeRoDWjbNSmLZkYh1" : "true"
+      },
+      "name" : "Test3",
+      "reputation" : "229",
+      "startDate" : "531898475.829541",
+      "uid" : "y9KD4aCuP1ezc836wpeeuj2lhuz1",
+      "username" : "test3"
+    }
+  }
+}
