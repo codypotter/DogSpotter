@@ -358,7 +358,14 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     @objc func dogPhotoLongPressed(_ sender: UILongPressGestureRecognizer) {
+        let imageView = sender.view
+        let reportButton = UIButton()
+        let blur = UIBlurEffect(style: .dark)
+        let effectView = UIVisualEffectView(effect: blur)
+        effectView.frame = (imageView?.frame)!
+        
         if sender.state == .began {
+            imageView?.addSubview(effectView)
             
         }
         
