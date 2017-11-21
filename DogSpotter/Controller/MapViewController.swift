@@ -309,8 +309,8 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
             for subview in view.subviews{
                 UIView.animate(withDuration: 0.2, animations: {
                     subview.alpha = 0
+                    subview.removeFromSuperview()
                 })
-                subview.removeFromSuperview()
             }
         }
     }
@@ -358,17 +358,40 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     @objc func dogPhotoLongPressed(_ sender: UILongPressGestureRecognizer) {
-        let imageView = sender.view
-        let reportButton = UIButton()
-        let blur = UIBlurEffect(style: .dark)
-        let effectView = UIVisualEffectView(effect: blur)
-        effectView.frame = (imageView?.frame)!
         
         if sender.state == .began {
-            imageView?.addSubview(effectView)
+            let imageView = sender.view
             
+            let blur = UIBlurEffect(style: .dark)
+            let effectView = UIVisualEffectView()
+            effectView.frame = (imageView?.frame)!
+            
+            let reportButton = UIButton()
+            reportButton.setTitle("Report...", for: .normal)
+            reportButton.setTitleColor(UIColor.white, for: .normal)
+            reportButton.sizeThatFits(reportButton.intrinsicContentSize)
+            
+            let shareButton = UIButton()
+            shareButton.setTitle("Share...", for: .normal)
+            shareButton.setTitleColor(UIColor.white, for: .normal)
+            shareButton.sizeThatFits(shareButton.intrinsicContentSize)
+            
+            imageView?.addSubview(effectView)
+            imageView?.addSubview(reportButton)
+            imageView?.addSubview(shareButton)
+            
+            reportButton.translatesAutoresizingMaskIntoConstraints = false
+            reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+            reportButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
+            
+            shareButton.translatesAutoresizingMaskIntoConstraints = false
+            shareButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+            shareButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: -30).isActive = true
+            
+            UIView.animate(withDuration: 0.15, animations: {
+                effectView.effect = blur
+            })
         }
-        
     }
 }
 
