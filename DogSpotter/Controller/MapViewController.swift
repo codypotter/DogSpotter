@@ -368,6 +368,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 let blur = UIBlurEffect(style: .dark)
                 let effectView = UIVisualEffectView()
                 effectView.frame = (imageView?.frame)!
+                effectView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(effectViewLongPressed(_:))))
                 
                 let reportButton = UIButton()
                 reportButton.setTitle("Report...", for: .normal)
@@ -402,6 +403,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 })
             }
         }
+            
     }
     
     @objc func shareTapped(_ sender: UIButton) {
@@ -414,6 +416,15 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 subview.removeFromSuperview()
             }
         }
+    }
+    
+    @objc func effectViewLongPressed(_ sender: UILongPressGestureRecognizer) {
+        guard let imageview = sender.view?.superview as? UIImageView else {return}
+        for subview in (imageview.subviews) {
+            subview.removeFromSuperview()
+        }
+        dogPhotoIsSelected = false
+        
     }
 }
 
