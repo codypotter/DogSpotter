@@ -21,6 +21,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     var dogs: [Dog] = [Dog]()
     var user = User()
     var dogIDOfUpvoteTapped: String = ""
+    var dogPhotoIsSelected = false
     
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -307,8 +308,9 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         if view.isKind(of: CustomAnnotationView.self){
             for subview in view.subviews{
-                UIView.animate(withDuration: 0.2, animations: {
+                UIView.animate(withDuration: 0.4, animations: {
                     subview.alpha = 0
+                    self.dogPhotoIsSelected = false
                     subview.removeFromSuperview()
                 })
             }
@@ -360,38 +362,71 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     @objc func dogPhotoLongPressed(_ sender: UILongPressGestureRecognizer) {
         
         if sender.state == .began {
-            let imageView = sender.view
-            
-            let blur = UIBlurEffect(style: .dark)
-            let effectView = UIVisualEffectView()
-            effectView.frame = (imageView?.frame)!
-            
-            let reportButton = UIButton()
-            reportButton.setTitle("Report...", for: .normal)
-            reportButton.setTitleColor(UIColor.white, for: .normal)
-            reportButton.sizeThatFits(reportButton.intrinsicContentSize)
-            
-            let shareButton = UIButton()
-            shareButton.setTitle("Share...", for: .normal)
-            shareButton.setTitleColor(UIColor.white, for: .normal)
-            shareButton.sizeThatFits(shareButton.intrinsicContentSize)
-            
-            imageView?.addSubview(effectView)
-            imageView?.addSubview(reportButton)
-            imageView?.addSubview(shareButton)
-            
-            reportButton.translatesAutoresizingMaskIntoConstraints = false
-            reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
-            reportButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
-            
-            shareButton.translatesAutoresizingMaskIntoConstraints = false
-            shareButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
-            shareButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: -30).isActive = true
-            
-            UIView.animate(withDuration: 0.15, animations: {
-                effectView.effect = blur
-            })
+            if !dogPhotoIsSelected {
+                let imageView = sender.view
+                
+                let blur = UIBlurEffect(style: .dark)
+                let effectView = UIVisualEffectView()
+                effectView.frame = (imageView?.frame)!
+                
+                let reportButton = UIButton()
+                reportButton.setTitle("Report...", for: .normal)
+                reportButton.setTitleColor(UIColor.white, for: .normal)
+                reportButton.sizeThatFits(reportButton.intrinsicContentSize)
+                reportButton.alpha = 0.0
+                
+                let shareButton = UIButton()
+                shareButton.setTitle("Share...", for: .normal)
+                shareButton.setTitleColor(UIColor.white, for: .normal)
+                shareButton.sizeThatFits(shareButton.intrinsicContentSize)
+                shareButton.alpha = 0.0
+                shareButton.addTarget(self, action: #selector(shareTapped(_:)), for: .touchUpInside)
+                
+                imageView?.addSubview(effectView)
+                imageView?.addSubview(reportButton)
+                imageView?.addSubview(shareButton)
+                
+                reportButton.translatesAutoresizingMaskIntoConstraints = false
+                reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                reportButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
+                
+                shareButton.translatesAutoresizingMaskIntoConstraints = false
+                shareButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                shareButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: -30).isActive = true
+                
+                UIView.animate(withDuration: 0.15, animations: {
+                    effectView.effect = blur
+                    reportButton.alpha = 1.0
+                    shareButton.alpha = 1.0
+                    self.dogPhotoIsSelected = true
+                })
+            }
         }
     }
+    
+    @objc func shareTapped(_ sender: UIButton) {
+        guard let blurview = sender.superview else {return}
+        guard let dogCard = blurview.superview as? CustomCalloutView else {return}
+        let image = dogCard.dogImageView.image!
+        
+        let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        present(activityController, animated: true, completion: nil)
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
