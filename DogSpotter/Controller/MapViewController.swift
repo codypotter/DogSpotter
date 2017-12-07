@@ -405,12 +405,15 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     @objc func shareTapped(_ sender: UIButton) {
-        guard let blurview = sender.superview else {return}
-        guard let dogCard = blurview.superview as? CustomCalloutView else {return}
-        let image = dogCard.dogImageView.image!
+        guard let imageview = sender.superview as? UIImageView else {return}
+        let image = imageview.image!
         
         let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        present(activityController, animated: true, completion: nil)
+        present(activityController, animated: true) {
+            for subview in imageview.subviews {
+                subview.removeFromSuperview()
+            }
+        }
     }
 }
 
