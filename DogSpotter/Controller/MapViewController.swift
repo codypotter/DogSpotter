@@ -375,6 +375,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 reportButton.setTitleColor(UIColor.white, for: .normal)
                 reportButton.sizeThatFits(reportButton.intrinsicContentSize)
                 reportButton.alpha = 0.0
+                reportButton.addTarget(self, action: #selector(reportTapped(_:)), for: .touchUpInside)
                 
                 let shareButton = UIButton()
                 shareButton.setTitle("Share...", for: .normal)
@@ -416,6 +417,15 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 subview.removeFromSuperview()
             }
         }
+    }
+    
+    @objc func reportTapped(_ sender: UIButton) {
+        guard let imageview = sender.superview as? UIImageView else {return}
+        let dogID = dogIDOfUpvoteTapped
+        let dogRef = Database.database().reference().child("dogs").child(dogID).child("reports").child((Auth.auth().currentUser?.uid)!)
+        dogRef.setValue("true")
+        
+        
     }
     
     @objc func effectViewLongPressed(_ sender: UILongPressGestureRecognizer) {

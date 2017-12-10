@@ -170,7 +170,6 @@
 				55CEF8C21F57BF0F001F1C85 /* CustomAnnotation.swift */,
 				556A8B8E1F3A9C2800A24A7A /* Dog.swift */,
 				553EB1F21F757F9E0023F27D /* User.swift */,
-				55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -223,6 +222,7 @@
 				558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */,
 				558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */,
 				55B273C41F62353B0088BF27 /* ShadowedView.swift */,
+				55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */,
 				55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */,
 				55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */,
 				55AA1DBA1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift */,
