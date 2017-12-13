@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import FirebaseDatabase
 
 class Dog: NSObject {
     var creator: String?
@@ -20,4 +21,15 @@ class Dog: NSObject {
     var dogID: String?
     var picture = UIImage()
     var location = CLLocationCoordinate2D()
+    
+//    convenience init(dictionary: [String: Any], dogUID: String, creatorName: String){
+//        self.init()
+//        creator = creatorName
+//        name = dictionary["name"] as? String
+//        breed = dictionary["breed"] as? String
+//        score = Int((dictionary["score"] as? String)!)
+//        imageURL = dictionary["imageURL"] as? String
+//        dogID = dogUID
+//        location = CLLocationCoordinate2D(latitude: Double(dictionary["latitude"] as! String)!, longitude: Double(dictionary["longitude"] as! String)!)
+//    }
 }

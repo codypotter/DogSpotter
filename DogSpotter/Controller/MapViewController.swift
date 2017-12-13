@@ -110,22 +110,25 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                         let dogID = snap1.key
                         
                         let dogRef = Database.database().reference().child("dogs").child(dogID)
+                        
                         dogRef.observeSingleEvent(of: .value, with: { (snap2) in
                             print("Found dog data!")
-                            let value = snap2.value as! Dictionary<String, String>
-                            let newDog = Dog()
+                            let value = snap2.value as? NSDictionary
                             
-                            let creatorID = value["creator"]!
+                            
+                            let newDog = Dog()
+
+                            let creatorID = value!["creator"] as! String
                             let userRef = Database.database().reference().child("users")
                             userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
                                 newDog.creator = snip.value as? String
                             })
-                            newDog.name = value["name"]!
-                            newDog.breed = value["breed"]!
-                            newDog.score = Int(value["score"]!)!
-                            newDog.imageURL = value["imageURL"]!
+                            newDog.name = value!["name"] as? String
+                            newDog.breed = value!["breed"] as? String
+                            newDog.score = Int(value!["score"] as! String)!
+                            newDog.imageURL = value!["imageURL"] as? String
                             newDog.dogID = snap2.key
-                            newDog.location = CLLocationCoordinate2D(latitude: Double(value["latitude"]!)!, longitude: Double(value["longitude"]!)!)
+                            newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
                             
                             URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
                                 if error != nil {
@@ -163,21 +166,20 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 let dogRef = Database.database().reference().child("dogs").child(dogID)
                 dogRef.observeSingleEvent(of: .value, with: { (snap) in
                     print("Found dog data!")
-                    let value = snap.value as! Dictionary<String, String>
-                    
+                    let value = snap.value as? NSDictionary
                     let newDog = Dog()
                     
-                    let creatorID = value["creator"]!
+                    let creatorID = value!["creator"]
                     let userRef = Database.database().reference().child("users")
-                    userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
+                    userRef.child(creatorID as! String).child("username").observeSingleEvent(of: .value, with: { (snip) in
                         newDog.creator = snip.value as? String
                     })
-                    newDog.name = value["name"]!
-                    newDog.breed = value["breed"]!
-                    newDog.score = Int(value["score"]!)!
-                    newDog.imageURL = value["imageURL"]!
+                    newDog.name = value!["name"] as? String
+                    newDog.breed = value!["breed"] as? String
+                    newDog.score = Int((value!["score"] as? String)!)
+                    newDog.imageURL = value!["imageURL"] as? String
                     newDog.dogID = snap.key
-                    newDog.location = CLLocationCoordinate2D(latitude: Double(value["latitude"]!)!, longitude: Double(value["longitude"]!)!)
+                    newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
                     
                     URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
                         if error != nil {
@@ -420,11 +422,10 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     @objc func reportTapped(_ sender: UIButton) {
-        guard let imageview = sender.superview as? UIImageView else {return}
         let dogID = dogIDOfUpvoteTapped
         let dogRef = Database.database().reference().child("dogs").child(dogID).child("reports").child((Auth.auth().currentUser?.uid)!)
         dogRef.setValue("true")
-        
+        // TODO: Dismiss callout view after reporting
         
     }
     
