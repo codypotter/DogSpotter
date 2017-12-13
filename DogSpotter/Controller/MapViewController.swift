@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MapViewController.swift
 //  DogSpotter
 //
 //  Created by Cody Potter on 8/3/17.
@@ -110,48 +110,52 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                         let dogID = snap1.key
                         
                         let dogRef = Database.database().reference().child("dogs").child(dogID)
+                        let reportsRef = dogRef.child("reports").child((Auth.auth().currentUser?.uid)!)
                         
-                        dogRef.observeSingleEvent(of: .value, with: { (snap2) in
-                            print("Found dog data!")
-                            let value = snap2.value as? NSDictionary
-                            
-                            
-                            let newDog = Dog()
-
-                            let creatorID = value!["creator"] as! String
-                            let userRef = Database.database().reference().child("users")
-                            userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
-                                newDog.creator = snip.value as? String
-                            })
-                            newDog.name = value!["name"] as? String
-                            newDog.breed = value!["breed"] as? String
-                            newDog.score = Int(value!["score"] as! String)!
-                            newDog.imageURL = value!["imageURL"] as? String
-                            newDog.dogID = snap2.key
-                            newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
-                            
-                            URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
-                                if error != nil {
-                                    print(error!)
-                                    return
-                                }
-                                newDog.picture = UIImage(data: data!)!
-                                self.dogs.append(newDog)
-                                let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name!, subtitle: newDog.creator!)
-                                annotation.name = newDog.name!
-                                annotation.breed = newDog.breed!
-                                annotation.score = newDog.score!
-                                annotation.creator = newDog.creator!
-                                annotation.picture = newDog.picture
-                                annotation.dogID = newDog.dogID!
-                                DispatchQueue.main.async {
-                                    self.map.addAnnotation(annotation)
-                                }
-                            }).resume()
+                        reportsRef.observeSingleEvent(of: .value, with: { (reportSnap) in
+                            if !reportSnap.exists() {
+                                dogRef.observeSingleEvent(of: .value, with: { (snap2) in
+                                    print("Found dog data!")
+                                    let value = snap2.value as? NSDictionary
+                                    
+                                    
+                                    let newDog = Dog()
+                                    
+                                    let creatorID = value!["creator"] as! String
+                                    let userRef = Database.database().reference().child("users")
+                                    userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
+                                        newDog.creator = snip.value as? String
+                                    })
+                                    newDog.name = value!["name"] as? String
+                                    newDog.breed = value!["breed"] as? String
+                                    newDog.score = Int(value!["score"] as! String)!
+                                    newDog.imageURL = value!["imageURL"] as? String
+                                    newDog.dogID = snap2.key
+                                    newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
+                                    
+                                    URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+                                        if error != nil {
+                                            print(error!)
+                                            return
+                                        }
+                                        newDog.picture = UIImage(data: data!)!
+                                        self.dogs.append(newDog)
+                                        let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name!, subtitle: newDog.creator!)
+                                        annotation.name = newDog.name!
+                                        annotation.breed = newDog.breed!
+                                        annotation.score = newDog.score!
+                                        annotation.creator = newDog.creator!
+                                        annotation.picture = newDog.picture
+                                        annotation.dogID = newDog.dogID!
+                                        DispatchQueue.main.async {
+                                            self.map.addAnnotation(annotation)
+                                        }
+                                    }).resume()
+                                })
+                            }
                         })
                     }
                 })
-                
             }
         }
         
@@ -357,7 +361,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 currentRep += 1
                 userRef.child(Auth.auth().currentUser!.uid).child("reputation").setValue(String(currentRep))
             })
-            
         }
     }
     
@@ -422,11 +425,20 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     @objc func reportTapped(_ sender: UIButton) {
-        let dogID = dogIDOfUpvoteTapped
-        let dogRef = Database.database().reference().child("dogs").child(dogID).child("reports").child((Auth.auth().currentUser?.uid)!)
-        dogRef.setValue("true")
-        // TODO: Dismiss callout view after reporting
+        let alert = UIAlertController(title: "Report", message: "Are you sure you want to report this post? You should only report a post if it does not feature a dog, or it features offensive content. This action is irreversible.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes, report this post", style: .destructive, handler: { (action) in
+            let dogID = self.dogIDOfUpvoteTapped
+            let dogRef = Database.database().reference().child("dogs").child(dogID).child("reports").child((Auth.auth().currentUser?.uid)!)
+            dogRef.setValue("true")
+            guard let annotation = sender.superview?.superview?.superview! as? CustomAnnotationView else {return}
+            annotation.removeFromSuperview()
+        }))
         
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }))
+        
+        present(alert, animated: true, completion: nil)
     }
     
     @objc func effectViewLongPressed(_ sender: UILongPressGestureRecognizer) {
@@ -435,7 +447,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
             subview.removeFromSuperview()
         }
         dogPhotoIsSelected = false
-        
     }
 }
 
