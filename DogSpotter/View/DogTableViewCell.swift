@@ -9,7 +9,6 @@
 import UIKit
 
 class DogTableViewCell: UITableViewCell {
-    var dogID = ""
     @IBOutlet weak var dogImageView: UIImageView!
     @IBOutlet weak var dogNameLabel: UILabel!
     @IBOutlet weak var dogBreedLabel: UILabel!

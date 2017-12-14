@@ -24,8 +24,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     let passwordTextField = UITextField()
     let emailTextField = UITextField()
     
-
-    
     // Constraint variables to be used w/ animation
     var loginCredentialsViewCenterXConstraint: NSLayoutConstraint!
     var loginCredentialsViewHeightConstraint: NSLayoutConstraint!
@@ -171,7 +169,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.isSecureTextEntry = true
         passwordTextField.textContentType = .password
         passwordTextField.font = UIFont(name: "Helvetica", size: 17)
-        
     }
     
     @objc func loginButtonTapped() {
@@ -228,7 +225,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.toggleEnableTextFields(named: textFieldsArray, to: false)
         self.toggleEnableButtons(named: buttonsArray, to: false)
         Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
-            //this is a git test
             if error != nil {
                 SVProgressHUD.dismiss()
                 self.createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: error!.localizedDescription)
@@ -290,9 +286,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        guard let email = emailTextField.text, let password = passwordTextField.text, let username = userNameTextField.text , let name = nameTextField.text else {
+        guard let email = emailTextField.text?.lowercased(), let password = passwordTextField.text, let username = userNameTextField.text?.lowercased() , let name = nameTextField.text else {
             createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: NSLocalizedString("It looks like you're missing some data.", comment: "ask user for more data"))
-            
             return
         }
         
@@ -300,6 +295,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         SVProgressHUD.show()
         toggleEnableTextFields(named: textFieldsArray, to: false)
         toggleEnableButtons(named: buttonsArray, to: false)
+        
         Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
                 SVProgressHUD.dismiss()
@@ -308,6 +304,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.toggleEnableButtons(named: buttonsArray, to: true)
                 return
             }
+            
+            let usernameCheckRef = Database.database().reference().child("usernames")
+            usernameCheckRef.queryEqual(toValue: username).observeSingleEvent(of: .value, with: { (snap) in
+                print(snap)
+            })
             
             let userRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!)
             let userValues = ["username": username,

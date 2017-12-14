@@ -131,7 +131,6 @@ class FeedTableViewController: UITableViewController {
         dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row].score!)
         dogCell.dogVotesLabel.text = String(describing: dogs[indexPath.row].upvotes!)
         dogCell.dogUpvoteButton.tag = indexPath.row
-        dogCell.dogID = dogs[indexPath.row].dogID!
         
         var score = (dogs[indexPath.row].score!)
         if score == 0 {
@@ -215,7 +214,7 @@ class FeedTableViewController: UITableViewController {
                 
                 let blur = UIBlurEffect(style: .dark)
                 let effectView = UIVisualEffectView()
-                effectView.frame = (cell!.frame)
+                effectView.frame = (imageView?.bounds)!
                 
                 effectView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(effectViewLongPressed(_:))))
                 
@@ -273,11 +272,17 @@ class FeedTableViewController: UITableViewController {
         let alert = UIAlertController(title: "Report", message: "Are you sure you want to report this post? You should only report a post if it does not feature a dog, or it features offensive content. This action is irreversible.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes, report this post", style: .destructive, handler: { (action) in
             let cell = sender.superview?.superview?.superview! as! DogTableViewCell
-            let dogID = cell.dogID
-            let dogRef = Database.database().reference().child("dogs").child(dogID).child("reports").child((Auth.auth().currentUser?.uid)!)
+            let indexPath = self.tableView.indexPath(for: cell)
+            
+            let dogID = self.dogs[(indexPath?.row)!].dogID
+            
+            let dogRef = Database.database().reference().child("dogs").child(dogID!).child("reports").child((Auth.auth().currentUser?.uid)!)
             dogRef.setValue("true")
+            
+            
+            self.dogs.remove(at: (indexPath?.row)!)
             DispatchQueue.main.async {
-                
+                self.tableView.deleteRows(at: [indexPath!], with: .automatic)
                 self.tableView.reloadData()
             }
         }))

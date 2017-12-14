@@ -330,7 +330,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     @objc func upvoteTapped(_ sender: UIButton) {
         let ref = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped)
         let userRef = Database.database().reference().child("users")
-
+        
         ref.child("creator").observeSingleEvent(of: .value) { (snapshot) in
             
             if snapshot.value as! String == (Auth.auth().currentUser?.uid)! {
@@ -356,7 +356,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 currentUpvotes += 1
                 ref.child("upvotes").setValue(String(currentUpvotes))
             })
-        userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+            userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
                 var currentRep = Int(snap.value as! String)!
                 currentRep += 1
                 userRef.child(Auth.auth().currentUser!.uid).child("reputation").setValue(String(currentRep))
@@ -415,7 +415,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 })
             }
         }
-            
     }
     
     @objc func shareTapped(_ sender: UIButton) {
