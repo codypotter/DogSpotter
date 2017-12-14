@@ -16,6 +16,7 @@ class DogTableViewController: UITableViewController {
     var dogs = [Dog]()
     var followersCount = 0
     var followingCount = 0
+    var dogPhotoIsSelected = false
     
     @IBOutlet weak var followBarButtonItem: UIBarButtonItem!
     
@@ -136,6 +137,10 @@ class DogTableViewController: UITableViewController {
                     dogCell.dogVotesLabel.text = snapshot.value as? String
                 }
             }
+            let tapPhoto = UILongPressGestureRecognizer(target: self, action: #selector(dogPhotoLongPressed(_:)))
+            tapPhoto.minimumPressDuration = 0.7
+            dogCell.dogImageView.addGestureRecognizer(tapPhoto)
+            dogCell.dogImageView.isUserInteractionEnabled = true
             return dogCell
         }
     }
@@ -233,5 +238,100 @@ class DogTableViewController: UITableViewController {
                 })
             }
         }
+    }
+    @objc func dogPhotoLongPressed(_ sender: UILongPressGestureRecognizer) {
+        
+        if sender.state == .began {
+            if !dogPhotoIsSelected {
+                let imageView = sender.view
+                
+                let blur = UIBlurEffect(style: .dark)
+                let effectView = UIVisualEffectView()
+                effectView.frame = (imageView?.bounds)!
+                
+                effectView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(effectViewLongPressed(_:))))
+                
+                let reportButton = UIButton()
+                reportButton.setTitle("Report...", for: .normal)
+                reportButton.setTitleColor(UIColor.white, for: .normal)
+                reportButton.sizeThatFits(reportButton.intrinsicContentSize)
+                reportButton.alpha = 0.0
+                reportButton.addTarget(self, action: #selector(reportTapped(_:)), for: .touchUpInside)
+                
+                
+                let shareButton = UIButton()
+                shareButton.setTitle("Share...", for: .normal)
+                shareButton.setTitleColor(UIColor.white, for: .normal)
+                shareButton.sizeThatFits(shareButton.intrinsicContentSize)
+                shareButton.alpha = 0.0
+                shareButton.addTarget(self, action: #selector(shareTapped(_:)), for: .touchUpInside)
+                
+                imageView?.addSubview(effectView)
+                imageView?.addSubview(reportButton)
+                imageView?.addSubview(shareButton)
+                
+                reportButton.translatesAutoresizingMaskIntoConstraints = false
+                reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                reportButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
+                
+                shareButton.translatesAutoresizingMaskIntoConstraints = false
+                shareButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                shareButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: -30).isActive = true
+                
+                UIView.animate(withDuration: 0.15, animations: {
+                    effectView.effect = blur
+                    reportButton.alpha = 1.0
+                    shareButton.alpha = 1.0
+                    self.dogPhotoIsSelected = true
+                })
+            }
+        }
+        
+    }
+    
+    @objc func shareTapped(_ sender: UIButton) {
+        guard let imageview = sender.superview as? UIImageView else {return}
+        let image = imageview.image!
+        
+        let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        present(activityController, animated: true) {
+            for subview in imageview.subviews {
+                subview.removeFromSuperview()
+            }
+        }
+    }
+    
+    @objc func reportTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Report", message: "Are you sure you want to report this post? You should only report a post if it does not feature a dog, or it features offensive content. This action is irreversible.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes, report this post", style: .destructive, handler: { (action) in
+            let cell = sender.superview?.superview?.superview! as! DogTableViewCell
+            let indexPath = self.tableView.indexPath(for: cell)
+            
+            let dogID = self.dogs[(indexPath?.row)! - 1].dogID
+            
+            let dogRef = Database.database().reference().child("dogs").child(dogID!).child("reports").child((Auth.auth().currentUser?.uid)!)
+            dogRef.setValue("true")
+            
+            
+            self.dogs.remove(at: (indexPath?.row)! - 1)
+            DispatchQueue.main.async {
+                self.tableView.deleteRows(at: [indexPath!], with: .automatic)
+                self.tableView.reloadData()
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func effectViewLongPressed(_ sender: UILongPressGestureRecognizer) {
+        guard let imageview = sender.view?.superview as? UIImageView else {return}
+        for subview in (imageview.subviews) {
+            subview.removeFromSuperview()
+        }
+        dogPhotoIsSelected = false
     }
 }
