@@ -270,7 +270,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let views = Bundle.main.loadNibNamed("CustomCalloutView", owner: nil, options: nil)
         let calloutView = views?[0] as! CustomCalloutView
         let tapPhoto = UILongPressGestureRecognizer(target: self, action: #selector(dogPhotoLongPressed(_:)))
-        tapPhoto.minimumPressDuration = 1.0
+        tapPhoto.minimumPressDuration = 0.7
         
         calloutView.dogImageView.addGestureRecognizer(tapPhoto)
         calloutView.nameLabel.text = customAnnotation.name
@@ -372,7 +372,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 
                 let blur = UIBlurEffect(style: .dark)
                 let effectView = UIVisualEffectView()
-                effectView.frame = (imageView?.frame)!
+                effectView.frame = (imageView?.bounds)!
                 effectView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(effectViewLongPressed(_:))))
                 
                 let reportButton = UIButton()
@@ -392,6 +392,12 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 imageView?.addSubview(effectView)
                 imageView?.addSubview(reportButton)
                 imageView?.addSubview(shareButton)
+                
+                effectView.translatesAutoresizingMaskIntoConstraints = false
+                effectView.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!).isActive = true
+                effectView.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 0).isActive = true
+                effectView.heightAnchor.constraint(equalTo: (imageView?.heightAnchor)!).isActive = true
+                effectView.widthAnchor.constraint(equalTo: (imageView?.widthAnchor)!).isActive = true
                 
                 reportButton.translatesAutoresizingMaskIntoConstraints = false
                 reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true

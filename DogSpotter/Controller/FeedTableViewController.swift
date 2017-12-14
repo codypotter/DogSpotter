@@ -12,7 +12,7 @@ import Firebase
 class FeedTableViewController: UITableViewController {
     var user = User()
     var dogs = [Dog]()
-    var dogIDs = [String]()
+    var dogPhotoIsSelected = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,73 +77,43 @@ class FeedTableViewController: UITableViewController {
                     let value  = snap.value as? NSDictionary
                     let newDog = Dog()
                     
-                    let creatorID = value?["creator"] as? String ?? ""
-                    usersRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
-                        newDog.creator = snip.value as? String
-                    })
-                    
-                    newDog.name = value?["name"] as? String ?? ""
-                    newDog.breed = value?["breed"] as? String ?? ""
-                    newDog.score = Int(value?["score"] as? String ?? "0")
-                    newDog.imageURL = value?["imageURL"] as? String ?? ""
-                    newDog.timestamp = value?["timestamp"] as? String ?? ""
-                    newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
-                    newDog.dogID = snap.key
-                    
-                    URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
-                        if error != nil {
-                            print(error!)
-                            return
-                        }
-                        newDog.picture = UIImage(data: data!)!
-                        DispatchQueue.main.async {
+                    let reportRef = dogRef.child("reports").child((Auth.auth().currentUser?.uid)!)
+                    reportRef.observeSingleEvent(of: .value, with: { (reportSnap) in
+                        if !reportSnap.exists(){
+                            let creatorID = value?["creator"] as? String ?? ""
+                            usersRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
+                                newDog.creator = snip.value as? String
+                            })
+                            
+                            newDog.name = value?["name"] as? String ?? ""
+                            newDog.breed = value?["breed"] as? String ?? ""
+                            newDog.score = Int(value?["score"] as? String ?? "0")
+                            newDog.imageURL = value?["imageURL"] as? String ?? ""
+                            newDog.timestamp = value?["timestamp"] as? String ?? ""
+                            newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
+                            newDog.dogID = snap.key
+                            
+                            URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+                                if error != nil {
+                                    print(error!)
+                                    return
+                                }
+                                newDog.picture = UIImage(data: data!)!
+                                DispatchQueue.main.async {
+                                    self.tableView.reloadData()
+                                }
+                            }).resume()
+                            
+                            self.dogs.insert(newDog, at: 0)
+                            self.dogs = self.dogs.sorted {
+                                $0.timestamp! > $1.timestamp!
+                            }
                             self.tableView.reloadData()
                         }
-                    }).resume()
-                    
-                    self.dogs.insert(newDog, at: 0)
-                    self.dogs = self.dogs.sorted {
-                        $0.timestamp! > $1.timestamp!
-                    }
-                    self.tableView.reloadData()
+                    })
                 })
             })
         }
-        
-        //MARK: Download
-        //        for dogID in dogIDs {
-        //            let dogRef = Database.database().reference().child("dogs").child(dogID)
-        //            dogRef.observeSingleEvent(of: .value, with: { (snap) in
-        //                print("Found dog data!")
-        //                let value  = snap.value as? NSDictionary
-        //                let newDog = Dog()
-        //
-        //                newDog.name = value?["name"] as? String ?? ""
-        //                newDog.breed = value?["breed"] as? String ?? ""
-        //                newDog.creator = value?["creator"] as? String ?? ""
-        //                newDog.score = Int(value?["score"] as? String ?? "0")
-        //                newDog.imageURL = value?["imageURL"] as? String ?? ""
-        //                newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
-        //                newDog.dogID = dogID
-        //
-        //                URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
-        //                    if error != nil {
-        //                        print(error!)
-        //                        return
-        //                    }
-        //                    newDog.picture = UIImage(data: data!)!
-        //                    DispatchQueue.main.async {
-        //                        self.tableView.reloadData()
-        //                    }
-        //                }).resume()
-        //
-        //                self.dogs.insert(newDog, at: 0)
-        //                self.dogs = self.dogs.sorted {
-        //                    $0.timestamp! > $1.timestamp!
-        //                }
-        //                self.tableView.reloadData()
-        //            })
-        //        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -161,6 +131,7 @@ class FeedTableViewController: UITableViewController {
         dogCell.dogScoreLabel.text = String(describing: dogs[indexPath.row].score!)
         dogCell.dogVotesLabel.text = String(describing: dogs[indexPath.row].upvotes!)
         dogCell.dogUpvoteButton.tag = indexPath.row
+        dogCell.dogID = dogs[indexPath.row].dogID!
         
         var score = (dogs[indexPath.row].score!)
         if score == 0 {
@@ -184,6 +155,11 @@ class FeedTableViewController: UITableViewController {
                 dogCell.dogVotesLabel.text = snapshot.value as? String
             }
         }
+        
+        let tapPhoto = UILongPressGestureRecognizer(target: self, action: #selector(dogPhotoLongPressed(_:)))
+        tapPhoto.minimumPressDuration = 0.7
+        dogCell.dogImageView.addGestureRecognizer(tapPhoto)
+        dogCell.dogImageView.isUserInteractionEnabled = true
         return dogCell
     }
     
@@ -228,5 +204,96 @@ class FeedTableViewController: UITableViewController {
                 })
             }
         }
+    }
+    
+    @objc func dogPhotoLongPressed(_ sender: UILongPressGestureRecognizer) {
+        
+        if sender.state == .began {
+            if !dogPhotoIsSelected {
+                let imageView = sender.view
+                let cell = imageView?.superview?.superview
+                
+                let blur = UIBlurEffect(style: .dark)
+                let effectView = UIVisualEffectView()
+                effectView.frame = (cell!.frame)
+                
+                effectView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(effectViewLongPressed(_:))))
+                
+                let reportButton = UIButton()
+                reportButton.setTitle("Report...", for: .normal)
+                reportButton.setTitleColor(UIColor.white, for: .normal)
+                reportButton.sizeThatFits(reportButton.intrinsicContentSize)
+                reportButton.alpha = 0.0
+                reportButton.addTarget(self, action: #selector(reportTapped(_:)), for: .touchUpInside)
+                
+                
+                let shareButton = UIButton()
+                shareButton.setTitle("Share...", for: .normal)
+                shareButton.setTitleColor(UIColor.white, for: .normal)
+                shareButton.sizeThatFits(shareButton.intrinsicContentSize)
+                shareButton.alpha = 0.0
+                shareButton.addTarget(self, action: #selector(shareTapped(_:)), for: .touchUpInside)
+                
+                imageView?.addSubview(effectView)
+                imageView?.addSubview(reportButton)
+                imageView?.addSubview(shareButton)
+                
+                reportButton.translatesAutoresizingMaskIntoConstraints = false
+                reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                reportButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
+                
+                shareButton.translatesAutoresizingMaskIntoConstraints = false
+                shareButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                shareButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: -30).isActive = true
+                
+                UIView.animate(withDuration: 0.15, animations: {
+                    effectView.effect = blur
+                    reportButton.alpha = 1.0
+                    shareButton.alpha = 1.0
+                    self.dogPhotoIsSelected = true
+                })
+            }
+        }
+        
+    }
+    
+    @objc func shareTapped(_ sender: UIButton) {
+        guard let imageview = sender.superview as? UIImageView else {return}
+        let image = imageview.image!
+        
+        let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        present(activityController, animated: true) {
+            for subview in imageview.subviews {
+                subview.removeFromSuperview()
+            }
+        }
+    }
+    
+    @objc func reportTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Report", message: "Are you sure you want to report this post? You should only report a post if it does not feature a dog, or it features offensive content. This action is irreversible.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes, report this post", style: .destructive, handler: { (action) in
+            let cell = sender.superview?.superview?.superview! as! DogTableViewCell
+            let dogID = cell.dogID
+            let dogRef = Database.database().reference().child("dogs").child(dogID).child("reports").child((Auth.auth().currentUser?.uid)!)
+            dogRef.setValue("true")
+            DispatchQueue.main.async {
+                
+                self.tableView.reloadData()
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func effectViewLongPressed(_ sender: UILongPressGestureRecognizer) {
+        guard let imageview = sender.view?.superview as? UIImageView else {return}
+        for subview in (imageview.subviews) {
+            subview.removeFromSuperview()
+        }
+        dogPhotoIsSelected = false
     }
 }
