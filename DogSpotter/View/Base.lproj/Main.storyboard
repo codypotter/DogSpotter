@@ -468,10 +468,18 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoDark" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Pt-6q-nQj">
+                                            <rect key="frame" x="290" y="8" width="22" height="22"/>
+                                            <color key="tintColor" red="0.8980392157" green="0.29411764709999999" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <connections>
+                                                <action selector="infoButtonTapped:" destination="8gY-bM-ubw" eventType="touchUpInside" id="9Hv-Zf-btO"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="eEj-j7-U0n" firstAttribute="leading" secondItem="hct-kw-7tN" secondAttribute="trailing" constant="8" id="0A4-WN-73w"/>
                                         <constraint firstItem="5Sj-E2-ukb" firstAttribute="top" secondItem="hct-kw-7tN" secondAttribute="bottom" constant="5" id="3H1-px-QrR"/>
+                                        <constraint firstItem="3Pt-6q-nQj" firstAttribute="top" secondItem="ZdQ-wu-6fu" secondAttribute="top" constant="8" id="3j4-Cm-A13"/>
                                         <constraint firstItem="jt0-1E-csh" firstAttribute="top" secondItem="9MP-C4-05m" secondAttribute="bottom" constant="8" id="9RI-eV-GAp"/>
                                         <constraint firstItem="9MP-C4-05m" firstAttribute="top" secondItem="ZdQ-wu-6fu" secondAttribute="topMargin" constant="8" id="9kv-kR-sNH"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5Sj-E2-ukb" secondAttribute="trailing" constant="20" symbolic="YES" id="C1K-OL-e3Z"/>
@@ -486,6 +494,7 @@
                                         <constraint firstItem="eEj-j7-U0n" firstAttribute="top" secondItem="hct-kw-7tN" secondAttribute="top" id="YRt-Am-Dhe"/>
                                         <constraint firstItem="0PZ-R8-sJB" firstAttribute="width" secondItem="66z-nd-Veo" secondAttribute="width" id="gY4-kZ-ee1"/>
                                         <constraint firstItem="YNb-Ij-YFW" firstAttribute="centerX" secondItem="ZZa-bP-dbU" secondAttribute="centerX" id="gbK-UW-A1v"/>
+                                        <constraint firstAttribute="trailing" secondItem="3Pt-6q-nQj" secondAttribute="trailing" constant="8" id="gdL-WG-YfN"/>
                                         <constraint firstItem="ovE-D5-20D" firstAttribute="leading" secondItem="eEj-j7-U0n" secondAttribute="trailing" constant="8" id="hfd-B9-JTG"/>
                                         <constraint firstItem="eEj-j7-U0n" firstAttribute="centerX" secondItem="ZdQ-wu-6fu" secondAttribute="centerX" id="i2y-La-8LW"/>
                                         <constraint firstItem="5Sj-E2-ukb" firstAttribute="width" secondItem="ibQ-El-prw" secondAttribute="width" id="mCR-aH-15P"/>
