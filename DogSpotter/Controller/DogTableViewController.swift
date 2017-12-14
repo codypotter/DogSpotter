@@ -52,35 +52,41 @@ class DogTableViewController: UITableViewController {
                 let dogID = snapshot.key
                 
                 let dogRef = Database.database().reference().child("dogs").child(dogID)
-                dogRef.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snap) in
-                    print("Found dog data!")
-                    let value  = snap.value as? NSDictionary
-                    let newDog = Dog()
+                let reportRef = dogRef.child("reports").child((Auth.auth().currentUser?.uid)!)
 
-                    userRef.child("username").observeSingleEvent(of: .value, with: { (snip) in
-                        newDog.creator = snip.value as? String
-                    })
+                dogRef.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snap) in
                     
-                    newDog.name = value?["name"] as? String ?? ""
-                    newDog.breed = value?["breed"] as? String ?? ""
-                    newDog.score = Int(value?["score"] as? String ?? "0")
-                    newDog.imageURL = value?["imageURL"] as? String ?? ""
-                    newDog.dogID = snapshot.key
-                    newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
-                    
-                    URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
-                        if error != nil {
-                            print(error!)
-                            return
-                        }
-                        newDog.picture = UIImage(data: data!)!
-                        DispatchQueue.main.async {
+                    reportRef.observeSingleEvent(of: .value, with: { (reportSnap) in
+                        if !reportSnap.exists() {
+                            let value  = snap.value as? NSDictionary
+                            let newDog = Dog()
+                            
+                            userRef.child("username").observeSingleEvent(of: .value, with: { (snip) in
+                                newDog.creator = snip.value as? String
+                            })
+                            
+                            newDog.name = value?["name"] as? String ?? ""
+                            newDog.breed = value?["breed"] as? String ?? ""
+                            newDog.score = Int(value?["score"] as? String ?? "0")
+                            newDog.imageURL = value?["imageURL"] as? String ?? ""
+                            newDog.dogID = snapshot.key
+                            newDog.upvotes = Int(value?["upvotes"] as? String ?? "0")
+                            
+                            URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+                                if error != nil {
+                                    print(error!)
+                                    return
+                                }
+                                newDog.picture = UIImage(data: data!)!
+                                DispatchQueue.main.async {
+                                    self.tableView.reloadData()
+                                }
+                            }).resume()
+                            
+                            self.dogs.insert(newDog, at: 0)
                             self.tableView.reloadData()
                         }
-                    }).resume()
-                    
-                    self.dogs.insert(newDog, at: 0)
-                    self.tableView.reloadData()
+                    })
                 })
             }
         })

@@ -210,7 +210,6 @@ class FeedTableViewController: UITableViewController {
         if sender.state == .began {
             if !dogPhotoIsSelected {
                 let imageView = sender.view
-                let cell = imageView?.superview?.superview
                 
                 let blur = UIBlurEffect(style: .dark)
                 let effectView = UIVisualEffectView()
