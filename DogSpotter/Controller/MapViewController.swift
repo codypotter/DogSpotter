@@ -34,6 +34,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.delegate = self
         self.map.addSubview(newDogButton)
         
+        
         let reference = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("reputation")
         reference.observe(.value) { (snapshot) in
             DispatchQueue.main.async {

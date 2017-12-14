@@ -12,7 +12,7 @@ import Firebase
 import SVProgressHUD
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
-
+    
     @IBOutlet var imageView: UIImageView!
     
     // Properties
@@ -59,7 +59,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-                
+        
         //MARK: Login Button Setup
         loginButton.setTitle("Log in", for: .normal)
         loginButton.setBackgroundColor(UIColor.white, for: .normal)
@@ -305,52 +305,57 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 return
             }
             
-            let usernameCheckRef = Database.database().reference().child("usernames")
-            usernameCheckRef.queryEqual(toValue: username).observeSingleEvent(of: .value, with: { (snap) in
-                print(snap)
-            })
-            
-            let userRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!)
-            let userValues = ["username": username,
-                              "email": email,
-                              "name": name,
-                              "startDate": String(describing: NSDate.timeIntervalSinceReferenceDate),
-                              "reputation": "10",
-                              "uid": user?.uid]
-            let usernameRef = Database.database().reference().child("usernames").child((Auth.auth().currentUser?.uid)!)
-            
-            userRef.updateChildValues(userValues as Any as! [AnyHashable : Any], withCompletionBlock: { (error, ref) in
-                if error != nil {
+            let usernameCheckRef = Database.database().reference().child("usernames").child(username)
+            usernameCheckRef.observeSingleEvent(of: .value, with: { (snap) in
+                if snap.exists(){
+                    //duplicate username found
+                    let user = Auth.auth().currentUser!
+                    user.delete(completion: { (error) in
+                        if error != nil {
+                            SVProgressHUD.dismiss()
+                            print(String(describing: error?.localizedDescription))
+                            
+                        }
+                        SVProgressHUD.dismiss()
+                        self.createAlertView(withTitle: "Oops", andMessage: "This username is already taken. Please try again.")
+                        self.toggleEnableTextFields(named: textFieldsArray, to: true)
+                        self.toggleEnableButtons(named: buttonsArray, to: true)
+                    })
+                } else {
+                    //finish setup
+                    let userRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!)
+                    let userValues = ["username":username,
+                                      "email": email,
+                                      "name": name,
+                                      "startDate": String(describing: NSDate.timeIntervalSinceReferenceDate),
+                                      "reputation": "10",
+                                      "uid": user?.uid]
+                    let usernameRef = Database.database().reference().child("usernames").child(username)
+                    usernameRef.setValue((Auth.auth().currentUser?.uid)!)
+                    
+                    userRef.updateChildValues(userValues as Any as! [AnyHashable : Any], withCompletionBlock: { (error, ref) in
+                        if error != nil {
+                            SVProgressHUD.dismiss()
+                            self.createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: error!.localizedDescription)
+                            self.toggleEnableTextFields(named: textFieldsArray, to: true)
+                            self.toggleEnableButtons(named: buttonsArray, to: true)
+                            return
+                        }
+                    })
+                    
+                    self.performSegue(withIdentifier: "showTabBarController", sender: self)
+                    
                     SVProgressHUD.dismiss()
-                    self.createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: error!.localizedDescription)
+                    self.emailTextField.text = ""
+                    self.passwordTextField.text = ""
+                    self.userNameTextField.text = ""
+                    self.nameTextField.text = ""
                     self.toggleEnableTextFields(named: textFieldsArray, to: true)
                     self.toggleEnableButtons(named: buttonsArray, to: true)
-                    return
                 }
             })
             
-            usernameRef.setValue(username)
             
-            let changeRequest = user?.createProfileChangeRequest()
-            changeRequest?.displayName = username
-            changeRequest?.commitChanges(completion: { (err) in
-                if err != nil {
-                    SVProgressHUD.dismiss()
-                    self.createAlertView(withTitle: NSLocalizedString("Oops", comment: "something went wrong"), andMessage: error!.localizedDescription)
-                    self.toggleEnableTextFields(named: textFieldsArray, to: true)
-                    self.toggleEnableButtons(named: buttonsArray, to: true)
-                    return
-                }
-                self.performSegue(withIdentifier: "showTabBarController", sender: self)
-            })
-            
-            SVProgressHUD.dismiss()
-            self.emailTextField.text = ""
-            self.passwordTextField.text = ""
-            self.userNameTextField.text = ""
-            self.nameTextField.text = ""
-            self.toggleEnableTextFields(named: textFieldsArray, to: true)
-            self.toggleEnableButtons(named: buttonsArray, to: true)
         })
     }
     

@@ -101,8 +101,14 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
                     }
                     self.emailLabel.text = textField.text
                 }))
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             }
             present(alertController, animated: true, completion: nil)
+        } else if indexPath.row == 0 && indexPath.section == 2 {
+            let email = "support@codypotter.com"
+            if let url = URL(string: "mailto:\(email)?subject=Dog-Spotter-Support:") {
+                UIApplication.shared.open(url)
+            }
         }
         tableView.reloadData()
         

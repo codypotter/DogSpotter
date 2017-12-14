@@ -9,6 +9,7 @@
 import UIKit
 import MaterialComponents
 import Firebase
+import AVFoundation
 
 class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -77,6 +78,15 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
         camera.sourceType = source
 		camera.allowsEditing = true
         camera.delegate = self
+		
+		if AVCaptureDevice.authorizationStatus(for: .video) != AVAuthorizationStatus.authorized {
+			let alert = UIAlertController(title: "Camera Error", message: "Oops! Looks like Dog Spotter doesn't have access to your camera! Please open Settings to give Dog Spotter permission to use the camera.", preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+			
+			present(alert, animated: true)
+			return
+		}
+		
 		present(camera, animated: true)
     }
 	
@@ -198,8 +208,12 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 			
 			
 		} else {
+			let alert = UIAlertController(title: "Location", message: "It looks like Dog Spotter doesn't have access to your location. You can't post a dog. To enable location, go to Settings > Privacy > Location Services.", preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+				self.dismiss(animated: true, completion: nil)
+			}))
+			present(alert, animated: true)
 			return
-			//TODO: Handle delegate location == nil alert
 		}
 		self.dismiss(animated: true, completion: nil)
 	}
