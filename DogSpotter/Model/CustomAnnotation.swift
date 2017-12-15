@@ -28,6 +28,19 @@ class CustomAnnotation: NSObject, MKAnnotation {
         super.init()
     }
     
+    init(dog: Dog) {
+        self.coordinate = dog.location
+        self.title = dog.name
+        self.subtitle = dog.breed!
+        self.creator = dog.creator!
+        self.name = dog.name!
+        self.breed = dog.breed!
+        self.score = dog.score!
+        self.picture = dog.picture
+        self.dogID = dog.dogID!
+        super.init()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -70,6 +70,7 @@ class LeaderboardViewController: UIViewController, UITableViewDataSource, UITabl
             userUID = Auth.auth().currentUser?.uid
             ref = Database.database().reference().child("users")
             
+            //MARK: Add following to following data source.
             ref?.child(userUID!).child("following").observe(.childAdded, with: { (snapshot) in
                 self.ref?.child(snapshot.key).observeSingleEvent(of: .value, with: { (snap) in
                     let userToAdd = User()
@@ -86,6 +87,8 @@ class LeaderboardViewController: UIViewController, UITableViewDataSource, UITabl
                     self.setTopLabels()
                 })
             })
+            
+            //MARK: Add followers to followers data source.
             ref?.child(userUID!).child("followers").observe(.childAdded, with: { (snapshot) in
                 self.ref?.child(snapshot.key).observeSingleEvent(of: .value, with: { (snap) in
                     let userToAdd = User()
@@ -101,6 +104,29 @@ class LeaderboardViewController: UIViewController, UITableViewDataSource, UITabl
                     self.leaderboardTableView.reloadData()
                     self.setTopLabels()
                 })
+            })
+            
+            //MARK: Add current user to both data sources.
+            let currentUserRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!)
+            currentUserRef.observeSingleEvent(of: .value, with: { (userSnapshot) in
+                let userToAdd = User()
+                let userDict = userSnapshot.value as? [String: AnyObject] ?? [:]
+                
+                userToAdd.username = userDict["username"] as? String
+                userToAdd.reputation = Int((userDict["reputation"] as? String)!)
+                userToAdd.uid = userDict["uid"] as? String
+                
+                self.myFollowersUsersArray.append(userToAdd)
+                self.myFollowersUsersArray = self.myFollowersUsersArray.sorted {
+                    $0.reputation! > $1.reputation!
+                }
+                
+                self.myFollowingUsersArray.append(userToAdd)
+                self.myFollowingUsersArray = self.myFollowingUsersArray.sorted {
+                    $0.reputation! > $1.reputation!
+                }
+                self.leaderboardTableView.reloadData()
+                self.setTopLabels()
             })
         }
     }

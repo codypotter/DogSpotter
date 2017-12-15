@@ -85,32 +85,28 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let userRef = ref.child("users")
         userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
             newDog.creator = snip.value as? String
+            newDog.name = value!["name"] as? String
+            newDog.breed = value!["breed"] as? String
+            newDog.score = Int(value!["score"] as! String)!
+            newDog.imageURL = value!["imageURL"] as? String
+            newDog.dogID = snap2.key
+            newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
+            
+            URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                newDog.picture = UIImage(data: data!)!
+                self.dogs.append(newDog)
+                
+                DispatchQueue.main.async {
+                    self.map.addAnnotation(CustomAnnotation(dog: newDog))
+                }
+            }).resume()
         })
-        newDog.name = value!["name"] as? String
-        newDog.breed = value!["breed"] as? String
-        newDog.score = Int(value!["score"] as! String)!
-        newDog.imageURL = value!["imageURL"] as? String
-        newDog.dogID = snap2.key
-        newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
         
-        URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
-            if error != nil {
-                print(error!)
-                return
-            }
-            newDog.picture = UIImage(data: data!)!
-            self.dogs.append(newDog)
-            let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name!, subtitle: newDog.creator!)
-            annotation.name = newDog.name!
-            annotation.breed = newDog.breed!
-            annotation.score = newDog.score!
-            annotation.creator = newDog.creator!
-            annotation.picture = newDog.picture
-            annotation.dogID = newDog.dogID!
-            DispatchQueue.main.async {
-                self.map.addAnnotation(annotation)
-            }
-        }).resume()
+        
     }
     
     fileprivate func loadDogs() {
@@ -130,7 +126,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 reportsRef.observeSingleEvent(of: .value, with: { (reportSnap) in
                     if !reportSnap.exists() {
                         dogRef.observeSingleEvent(of: .value, with: { (snap2) in
-                            print("Found dog data!")
                             self.getDogInfo(snap2)
                         })
                     }
