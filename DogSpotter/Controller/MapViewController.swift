@@ -7,10 +7,8 @@
 //
 
 import UIKit
-import Photos
 import MapKit
 import Firebase
-import MaterialComponents
 
 class MapViewController: UIViewController, UINavigationControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
     
@@ -22,6 +20,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     var user = User()
     var dogIDOfUpvoteTapped: String = ""
     var dogPhotoIsSelected = false
+    let ref = Database.database().reference()
     
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -34,25 +33,13 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.delegate = self
         self.map.addSubview(newDogButton)
         
-        let reference = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("reputation")
-        reference.observe(.value) { (snapshot) in
+        let repRef = ref.child("users").child((Auth.auth().currentUser?.uid)!).child("reputation")
+        repRef.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
                 self.repLabel.text = "👑\(snapshot.value ?? "0")"
             }
         }
         loadDogs()
-
-        //MARK: Check if signed in then load dogs
-//        if Auth.auth().currentUser == nil {
-//            let alert = UIAlertController(title: "Welcome!", message: "It looks like you're not logged in! Let's fix that!", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Log In", style: .default, handler: { (action) in
-//                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
-//            }))
-//            present(alert, animated: true, completion: nil)
-//        } else {
-//            loadDogs()
-//        }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,7 +63,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     @objc func newDogButtonTapped() {
         Auth.auth().addStateDidChangeListener { (auth, user) in
             if user != nil {
-                // Get current location
                 DispatchQueue.global(qos: .background).async {
                     self.delegate.locationManager.requestLocation()
                 }
@@ -91,121 +77,106 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         }
     }
     
+    fileprivate func getDogInfo(_ snap2: (DataSnapshot)) {
+        let value = snap2.value as? NSDictionary
+        let newDog = Dog()
+        
+        let creatorID = value!["creator"] as! String
+        let userRef = ref.child("users")
+        userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
+            newDog.creator = snip.value as? String
+        })
+        newDog.name = value!["name"] as? String
+        newDog.breed = value!["breed"] as? String
+        newDog.score = Int(value!["score"] as! String)!
+        newDog.imageURL = value!["imageURL"] as? String
+        newDog.dogID = snap2.key
+        newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
+        
+        URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+            if error != nil {
+                print(error!)
+                return
+            }
+            newDog.picture = UIImage(data: data!)!
+            self.dogs.append(newDog)
+            let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name!, subtitle: newDog.creator!)
+            annotation.name = newDog.name!
+            annotation.breed = newDog.breed!
+            annotation.score = newDog.score!
+            annotation.creator = newDog.creator!
+            annotation.picture = newDog.picture
+            annotation.dogID = newDog.dogID!
+            DispatchQueue.main.async {
+                self.map.addAnnotation(annotation)
+            }
+        }).resume()
+    }
+    
     fileprivate func loadDogs() {
         //MARK: Download dogs from firebase
         var friendID = ""
-        let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
-        let followingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following")
+        let userDogRef = ref.child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
+        let followingRef = ref.child("users").child((Auth.auth().currentUser?.uid)!).child("following")
         
         followingRef.observe(.childAdded) { (snapshot) in
-            if snapshot.value == nil {
-                print("not following any users")
-            } else {
-                friendID = snapshot.key
-                Database.database().reference().child("users").child(friendID).child("dogs").observe(.childAdded, with: { (snap1) in
-                    if snap1.value == nil {
-                        print("no new dog found")
-                    } else {
-                        print("new dog found")
-                        
-                        let dogID = snap1.key
-                        
-                        let dogRef = Database.database().reference().child("dogs").child(dogID)
-                        let reportsRef = dogRef.child("reports").child((Auth.auth().currentUser?.uid)!)
-                        
-                        reportsRef.observeSingleEvent(of: .value, with: { (reportSnap) in
-                            if !reportSnap.exists() {
-                                dogRef.observeSingleEvent(of: .value, with: { (snap2) in
-                                    print("Found dog data!")
-                                    let value = snap2.value as? NSDictionary
-                                    
-                                    
-                                    let newDog = Dog()
-                                    
-                                    let creatorID = value!["creator"] as! String
-                                    let userRef = Database.database().reference().child("users")
-                                    userRef.child(creatorID).child("username").observeSingleEvent(of: .value, with: { (snip) in
-                                        newDog.creator = snip.value as? String
-                                    })
-                                    newDog.name = value!["name"] as? String
-                                    newDog.breed = value!["breed"] as? String
-                                    newDog.score = Int(value!["score"] as! String)!
-                                    newDog.imageURL = value!["imageURL"] as? String
-                                    newDog.dogID = snap2.key
-                                    newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
-                                    
-                                    URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
-                                        if error != nil {
-                                            print(error!)
-                                            return
-                                        }
-                                        newDog.picture = UIImage(data: data!)!
-                                        self.dogs.append(newDog)
-                                        let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name!, subtitle: newDog.creator!)
-                                        annotation.name = newDog.name!
-                                        annotation.breed = newDog.breed!
-                                        annotation.score = newDog.score!
-                                        annotation.creator = newDog.creator!
-                                        annotation.picture = newDog.picture
-                                        annotation.dogID = newDog.dogID!
-                                        DispatchQueue.main.async {
-                                            self.map.addAnnotation(annotation)
-                                        }
-                                    }).resume()
-                                })
-                            }
+            friendID = snapshot.key
+            self.ref.child("users").child(friendID).child("dogs").observe(.childAdded, with: { (snap1) in
+                let dogID = snap1.key
+                
+                let dogRef = self.ref.child("dogs").child(dogID)
+                let reportsRef = dogRef.child("reports").child((Auth.auth().currentUser?.uid)!)
+                
+                reportsRef.observeSingleEvent(of: .value, with: { (reportSnap) in
+                    if !reportSnap.exists() {
+                        dogRef.observeSingleEvent(of: .value, with: { (snap2) in
+                            print("Found dog data!")
+                            self.getDogInfo(snap2)
                         })
                     }
                 })
-            }
+            })
         }
         
         userDogRef.observe(.childAdded, with: { (snapshot) in
-            if snapshot.value == nil {
-                print("no new dog found")
-            } else {
-                print("new dog found")
+            let dogID = snapshot.key
+            
+            let dogRef = self.ref.child("dogs").child(dogID)
+            dogRef.observeSingleEvent(of: .value, with: { (snap) in
+                let value = snap.value as? NSDictionary
+                let newDog = Dog()
                 
-                let dogID = snapshot.key
-                
-                let dogRef = Database.database().reference().child("dogs").child(dogID)
-                dogRef.observeSingleEvent(of: .value, with: { (snap) in
-                    print("Found dog data!")
-                    let value = snap.value as? NSDictionary
-                    let newDog = Dog()
-                    
-                    let creatorID = value!["creator"]
-                    let userRef = Database.database().reference().child("users")
-                    userRef.child(creatorID as! String).child("username").observeSingleEvent(of: .value, with: { (snip) in
-                        newDog.creator = snip.value as? String
-                    })
-                    newDog.name = value!["name"] as? String
-                    newDog.breed = value!["breed"] as? String
-                    newDog.score = Int((value!["score"] as? String)!)
-                    newDog.imageURL = value!["imageURL"] as? String
-                    newDog.dogID = snap.key
-                    newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
-                    
-                    URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
-                        if error != nil {
-                            print(error!)
-                            return
-                        }
-                        newDog.picture = UIImage(data: data!)!
-                        self.dogs.append(newDog)
-                        let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name!, subtitle: newDog.creator!)
-                        annotation.name = newDog.name!
-                        annotation.breed = newDog.breed!
-                        annotation.score = newDog.score!
-                        annotation.creator = newDog.creator!
-                        annotation.picture = newDog.picture
-                        annotation.dogID = newDog.dogID!
-                        DispatchQueue.main.async {
-                            self.map.addAnnotation(annotation)
-                        }
-                    }).resume()
+                let creatorID = value!["creator"]
+                let userRef = self.ref.child("users")
+                userRef.child(creatorID as! String).child("username").observeSingleEvent(of: .value, with: { (snip) in
+                    newDog.creator = snip.value as? String
                 })
-            }
+                newDog.name = value!["name"] as? String
+                newDog.breed = value!["breed"] as? String
+                newDog.score = Int((value!["score"] as? String)!)
+                newDog.imageURL = value!["imageURL"] as? String
+                newDog.dogID = snap.key
+                newDog.location = CLLocationCoordinate2D(latitude: Double(value!["latitude"] as! String)!, longitude: Double(value!["longitude"] as! String)!)
+                
+                URLSession.shared.dataTask(with: URL(string: newDog.imageURL!)!, completionHandler: { (data, response, error) in
+                    if error != nil {
+                        print(error!)
+                        return
+                    }
+                    newDog.picture = UIImage(data: data!)!
+                    self.dogs.append(newDog)
+                    let annotation  = CustomAnnotation(location: newDog.location, title: newDog.name!, subtitle: newDog.creator!)
+                    annotation.name = newDog.name!
+                    annotation.breed = newDog.breed!
+                    annotation.score = newDog.score!
+                    annotation.creator = newDog.creator!
+                    annotation.picture = newDog.picture
+                    annotation.dogID = newDog.dogID!
+                    DispatchQueue.main.async {
+                        self.map.addAnnotation(annotation)
+                    }
+                }).resume()
+            })
         })
     }
     
@@ -226,7 +197,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let ident = "pin"
         let customAnnotation = annotation as! CustomAnnotation
         
-        let usernameRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("username")
+        let usernameRef = ref.child("users").child((Auth.auth().currentUser?.uid)!).child("username")
         
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: ident)
         if annotationView == nil {
@@ -295,8 +266,8 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         calloutView.creatorLabel.text = customAnnotation.creator
         calloutView.dogImageView.image = customAnnotation.picture
         
-        let reference = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped).child("upvotes")
-        reference.observe(.value) { (snapshot) in
+        let upvoteRef = ref.child("dogs").child(dogIDOfUpvoteTapped).child("upvotes")
+        upvoteRef.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
                 calloutView.upvoteCounterLabel.text = snapshot.value as? String
             }
@@ -329,10 +300,10 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     @objc func upvoteTapped(_ sender: UIButton) {
-        let ref = Database.database().reference().child("dogs").child(dogIDOfUpvoteTapped)
-        let userRef = Database.database().reference().child("users")
+        let dogRef = ref.child("dogs").child(dogIDOfUpvoteTapped)
+        let userRef = ref.child("users")
         
-        ref.child("creator").observeSingleEvent(of: .value) { (snapshot) in
+        dogRef.child("creator").observeSingleEvent(of: .value) { (snapshot) in
             
             if snapshot.value as! String == (Auth.auth().currentUser?.uid)! {
                 return
@@ -352,10 +323,10 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 userRef.child(snapshot.value as! String).child("reputation").setValue(String(currentRep))
             })
             
-            ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
+            dogRef.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
                 var currentUpvotes = Int(snap.value as! String)!
                 currentUpvotes += 1
-                ref.child("upvotes").setValue(String(currentUpvotes))
+                dogRef.child("upvotes").setValue(String(currentUpvotes))
             })
             userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
                 var currentRep = Int(snap.value as! String)!
@@ -434,7 +405,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let alert = UIAlertController(title: "Report", message: "Are you sure you want to report this post? You should only report a post if it does not feature a dog, or it features offensive content. This action is irreversible.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes, report this post", style: .destructive, handler: { (action) in
             let dogID = self.dogIDOfUpvoteTapped
-            let dogRef = Database.database().reference().child("dogs").child(dogID).child("reports").child((Auth.auth().currentUser?.uid)!)
+            let dogRef = self.ref.child("dogs").child(dogID).child("reports").child((Auth.auth().currentUser?.uid)!)
             dogRef.setValue("true")
             guard let annotation = sender.superview?.superview?.superview! as? CustomAnnotationView else {return}
             annotation.removeFromSuperview()
