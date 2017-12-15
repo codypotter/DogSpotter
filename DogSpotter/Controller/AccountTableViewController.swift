@@ -115,7 +115,6 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
     }
     @IBAction func logoutTapped(_ sender: UIBarButtonItem) {
         let loginViewController = storyboard?.instantiateViewController(withIdentifier: "LoginViewController")
-        
         let firebaseAuth = Auth.auth()
         do {
             try firebaseAuth.signOut()

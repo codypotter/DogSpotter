@@ -34,24 +34,24 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.delegate = self
         self.map.addSubview(newDogButton)
         
-        
         let reference = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("reputation")
         reference.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
                 self.repLabel.text = "👑\(snapshot.value ?? "0")"
             }
         }
-        
+        loadDogs()
+
         //MARK: Check if signed in then load dogs
-        if Auth.auth().currentUser == nil {
-            let alert = UIAlertController(title: "Welcome!", message: "It looks like you're not logged in! Let's fix that!", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Log In", style: .default, handler: { (action) in
-                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
-            }))
-            present(alert, animated: true, completion: nil)
-        } else {
-            loadDogs()
-        }
+//        if Auth.auth().currentUser == nil {
+//            let alert = UIAlertController(title: "Welcome!", message: "It looks like you're not logged in! Let's fix that!", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "Log In", style: .default, handler: { (action) in
+//                self.performSegue(withIdentifier: "showLoginViewController", sender: self)
+//            }))
+//            present(alert, animated: true, completion: nil)
+//        } else {
+//            loadDogs()
+//        }
         
     }
     

@@ -30,20 +30,25 @@ class FriendSearchTableViewController: UITableViewController, UISearchResultsUpd
         tableView.tableHeaderView = searchController.searchBar
 
         databaseRef.child("users").queryOrdered(byChild: "username").observe(.childAdded) { (snapshot) in
-            let queriedUser = User()
-            
-            let value = snapshot.value as? NSDictionary
-            queriedUser.email = value?["email"] as? String ?? ""
-            queriedUser.name = value?["name"] as? String ?? ""
-            queriedUser.reputation = Int(value?["reputation"] as? String ?? "0")
-            queriedUser.timestamp = Int(value?["timestamp"] as? String ?? "0")
-            queriedUser.uid = snapshot.key
-            queriedUser.username = value?["username"] as? String ?? ""
-            self.usersArray.append(queriedUser)
-            
-            //insert the rows
-            
-            self.followUsersTableView.insertRows(at: [IndexPath(row: self.usersArray.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
+            let blockedRef = self.databaseRef.child("users").child((Auth.auth().currentUser?.uid)!).child("blocked").child(snapshot.key)
+            blockedRef.observeSingleEvent(of: .value, with: { (snap) in
+                if !snap.exists() {
+                    let queriedUser = User()
+                    
+                    let value = snapshot.value as? NSDictionary
+                    queriedUser.email = value?["email"] as? String ?? ""
+                    queriedUser.name = value?["name"] as? String ?? ""
+                    queriedUser.reputation = Int(value?["reputation"] as? String ?? "0")
+                    queriedUser.timestamp = Int(value?["timestamp"] as? String ?? "0")
+                    queriedUser.uid = snapshot.key
+                    queriedUser.username = value?["username"] as? String ?? ""
+                    self.usersArray.append(queriedUser)
+                    
+                    //insert the rows
+                    
+                    self.followUsersTableView.insertRows(at: [IndexPath(row: self.usersArray.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
+                }
+            })
         }
     }
 

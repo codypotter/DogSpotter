@@ -17,6 +17,7 @@ class DogTableViewController: UITableViewController {
     var followersCount = 0
     var followingCount = 0
     var dogPhotoIsSelected = false
+    var currentUID = (Auth.auth().currentUser?.uid)!
     
     @IBOutlet weak var followBarButtonItem: UIBarButtonItem!
     
@@ -26,7 +27,7 @@ class DogTableViewController: UITableViewController {
         self.navigationController?.navigationBar.isHidden = false
         let userDogRef = Database.database().reference().child("users").child(user.uid!).child("dogs")
         let userRef = Database.database().reference().child("users").child(user.uid!)
-        let isFollowingRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("following").child(user.uid!)
+        let isFollowingRef = Database.database().reference().child("users").child(currentUID).child("following").child(user.uid!)
         
         isFollowingRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists() {
@@ -53,7 +54,7 @@ class DogTableViewController: UITableViewController {
                 let dogID = snapshot.key
                 
                 let dogRef = Database.database().reference().child("dogs").child(dogID)
-                let reportRef = dogRef.child("reports").child((Auth.auth().currentUser?.uid)!)
+                let reportRef = dogRef.child("reports").child(self.currentUID)
 
                 dogRef.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snap) in
                     
@@ -162,11 +163,11 @@ class DogTableViewController: UITableViewController {
     }
     
     func followOrUnfollow() {
-        if user.uid! == Auth.auth().currentUser?.uid {
+        if user.uid! == currentUID {
             return
         }
-        let followingRef = Database.database().reference().child("users/\(Auth.auth().currentUser!.uid)/following/\(self.user.uid!)")
-        let followersRef = Database.database().reference().child("users/\(user.uid!)/followers/\(Auth.auth().currentUser!.uid)")
+        let followingRef = Database.database().reference().child("users/\(currentUID)/following/\(self.user.uid!)")
+        let followersRef = Database.database().reference().child("users/\(user.uid!)/followers/\(currentUID)")
         
         followingRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if !snapshot.exists() {
@@ -209,7 +210,7 @@ class DogTableViewController: UITableViewController {
         let userRef = Database.database().reference().child("users")
         
         ref.child("creator").observeSingleEvent(of: .value) { (snapshot) in
-            if snapshot.value as! String != (Auth.auth().currentUser?.uid)! {
+            if snapshot.value as! String != self.currentUID {
                 ref.child("upvotes").observeSingleEvent(of: .value, with: { (snap) in
                     var currentUpvotes = Int(snap.value as! String)!
                     currentUpvotes += 1
@@ -231,10 +232,10 @@ class DogTableViewController: UITableViewController {
                     userRef.child(snapshot.value as! String).child("reputation").setValue(String(currentRep))
                 })
                 
-                userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+                userRef.child(self.currentUID).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
                     var currentRep = Int(snap.value as! String)!
                     currentRep += 1
-                    userRef.child(Auth.auth().currentUser!.uid).child("reputation").setValue(String(currentRep))
+                    userRef.child(self.currentUID).child("reputation").setValue(String(currentRep))
                 })
             }
         }
@@ -309,7 +310,7 @@ class DogTableViewController: UITableViewController {
             
             let dogID = self.dogs[(indexPath?.row)! - 1].dogID
             
-            let dogRef = Database.database().reference().child("dogs").child(dogID!).child("reports").child((Auth.auth().currentUser?.uid)!)
+            let dogRef = Database.database().reference().child("dogs").child(dogID!).child("reports").child(self.currentUID)
             dogRef.setValue("true")
             
             
@@ -334,4 +335,71 @@ class DogTableViewController: UITableViewController {
         }
         dogPhotoIsSelected = false
     }
+    @IBAction func infoButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Settings", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        let ref = Database.database().reference()
+        let blockRef = ref.child("users").child(self.user.uid!).child("blocked").child(self.currentUID)
+        
+        blockRef.observeSingleEvent(of: .value) { (snapshot) in
+            if !snapshot.exists() {
+                alert.addAction(UIAlertAction(title: "Block", style: .destructive, handler: { (action) in
+                    if self.user.uid! == self.currentUID {
+                        return
+                    }
+                    let myFollowersRef = ref.child("users").child(self.currentUID).child("followers").child(self.user.uid!)
+                    let myFollowingRef = ref.child("users").child(self.currentUID).child("following").child(self.user.uid!)
+                    let blockedFollowersRef = ref.child("users").child(self.user.uid!).child("followers").child(self.currentUID)
+                    let blockedFollowingRef = ref.child("users").child(self.user.uid!).child("following").child(self.currentUID)
+                    myFollowersRef.removeValue()
+                    myFollowingRef.removeValue()
+                    blockedFollowersRef.removeValue()
+                    blockedFollowingRef.removeValue()
+                    
+                    blockRef.setValue("true")
+                    
+                    self.followBarButtonItem.title = "Follow"
+                    self.navigationController?.popViewController(animated: true)
+                }))
+                self.present(alert, animated: true, completion: nil)
+
+            } else {
+                alert.addAction(UIAlertAction(title: "Unblock", style: .default, handler: { (action) in
+                    if self.user.uid! == self.currentUID {
+                        return
+                    }
+                    
+                    blockRef.removeValue()
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+        
+        
+        
+        
+        
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
