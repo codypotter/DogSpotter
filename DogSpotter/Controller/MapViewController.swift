@@ -257,6 +257,18 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         calloutView.creatorLabel.text = customAnnotation.creator
         calloutView.dogImageView.image = customAnnotation.picture
         
+        calloutView.layer.shadowColor = UIColor.black.cgColor
+        calloutView.layer.shadowOpacity = 0.5
+        calloutView.layer.shadowOffset = CGSize.zero
+        calloutView.layer.shadowRadius = 5
+        calloutView.layer.cornerRadius = 10.0
+        
+        let maskPath = UIBezierPath.init(roundedRect: calloutView.dogImageView.bounds, byRoundingCorners:[.topLeft, .topRight], cornerRadii: CGSize.init(width: 10.0, height: 10.0))
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = calloutView.dogImageView.bounds
+        maskLayer.path = maskPath.cgPath
+        calloutView.dogImageView.layer.mask = maskLayer
+        
         let upvoteRef = ref.child("dogs").child(dogIDOfUpvoteTapped).child("upvotes")
         upvoteRef.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
