@@ -28,6 +28,11 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
 
         tableView.delegate = self
         
+        let title = UILabel()
+        title.font = UIFont(name: "Avenir Next", size: 24)
+        title.text = "Account"
+        self.navigationItem.titleView = title
+        
         SVProgressHUD.show()
         let userRef = Database.database().reference().child("users").child(uid!)
         userRef.observe(.value) { (snapshot) in

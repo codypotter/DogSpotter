@@ -119,7 +119,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         userNameTextField.autocapitalizationType = .none
         userNameTextField.autocorrectionType = .no
         userNameTextField.textContentType = .username
-        userNameTextField.font = UIFont(name: "Helvetica", size: 17)
+        userNameTextField.font = UIFont(name: "Avenir Next", size: 17)
         
         //MARK: Name Text Field Layout
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -135,7 +135,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         nameTextField.autocapitalizationType = .words
         nameTextField.autocorrectionType = .no
         nameTextField.textContentType = .name
-        nameTextField.font = UIFont(name: "Helvetica", size: 17)
+        nameTextField.font = UIFont(name: "Avenir Next", size: 17)
         
         //MARK: Email Text Field Layout
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -152,7 +152,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         emailTextField.autocorrectionType = .no
         emailTextField.keyboardType = .emailAddress
         emailTextField.textContentType = .emailAddress
-        emailTextField.font = UIFont(name: "Helvetica", size: 17)
+        emailTextField.font = UIFont(name: "Avenir Next", size: 17)
         
         //MARK: Password Text Field Layout
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -168,7 +168,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
         passwordTextField.textContentType = .password
-        passwordTextField.font = UIFont(name: "Helvetica", size: 17)
+        passwordTextField.font = UIFont(name: "Avenir Next", size: 17)
     }
     
     @objc func loginButtonTapped() {

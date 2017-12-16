@@ -274,7 +274,7 @@
                             <outlet property="delegate" destination="wXD-QN-NwH" id="2l6-7N-R75"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Account Info" id="9za-EM-WOa">
+                    <navigationItem key="navigationItem" id="9za-EM-WOa">
                         <barButtonItem key="rightBarButtonItem" title="Logout" id="fmG-DZ-2Pz">
                             <connections>
                                 <action selector="logoutTapped:" destination="wXD-QN-NwH" id="AET-QM-3SU"/>
@@ -674,27 +674,26 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bN2-Mx-Twc">
-                                <rect key="frame" x="60" y="30" width="112" height="50"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.30336707746478875" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="60" y="40" width="112" height="30"/>
+                                <color key="backgroundColor" red="0.8980392157" green="0.29411764709999999" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="hf4-h5-tJc"/>
+                                    <constraint firstAttribute="height" constant="30" id="hf4-h5-tJc"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="25"/>
+                                        <integer key="value" value="15"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="👑" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oe3-e4-I9m">
-                                <rect key="frame" x="64" y="42" width="100" height="27"/>
+                                <rect key="frame" x="64" y="40" width="100" height="30.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="7Cr-IH-U9I"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="19"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="22"/>
+                                <color key="textColor" red="0.97505325078964233" green="0.84895473718643188" blue="0.27489399909973145" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
-                                <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <size key="shadowOffset" width="0.0" height="1"/>
+                                <size key="shadowOffset" width="0.0" height="0.0"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1064,7 +1063,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.8980392157" green="0.29411764709999999" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="24"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
