@@ -69,10 +69,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "showNewDogViewController", sender: self)
                 }
-            } else {
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "showLoginViewController", sender: self)
-                }
             }
         }
     }

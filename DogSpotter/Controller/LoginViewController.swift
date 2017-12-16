@@ -55,10 +55,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.loginCredentialsView.addSubview(nameTextField)
         self.loginCredentialsView.addSubview(passwordTextField)
         self.loginCredentialsView.addSubview(emailTextField)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
         
         //MARK: Login Button Setup
         loginButton.setTitle("Log in", for: .normal)
