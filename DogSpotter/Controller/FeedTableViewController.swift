@@ -14,14 +14,12 @@ class FeedTableViewController: UITableViewController {
     var dogs = [Dog]()
     var dogPhotoIsSelected = false
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.navigationController?.navigationBar.isHidden = false
-        
+    fileprivate func loadData() {
         let usersRef = Database.database().reference().child("users")
         let userDogRef = usersRef.child((Auth.auth().currentUser?.uid)!).child("dogs")
         let followingRef = usersRef.child((Auth.auth().currentUser?.uid)!).child("following")
+        
+        dogs.removeAll()
         
         //MARK: Download my dog IDs from firebase
         userDogRef.observe(.childAdded, with: { (snapshot) in
@@ -114,6 +112,23 @@ class FeedTableViewController: UITableViewController {
                 })
             })
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+
+        
+        self.navigationController?.navigationBar.isHidden = false
+        
+        loadData()
+    }
+    
+    @objc func refresh() {
+        loadData()
+        tableView.reloadData()
+        self.refreshControl?.endRefreshing()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -214,16 +229,53 @@ class FeedTableViewController: UITableViewController {
                 let blur = UIBlurEffect(style: .dark)
                 let effectView = UIVisualEffectView()
                 effectView.frame = (imageView?.bounds)!
-                
                 effectView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(effectViewLongPressed(_:))))
                 
-                let reportButton = UIButton()
-                reportButton.setTitle("Report...", for: .normal)
-                reportButton.setTitleColor(UIColor.white, for: .normal)
-                reportButton.sizeThatFits(reportButton.intrinsicContentSize)
-                reportButton.alpha = 0.0
-                reportButton.addTarget(self, action: #selector(reportTapped(_:)), for: .touchUpInside)
+                let cell = sender.view?.superview?.superview as! DogTableViewCell
+                let indexPath = self.tableView.indexPath(for: cell)
                 
+                let dogID = self.dogs[(indexPath?.row)!].dogID
+                
+                let isMyDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs").child(dogID!)
+                isMyDogRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        //it's my dog
+                        let deleteButton = UIButton()
+                        deleteButton.setTitle("Delete...", for: .normal)
+                        deleteButton.setTitleColor(UIColor.white, for: .normal)
+                        deleteButton.sizeThatFits(deleteButton.intrinsicContentSize)
+                        deleteButton.alpha = 0.0
+                        deleteButton.addTarget(self, action: #selector(self.deleteTapped(_:)), for: .touchUpInside)
+                        
+                        DispatchQueue.main.async {
+                            imageView?.addSubview(deleteButton)
+                            deleteButton.translatesAutoresizingMaskIntoConstraints = false
+                            deleteButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                            deleteButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
+                            UIView.animate(withDuration: 0.15, animations: {
+                                deleteButton.alpha = 1.0
+                            })
+                        }
+                    } else {
+                        //it's not my dog
+                        let reportButton = UIButton()
+                        reportButton.setTitle("Report...", for: .normal)
+                        reportButton.setTitleColor(UIColor.white, for: .normal)
+                        reportButton.sizeThatFits(reportButton.intrinsicContentSize)
+                        reportButton.alpha = 0.0
+                        reportButton.addTarget(self, action: #selector(self.reportTapped(_:)), for: .touchUpInside)
+                        
+                        DispatchQueue.main.async {
+                            imageView?.addSubview(reportButton)
+                            reportButton.translatesAutoresizingMaskIntoConstraints = false
+                            reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                            reportButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
+                            UIView.animate(withDuration: 0.15, animations: {
+                                reportButton.alpha = 1.0
+                            })
+                        }
+                    }
+                })
                 
                 let shareButton = UIButton()
                 shareButton.setTitle("Share...", for: .normal)
@@ -233,12 +285,13 @@ class FeedTableViewController: UITableViewController {
                 shareButton.addTarget(self, action: #selector(shareTapped(_:)), for: .touchUpInside)
                 
                 imageView?.addSubview(effectView)
-                imageView?.addSubview(reportButton)
                 imageView?.addSubview(shareButton)
                 
-                reportButton.translatesAutoresizingMaskIntoConstraints = false
-                reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
-                reportButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
+                effectView.translatesAutoresizingMaskIntoConstraints = false
+                effectView.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!).isActive = true
+                effectView.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 0).isActive = true
+                effectView.heightAnchor.constraint(equalTo: (imageView?.heightAnchor)!).isActive = true
+                effectView.widthAnchor.constraint(equalTo: (imageView?.widthAnchor)!).isActive = true
                 
                 shareButton.translatesAutoresizingMaskIntoConstraints = false
                 shareButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
@@ -246,13 +299,11 @@ class FeedTableViewController: UITableViewController {
                 
                 UIView.animate(withDuration: 0.15, animations: {
                     effectView.effect = blur
-                    reportButton.alpha = 1.0
                     shareButton.alpha = 1.0
                     self.dogPhotoIsSelected = true
                 })
             }
         }
-        
     }
     
     @objc func shareTapped(_ sender: UIButton) {
@@ -290,6 +341,38 @@ class FeedTableViewController: UITableViewController {
             self.dismiss(animated: true, completion: nil)
         }))
         
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func deleteTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this post? This action is irreversible. There's no going back.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes, delete this post", style: .destructive, handler: { (action) in
+            let cell = sender.superview?.superview?.superview! as! DogTableViewCell
+            let indexPath = self.tableView.indexPath(for: cell)
+            
+            let dogID = self.dogs[(indexPath?.row)!].dogID
+            
+            let userDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs").child(dogID!)
+            userDogRef.removeValue()
+            let dogRef = Database.database().reference().child("dogs").child(dogID!)
+            dogRef.removeValue()
+            
+            self.dogs.remove(at: (indexPath?.row)!)
+            DispatchQueue.main.async {
+                self.tableView.deleteRows(at: [indexPath!], with: .automatic)
+                self.tableView.reloadData()
+            }
+            
+            let userRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!)
+            userRef.child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+                var currentRep = Int(snap.value as! String)!
+                currentRep -= 25
+                userRef.child("reputation").setValue(String(currentRep))
+            })
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }))
         present(alert, animated: true, completion: nil)
     }
     
