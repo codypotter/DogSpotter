@@ -23,6 +23,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     var dogIDOfUpvoteTapped: String = ""
     var dogPhotoIsSelected = false
     let ref = Database.database().reference()
+    let currentUID = Auth.auth().currentUser?.uid
     
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -35,7 +36,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.delegate = self
         self.map.addSubview(newDogButton)
         
-        let repRef = ref.child("users").child((Auth.auth().currentUser?.uid)!).child("reputation")
+        let repRef = ref.child("users").child(currentUID!).child("reputation")
         repRef.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
                 self.repLabel.text = "👑\(snapshot.value ?? "0")"
@@ -124,8 +125,8 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     fileprivate func loadDogs() {
         //MARK: Download dogs from firebase
         var friendID = ""
-        let userDogRef = ref.child("users").child((Auth.auth().currentUser?.uid)!).child("dogs")
-        let followingRef = ref.child("users").child((Auth.auth().currentUser?.uid)!).child("following")
+        let userDogRef = ref.child("users").child((currentUID)!).child("dogs")
+        let followingRef = ref.child("users").child((currentUID)!).child("following")
         
         followingRef.observe(.childAdded) { (snapshot) in
             friendID = snapshot.key
@@ -133,7 +134,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 let dogID = snap1.key
                 
                 let dogRef = self.ref.child("dogs").child(dogID)
-                let reportsRef = dogRef.child("reports").child((Auth.auth().currentUser?.uid)!)
+                let reportsRef = dogRef.child("reports").child(self.currentUID!)
                 
                 reportsRef.observeSingleEvent(of: .value, with: { (reportSnap) in
                     if !reportSnap.exists() {
@@ -204,7 +205,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let ident = "pin"
         let customAnnotation = annotation as! CustomAnnotation
         
-        let usernameRef = ref.child("users").child((Auth.auth().currentUser?.uid)!).child("username")
+        let usernameRef = ref.child("users").child((currentUID)!).child("username")
         
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: ident)
         if annotationView == nil {
@@ -324,7 +325,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         
         dogRef.child("creator").observeSingleEvent(of: .value) { (snapshot) in
             
-            if snapshot.value as! String == (Auth.auth().currentUser?.uid)! {
+            if snapshot.value as! String == (self.currentUID)! {
                 return
             }
             DispatchQueue.main.async {
@@ -347,10 +348,10 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 currentUpvotes += 1
                 dogRef.child("upvotes").setValue(String(currentUpvotes))
             })
-            userRef.child(Auth.auth().currentUser!.uid).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+            userRef.child(self.currentUID!).child("reputation").observeSingleEvent(of: .value, with: { (snap) in
                 var currentRep = Int(snap.value as! String)!
                 currentRep += 1
-                userRef.child(Auth.auth().currentUser!.uid).child("reputation").setValue(String(currentRep))
+                userRef.child(self.currentUID!).child("reputation").setValue(String(currentRep))
             })
         }
     }
@@ -366,7 +367,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 effectView.frame = (imageView?.bounds)!
                 effectView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(effectViewLongPressed(_:))))
                 
-                let isMyDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs").child(dogIDOfUpvoteTapped)
+                let isMyDogRef = Database.database().reference().child("users").child(currentUID!).child("dogs").child(dogIDOfUpvoteTapped)
                 isMyDogRef.observeSingleEvent(of: .value, with: { (snapshot) in
                     if snapshot.exists() {
                         //it's my dog
@@ -452,7 +453,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let alert = UIAlertController(title: "Report", message: "Are you sure you want to report this post? You should only report a post if it does not feature a dog, or it features offensive content. This action is irreversible.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes, report this post", style: .destructive, handler: { (action) in
             let dogID = self.dogIDOfUpvoteTapped
-            let dogRef = self.ref.child("dogs").child(dogID).child("reports").child((Auth.auth().currentUser?.uid)!)
+            let dogRef = self.ref.child("dogs").child(dogID).child("reports").child(self.currentUID!)
             dogRef.setValue("true")
             guard let annotation = sender.superview?.superview?.superview! as? CustomAnnotationView else {return}
             annotation.removeFromSuperview()
@@ -469,7 +470,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         let alert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this post? This action is irreversible. There's no going back.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes, delete this post", style: .destructive, handler: { (action) in
             let dogID = self.dogIDOfUpvoteTapped
-            let userDogRef = self.ref.child("users").child((Auth.auth().currentUser?.uid)!).child("dogs").child(dogID)
+            let userDogRef = self.ref.child("users").child(self.currentUID!).child("dogs").child(dogID)
             userDogRef.removeValue()
             let dogRef = self.ref.child("dogs").child(dogID)
             dogRef.removeValue()
@@ -477,7 +478,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
             guard let annotation = sender.superview?.superview?.superview! as? CustomAnnotationView else {return}
             annotation.removeFromSuperview()
             
-            let userRef = self.ref.child("users").child((Auth.auth().currentUser?.uid)!)
+            let userRef = self.ref.child("users").child(self.currentUID!)
             userRef.child("reputation").observeSingleEvent(of: .value, with: { (snap) in
                 var currentRep = Int(snap.value as! String)!
                 currentRep -= 25
