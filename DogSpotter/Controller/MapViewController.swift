@@ -366,13 +366,47 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 effectView.frame = (imageView?.bounds)!
                 effectView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(effectViewLongPressed(_:))))
                 
-                let reportButton = UIButton()
-                reportButton.setTitle("Report...", for: .normal)
-                reportButton.setTitleColor(UIColor.white, for: .normal)
-                reportButton.sizeThatFits(reportButton.intrinsicContentSize)
-                reportButton.alpha = 0.0
-                reportButton.addTarget(self, action: #selector(reportTapped(_:)), for: .touchUpInside)
-                
+                let isMyDogRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("dogs").child(dogIDOfUpvoteTapped)
+                isMyDogRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        //it's my dog
+                        let deleteButton = UIButton()
+                        deleteButton.setTitle("Delete...", for: .normal)
+                        deleteButton.setTitleColor(UIColor.white, for: .normal)
+                        deleteButton.sizeThatFits(deleteButton.intrinsicContentSize)
+                        deleteButton.alpha = 0.0
+                        deleteButton.addTarget(self, action: #selector(self.deleteTapped(_:)), for: .touchUpInside)
+
+                        DispatchQueue.main.async {
+                            imageView?.addSubview(deleteButton)
+                            deleteButton.translatesAutoresizingMaskIntoConstraints = false
+                            deleteButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                            deleteButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
+                            UIView.animate(withDuration: 0.15, animations: {
+                                deleteButton.alpha = 1.0
+                            })
+                        }
+                    } else {
+                        //it's not my dog
+                        let reportButton = UIButton()
+                        reportButton.setTitle("Report...", for: .normal)
+                        reportButton.setTitleColor(UIColor.white, for: .normal)
+                        reportButton.sizeThatFits(reportButton.intrinsicContentSize)
+                        reportButton.alpha = 0.0
+                        reportButton.addTarget(self, action: #selector(self.reportTapped(_:)), for: .touchUpInside)
+
+                        DispatchQueue.main.async {
+                            imageView?.addSubview(reportButton)
+                            reportButton.translatesAutoresizingMaskIntoConstraints = false
+                            reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
+                            reportButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
+                            UIView.animate(withDuration: 0.15, animations: {
+                                reportButton.alpha = 1.0
+                            })
+                        }
+                    }
+                })
+
                 let shareButton = UIButton()
                 shareButton.setTitle("Share...", for: .normal)
                 shareButton.setTitleColor(UIColor.white, for: .normal)
@@ -381,7 +415,6 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 shareButton.addTarget(self, action: #selector(shareTapped(_:)), for: .touchUpInside)
                 
                 imageView?.addSubview(effectView)
-                imageView?.addSubview(reportButton)
                 imageView?.addSubview(shareButton)
                 
                 effectView.translatesAutoresizingMaskIntoConstraints = false
@@ -390,17 +423,12 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
                 effectView.heightAnchor.constraint(equalTo: (imageView?.heightAnchor)!).isActive = true
                 effectView.widthAnchor.constraint(equalTo: (imageView?.widthAnchor)!).isActive = true
                 
-                reportButton.translatesAutoresizingMaskIntoConstraints = false
-                reportButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
-                reportButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: 30).isActive = true
-                
                 shareButton.translatesAutoresizingMaskIntoConstraints = false
                 shareButton.centerXAnchor.constraint(equalTo: (imageView?.centerXAnchor)!, constant: 0).isActive = true
                 shareButton.centerYAnchor.constraint(equalTo: (imageView?.centerYAnchor)!, constant: -30).isActive = true
                 
                 UIView.animate(withDuration: 0.15, animations: {
                     effectView.effect = blur
-                    reportButton.alpha = 1.0
                     shareButton.alpha = 1.0
                     self.dogPhotoIsSelected = true
                 })
@@ -434,6 +462,31 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
             self.dismiss(animated: true, completion: nil)
         }))
         
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func deleteTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this post? This action is irreversible. There's no going back.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes, delete this post", style: .destructive, handler: { (action) in
+            let dogID = self.dogIDOfUpvoteTapped
+            let userDogRef = self.ref.child("users").child((Auth.auth().currentUser?.uid)!).child("dogs").child(dogID)
+            userDogRef.removeValue()
+            let dogRef = self.ref.child("dogs").child(dogID)
+            dogRef.removeValue()
+            
+            guard let annotation = sender.superview?.superview?.superview! as? CustomAnnotationView else {return}
+            annotation.removeFromSuperview()
+            
+            let userRef = self.ref.child("users").child((Auth.auth().currentUser?.uid)!)
+            userRef.child("reputation").observeSingleEvent(of: .value, with: { (snap) in
+                var currentRep = Int(snap.value as! String)!
+                currentRep -= 25
+                userRef.child("reputation").setValue(String(currentRep))
+            })
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }))
         present(alert, animated: true, completion: nil)
     }
     
