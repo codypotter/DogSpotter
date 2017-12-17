@@ -14,6 +14,8 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     
     @IBOutlet var map: MKMapView!
     @IBOutlet weak var repLabel: UILabel!
+    @IBOutlet weak var repBackgroundView: UIView!
+    @IBOutlet weak var accountButton: UIButton!
     
     let newDogButton = UIButton()
     var dogs: [Dog] = [Dog]()
@@ -57,6 +59,20 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         newDogButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         newDogButton.widthAnchor.constraint(equalToConstant: 50.0).isActive = true
         newDogButton.contentMode = .scaleAspectFit
+        newDogButton.layer.shadowColor = UIColor.black.cgColor
+        newDogButton.layer.shadowOpacity = 0.5
+        newDogButton.layer.shadowOffset = CGSize.zero
+        newDogButton.layer.shadowRadius = 2
+        
+        accountButton.layer.shadowColor = UIColor.black.cgColor
+        accountButton.layer.shadowOpacity = 0.5
+        accountButton.layer.shadowOffset = CGSize.zero
+        accountButton.layer.shadowRadius = 2
+        
+        repBackgroundView.layer.shadowColor = UIColor.black.cgColor
+        repBackgroundView.layer.shadowOpacity = 0.5
+        repBackgroundView.layer.shadowOffset = CGSize.zero
+        repBackgroundView.layer.shadowRadius = 2
         
     }
     
