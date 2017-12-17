@@ -10,12 +10,20 @@ import UIKit
 import MaterialComponents
 import Firebase
 import AVFoundation
+import CoreML
+import Vision
 
 class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     let delegate = UIApplication.shared.delegate as! AppDelegate
 	let storageRef = Storage.storage().reference()
 	let uid = Auth.auth().currentUser?.uid
+	
+	var breedGuess: String = "" {
+		didSet {
+			dogBreedTextField.text = breedGuess
+		}
+	}
 	
     var dogScore: Int = 1
     var image: UIImage?
@@ -94,12 +102,43 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
         image = info[UIImagePickerControllerOriginalImage] as? UIImage
         if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             imageData = UIImageJPEGRepresentation(editedImage, 0.70)
+			
+			guard let ciimage = CIImage(image: editedImage) else {
+				fatalError("Could not convert UIImage to CIImage.")
+			}
+			
+			detect(image: ciimage)
+			
 			image = editedImage
         }
         self.dismiss(animated: true, completion: {
             self.dogImageView.image = self.image
         })
     }
+	
+	func detect(image: CIImage) {
+		guard let model = try? VNCoreMLModel(for: Inceptionv3().model) else {
+			fatalError("Loading CoreML model failed.")
+		}
+		
+		let request = VNCoreMLRequest(model: model) { (request, error) in
+			guard let results = request.results as? [VNClassificationObservation] else {
+				fatalError("Model failed to process image")
+			}
+			
+			if let firstResult = results.first {
+				self.breedGuess = firstResult.identifier
+			}
+		}
+		
+		let handler = VNImageRequestHandler(ciImage: image)
+		
+		do {
+			try handler.perform([request])
+		} catch {
+			print(error)
+		}
+	}
 	
 	@IBAction func dogRateChanged(_ sender: UISlider) {
 		var score = (Int(dogRateSlider.value * 10))

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		550121B41FE6201200C1C7B5 /* Inceptionv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 550121B31FE6201200C1C7B5 /* Inceptionv3.mlmodel */; };
 		553EB1F31F757F9E0023F27D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553EB1F21F757F9E0023F27D /* User.swift */; };
 		556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556A8B8E1F3A9C2800A24A7A /* Dog.swift */; };
 		557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557028DE1F33DF67007ADC87 /* AppDelegate.swift */; };
@@ -57,6 +58,7 @@
 
 /* Begin PBXFileReference section */
 		550121B21FE3108A00C1C7B5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		550121B31FE6201200C1C7B5 /* Inceptionv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Inceptionv3.mlmodel; sourceTree = "<group>"; };
 		553EB1F21F757F9E0023F27D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		556A8B8E1F3A9C2800A24A7A /* Dog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 		557028DB1F33DF67007ADC87 /* DogSpotter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DogSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,6 +169,7 @@
 		5596A2B81F6B2E8E00ED546E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				550121B31FE6201200C1C7B5 /* Inceptionv3.mlmodel */,
 				55CEF8C21F57BF0F001F1C85 /* CustomAnnotation.swift */,
 				556A8B8E1F3A9C2800A24A7A /* Dog.swift */,
 				553EB1F21F757F9E0023F27D /* User.swift */,
@@ -404,6 +407,7 @@
 				553EB1F31F757F9E0023F27D /* User.swift in Sources */,
 				55D8E58C1F5B3C1F00FD6A3A /* DesignableView.swift in Sources */,
 				55CFC9281F70BD8E007789D2 /* FriendSearchTableViewController.swift in Sources */,
+				550121B41FE6201200C1C7B5 /* Inceptionv3.mlmodel in Sources */,
 				55957A971F72EFA00083C0C4 /* CustomCalloutView.swift in Sources */,
 				55C606461F62063D00B3F870 /* LoginViewController.swift in Sources */,
 				55CEF8C31F57BF0F001F1C85 /* CustomAnnotation.swift in Sources */,
