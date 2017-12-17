@@ -98,6 +98,9 @@ class DogTableViewController: UITableViewController {
         super.viewDidLoad()
         
         self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh...")
+        self.tableView.sendSubview(toBack: refreshControl!)
+        tableView.refreshControl = self.refreshControl
         
         self.navigationController?.navigationBar.isHidden = false
         loadData()
@@ -105,7 +108,6 @@ class DogTableViewController: UITableViewController {
     
     @objc func refresh() {
         loadData()
-        tableView.reloadData()
         self.refreshControl?.endRefreshing()
     }
 
@@ -358,6 +360,7 @@ class DogTableViewController: UITableViewController {
         let alert = UIAlertController(title: "Report", message: "Are you sure you want to report this post? You should only report a post if it does not feature a dog, or it features offensive content. This action is irreversible.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes, report this post", style: .destructive, handler: { (action) in
             let cell = sender.superview?.superview?.superview! as! DogTableViewCell
+            let imageview = sender.superview! as! UIImageView
             let indexPath = self.tableView.indexPath(for: cell)
             
             let dogID = self.dogs[(indexPath?.row)! - 1].dogID
@@ -368,6 +371,10 @@ class DogTableViewController: UITableViewController {
             
             self.dogs.remove(at: (indexPath?.row)! - 1)
             DispatchQueue.main.async {
+                for subview in (imageview.subviews) {
+                    subview.removeFromSuperview()
+                }
+                self.dogPhotoIsSelected = false
                 self.tableView.deleteRows(at: [indexPath!], with: .automatic)
                 self.tableView.reloadData()
             }
@@ -384,6 +391,7 @@ class DogTableViewController: UITableViewController {
         let alert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this post? This action is irreversible. There's no going back.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes, delete this post", style: .destructive, handler: { (action) in
             let cell = sender.superview?.superview?.superview! as! DogTableViewCell
+            let imageview = sender.superview! as! UIImageView
             let indexPath = self.tableView.indexPath(for: cell)
             
             let dogID = self.dogs[(indexPath?.row)! - 1].dogID
@@ -395,6 +403,10 @@ class DogTableViewController: UITableViewController {
             
             self.dogs.remove(at: (indexPath?.row)! - 1)
             DispatchQueue.main.async {
+                for subview in (imageview.subviews) {
+                    subview.removeFromSuperview()
+                }
+                self.dogPhotoIsSelected = false
                 self.tableView.deleteRows(at: [indexPath!], with: .automatic)
                 self.tableView.reloadData()
             }
