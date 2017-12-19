@@ -74,29 +74,53 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 
     @IBAction func newPhotoTapped(_ sender: UIButton) {
         // Setup Camera and present it
-        let source = UIImagePickerControllerSourceType.camera
-        guard UIImagePickerController.isSourceTypeAvailable(source)
-            else {
-                let alert = UIAlertController(title: "Camera Error", message: "Oops! Looks like Dog Spotter doesn't have access to your camera! Please open Settings to give Dog Spotter permission to use the camera.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                present(alert, animated: true)
-                return
-        }
-        let camera = UIImagePickerController()
-        camera.sourceType = source
-		camera.allowsEditing = true
-        camera.delegate = self
 		
+		let authStatus = AVCaptureDevice.authorizationStatus(for: .video)
+		
+		switch authStatus {
+		case .authorized: setupCamera()
+		case .denied: alertSettings()
+		case .notDetermined: requestAccess()
+		case .restricted: alertSettings()
+		}
+    }
+	
+	func setupCamera() {
+		let source = UIImagePickerControllerSourceType.camera
+
+		guard UIImagePickerController.isSourceTypeAvailable(source)
+			else {
+				let alert = UIAlertController(title: "Camera Error", message: "Oops! Looks like Dog Spotter doesn't have access to your camera! Please open Settings to give Dog Spotter permission to use the camera.", preferredStyle: .alert)
+				alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+				present(alert, animated: true)
+				return
+		}
+		let camera = UIImagePickerController()
+		camera.sourceType = source
+		camera.allowsEditing = true
+		camera.delegate = self
+		
+
+		present(camera, animated: true)
+	}
+	
+	func alertSettings() {
 		if AVCaptureDevice.authorizationStatus(for: .video) != AVAuthorizationStatus.authorized {
-			let alert = UIAlertController(title: "Camera Error", message: "Oops! Looks like Dog Spotter doesn't have access to your camera! Please open Settings to give Dog Spotter permission to use the camera.", preferredStyle: .alert)
+			let alert = UIAlertController(title: "Camera Error", message: "Oops! Looks like Dog Spotter doesn't have access to your camera! Please open Settings to give Dog Spotter permission to use the camera. Parental Controls can cause this error as well.", preferredStyle: .alert)
 			alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 			
 			present(alert, animated: true)
 			return
 		}
-		
-		present(camera, animated: true)
-    }
+	}
+	
+	func requestAccess() {
+		AVCaptureDevice.requestAccess(for: .video) { (success) in
+			if success {
+				self.setupCamera()
+			}
+		}
+	}
 	
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         image = info[UIImagePickerControllerOriginalImage] as? UIImage
