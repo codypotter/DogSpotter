@@ -1,10 +1,10 @@
-//
 //  AccountTableViewController.swift
 //  DogSpotter
 //
 //  Created by Cody Potter on 9/18/17.
 //  Copyright © 2017 Cody Potter. All rights reserved.
 //
+//  This class is a table view controller that shows account information.
 
 import UIKit
 import Firebase
@@ -35,24 +35,24 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
         
         SVProgressHUD.show()
         let userRef = Database.database().reference().child("users").child(uid!)
-        userRef.observe(.value) { (snapshot) in
-            let postDict = snapshot.value as? [String : AnyObject] ?? [:]
+        userRef.observe(.value) { (userSnapshot) in
+            let postDict = userSnapshot.value as? [String : AnyObject] ?? [:]
             self.usernameLabel.text = postDict["username"] as? String
             self.emailLabel.text = postDict["email"] as? String
             self.reputationLabel.text = "👑" + (postDict["reputation"] as? String)!
             
-            snapshot.ref.child("dogs").observe(.value, with: { (snap) in
-                let dogsDict = snap.value as? [String : AnyObject] ?? [:]
+            userSnapshot.ref.child("dogs").observe(.value, with: { (dogSnapshot) in
+                let dogsDict = dogSnapshot.value as? [String : AnyObject] ?? [:]
                 self.dogsPostedLabel.text = String(describing: dogsDict.count)
             })
             
-            snapshot.ref.child("following").observe(.value, with: { (snap) in
-                let followingDict = snap.value as? [String : AnyObject] ?? [:]
+            userSnapshot.ref.child("following").observe(.value, with: { (followingSnapshot) in
+                let followingDict = followingSnapshot.value as? [String : AnyObject] ?? [:]
                 self.followingLabel.text = String(describing: followingDict.count)
             })
             
-            snapshot.ref.child("followers").observe(.value, with: { (snap) in
-                let followersDict = snap.value as? [String : AnyObject] ?? [:]
+            userSnapshot.ref.child("followers").observe(.value, with: { (followersSnapshot) in
+                let followersDict = followersSnapshot.value as? [String : AnyObject] ?? [:]
                 self.followersLabel.text = String(describing: followersDict.count)
             })
             
@@ -69,11 +69,15 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.row == 0 && indexPath.section == 0 {
-            let alertController = UIAlertController(title: "Edit", message: "Please enter a new username.", preferredStyle: .alert)
+            let alertController = UIAlertController(title: "Edit",
+                                                    message: "Please enter a new username.",
+                                                    preferredStyle: .alert)
             alertController.addTextField { (textField) in
                 textField.placeholder = self.usernameLabel.text
                 textField.autocapitalizationType = .none
-                alertController.addAction(UIAlertAction(title: "Submit", style: .default, handler: { (action) in
+                alertController.addAction(UIAlertAction(title: "Submit",
+                                                        style: .default,
+                                                        handler: { (action) in
                     let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
                     let usernameRef = Database.database().reference().child("users").child((Auth.auth().currentUser?.uid)!).child("username")
                     let usernamesNodeRef = Database.database().reference().child("usernames").child((Auth.auth().currentUser?.uid)!)
@@ -83,6 +87,8 @@ class AccountTableViewController: UITableViewController, UIImagePickerController
                     changeRequest?.commitChanges(completion: { (error) in
                         if error != nil {
                             print(String(describing: error?.localizedDescription))
+                            let alert = Alert(title: "oops", message: "Couldn't commit changess to your account.")
+                            alert.display()
                             return
                         }
                     })

@@ -1,10 +1,9 @@
-//
 //  NewDogViewController.swift
 //  DogSpotter
 //
 //  Created by Cody Potter on 9/2/17.
 //  Copyright © 2017 Cody Potter. All rights reserved.
-//
+//  This class allows the user to create a new dog and saves it to the database
 
 import UIKit
 import MaterialComponents
@@ -166,16 +165,11 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 	
 	@IBAction func dogRateChanged(_ sender: UISlider) {
 		var score = (Int(dogRateSlider.value * 10))
-		if score == 0 {
-			score = 1
-		}
+		if score == 0 { score = 1 }
 		var text = ""
 		for _ in 0..<score {
-			if text.isEmpty {
-				text = "🔥"
-			} else {
-				text += "🔥"
-			}
+			if text.isEmpty { text = "🔥"}
+			else { text += "🔥" }
 		}
 		dogScoreLabel.text = text
 		self.dogScore = score
@@ -228,9 +222,8 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 					if error != nil {
 						print(error!)
 						return
-						//TODO: Handle download url error
 					}
-					// Successfuly got a URL, let's save that along with our dog info to the DB.
+
 					dogDownloadURL = (url?.absoluteString)!
 					
 					let dogValues = ["creator": user!,
@@ -250,10 +243,8 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 							print(error!.localizedDescription)
 							return
 						}
-						
 					})
 					
-					// At the same time, let's update the user's list of dogs with the dog we've made
 					userRef.child("dogs").child(dogKey).setValue("true", withCompletionBlock: { (error, ref) in
 						if error != nil {
 							print(error!.localizedDescription)
@@ -261,15 +252,13 @@ class NewDogViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 						}
 					})
 					
-					userRef.child("reputation").observeSingleEvent(of: .value, with: { (snap) in
-						var currentRep = Int(snap.value as! String)!
+					userRef.child("reputation").observeSingleEvent(of: .value, with: { (reputationSnapshot) in
+						var currentRep = Int(reputationSnapshot.value as! String)!
 						currentRep += 25
 						userRef.child("reputation").setValue(String(currentRep))
 					})
 				})
 			})
-			
-			
 		} else {
 			let alert = UIAlertController(title: "Location", message: "It looks like Dog Spotter doesn't have access to your location. You can't post a dog. To enable location, go to Settings > Privacy > Location Services.", preferredStyle: .alert)
 			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in

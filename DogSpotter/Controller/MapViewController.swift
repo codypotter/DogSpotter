@@ -36,6 +36,7 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         self.map.delegate = self
         self.map.addSubview(newDogButton)
         
+        // MARK: Update top left reputation label with firebase listener
         let repRef = ref.child("users").child(currentUID!).child("reputation")
         repRef.observe(.value) { (snapshot) in
             DispatchQueue.main.async {
@@ -74,15 +75,17 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         repBackgroundView.layer.shadowOpacity = 0.5
         repBackgroundView.layer.shadowOffset = CGSize.zero
         repBackgroundView.layer.shadowRadius = 2
-        
     }
     
     @objc func newDogButtonTapped() {
+        //MARK: Check if logged in before showing new dog view controller
         Auth.auth().addStateDidChangeListener { (auth, user) in
             if user != nil {
+                // do this in the background
                 DispatchQueue.global(qos: .background).async {
                     self.delegate.locationManager.requestLocation()
                 }
+                // its UI, so do this on the main thread
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "showNewDogViewController", sender: self)
                 }
@@ -198,14 +201,13 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // Don't add a view for user location annotation
         if(annotation is MKUserLocation){
             return nil
         }
         
         let ident = "pin"
         let customAnnotation = annotation as! CustomAnnotation
-        
-        let usernameRef = ref.child("users").child((currentUID)!).child("username")
         
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: ident)
         if annotationView == nil {
@@ -214,6 +216,9 @@ class MapViewController: UIViewController, UINavigationControllerDelegate, CLLoc
         } else {
             annotationView!.annotation = annotation
         }
+        
+        //MARK: Get image for annotation from firebase
+        let usernameRef = ref.child("users").child((currentUID)!).child("username")
         
         usernameRef.observeSingleEvent(of: .value) { (snapshot) in
             if customAnnotation.creator == snapshot.value as! String {

@@ -18,7 +18,7 @@ class DogTableViewController: UITableViewController {
     var followingCount = 0
     var dogPhotoIsSelected = false
     var currentUID = (Auth.auth().currentUser?.uid)!
-    
+    var noDogs = false
     
     @IBOutlet weak var followBarButtonItem: UIBarButtonItem!
     
@@ -47,9 +47,9 @@ class DogTableViewController: UITableViewController {
         //MARK: Download dogs from firebase
         userDogRef.observe(.childAdded, with: { (snapshot) in
             if snapshot.value == nil {
-                print("no new dog found")
+                self.noDogs = true;
             } else {
-                print("new dog found")
+                self.noDogs = false;
                 
                 let dogID = snapshot.key
                 
@@ -116,7 +116,12 @@ class DogTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        if noDogs {
+            let noDogCell = tableView.dequeueReusableCell(withIdentifier: "noDogCell")
+            noDogCell?.textLabel?.text = "No dogs found! Follow your friends or post some dogs!"
+            return noDogCell!
+        }
+        if !noDogs && indexPath.row == 0 {
             let profileCell = tableView.dequeueReusableCell(withIdentifier: "profileCell", for: indexPath) as! ProfileTableViewCell
             profileCell.nameLabel.text = user.name
             profileCell.totalReputationLabel.text = String(describing: user.reputation!)

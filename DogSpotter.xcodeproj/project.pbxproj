@@ -10,6 +10,7 @@
 		550121B41FE6201200C1C7B5 /* Inceptionv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 550121B31FE6201200C1C7B5 /* Inceptionv3.mlmodel */; };
 		550121B61FE65BEB00C1C7B5 /* CreditsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550121B51FE65BEB00C1C7B5 /* CreditsTableViewController.swift */; };
 		553EB1F31F757F9E0023F27D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553EB1F21F757F9E0023F27D /* User.swift */; };
+		554CE8A220507EDD0004836B /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CE8A120507EDD0004836B /* Alert.swift */; };
 		556A8B8F1F3A9C2800A24A7A /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556A8B8E1F3A9C2800A24A7A /* Dog.swift */; };
 		557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557028DE1F33DF67007ADC87 /* AppDelegate.swift */; };
 		557028E11F33DF67007ADC87 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557028E01F33DF67007ADC87 /* MapViewController.swift */; };
@@ -62,6 +63,7 @@
 		550121B31FE6201200C1C7B5 /* Inceptionv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Inceptionv3.mlmodel; sourceTree = "<group>"; };
 		550121B51FE65BEB00C1C7B5 /* CreditsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsTableViewController.swift; sourceTree = "<group>"; };
 		553EB1F21F757F9E0023F27D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		554CE8A120507EDD0004836B /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Alert.swift; path = /Users/codypotter/Documents/DogSpotter/DogSpotter/Controller/Alert.swift; sourceTree = "<absolute>"; };
 		556A8B8E1F3A9C2800A24A7A /* Dog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 		557028DB1F33DF67007ADC87 /* DogSpotter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DogSpotter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		557028DE1F33DF67007ADC87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -157,13 +159,13 @@
 		557028DD1F33DF67007ADC87 /* DogSpotter */ = {
 			isa = PBXGroup;
 			children = (
+				557028E51F33DF67007ADC87 /* Assets.xcassets */,
 				5596A2BA1F6B2EB800ED546E /* Controller */,
+				55A8C93C1F650A93008B8B22 /* GoogleService-Info.plist */,
+				557028EA1F33DF67007ADC87 /* Info.plist */,
+				557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */,
 				5596A2B81F6B2E8E00ED546E /* Model */,
 				55D8E58A1F5B3BF100FD6A3A /* View */,
-				557028E51F33DF67007ADC87 /* Assets.xcassets */,
-				557028E71F33DF67007ADC87 /* LaunchScreen.storyboard */,
-				557028EA1F33DF67007ADC87 /* Info.plist */,
-				55A8C93C1F650A93008B8B22 /* GoogleService-Info.plist */,
 			);
 			path = DogSpotter;
 			sourceTree = "<group>";
@@ -171,9 +173,9 @@
 		5596A2B81F6B2E8E00ED546E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				550121B31FE6201200C1C7B5 /* Inceptionv3.mlmodel */,
 				55CEF8C21F57BF0F001F1C85 /* CustomAnnotation.swift */,
 				556A8B8E1F3A9C2800A24A7A /* Dog.swift */,
+				550121B31FE6201200C1C7B5 /* Inceptionv3.mlmodel */,
 				553EB1F21F757F9E0023F27D /* User.swift */,
 			);
 			path = Model;
@@ -182,17 +184,18 @@
 		5596A2BA1F6B2EB800ED546E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				55CFC92B1F70C4A3007789D2 /* AccountTableViewController.swift */,
+				554CE8A120507EDD0004836B /* Alert.swift */,
 				557028DE1F33DF67007ADC87 /* AppDelegate.swift */,
+				550121B51FE65BEB00C1C7B5 /* CreditsTableViewController.swift */,
+				5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */,
+				5578A4E31FB10CCE00DDFD10 /* FeedTableViewController.swift */,
+				55CFC9271F70BD8E007789D2 /* FriendSearchTableViewController.swift */,
+				55AA1DB81FAA558A005922DC /* LeaderboardViewController.swift */,
+				557845651FB81A2500AB2102 /* Localizable.strings */,
+				55C606451F62063D00B3F870 /* LoginViewController.swift */,
 				557028E01F33DF67007ADC87 /* MapViewController.swift */,
 				55D8E5831F5B38D400FD6A3A /* NewDogViewController.swift */,
-				55C606451F62063D00B3F870 /* LoginViewController.swift */,
-				55CFC9271F70BD8E007789D2 /* FriendSearchTableViewController.swift */,
-				55CFC92B1F70C4A3007789D2 /* AccountTableViewController.swift */,
-				557845651FB81A2500AB2102 /* Localizable.strings */,
-				5581FCD71F734F1C00AF3454 /* DogTableViewController.swift */,
-				55AA1DB81FAA558A005922DC /* LeaderboardViewController.swift */,
-				5578A4E31FB10CCE00DDFD10 /* FeedTableViewController.swift */,
-				550121B51FE65BEB00C1C7B5 /* CreditsTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -221,17 +224,17 @@
 		55D8E58A1F5B3BF100FD6A3A /* View */ = {
 			isa = PBXGroup;
 			children = (
-				5578455A1FB8134000AB2102 /* Launch Screen.storyboard */,
+				55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */,
+				55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */,
+				55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */,
 				5504E0D51F789D44005A9833 /* Designables */,
+				558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */,
 				55D8E5851F5B38E900FD6A3A /* Fonts */,
+				5578455A1FB8134000AB2102 /* Launch Screen.storyboard */,
+				55AA1DBA1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift */,
 				557028E21F33DF67007ADC87 /* Main.storyboard */,
 				558F10BA1F7389EF006679CF /* ProfileTableViewCell.swift */,
-				558F10BC1F74E1C6006679CF /* DogTableViewCell.swift */,
 				55B273C41F62353B0088BF27 /* ShadowedView.swift */,
-				55957A921F72E4070083C0C4 /* CustomAnnotationView.swift */,
-				55957A941F72E7A10083C0C4 /* CustomCalloutView.xib */,
-				55957A961F72EFA00083C0C4 /* CustomCalloutView.swift */,
-				55AA1DBA1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 				55B273C51F62353B0088BF27 /* ShadowedView.swift in Sources */,
 				557028E11F33DF67007ADC87 /* MapViewController.swift in Sources */,
 				557028DF1F33DF67007ADC87 /* AppDelegate.swift in Sources */,
+				554CE8A220507EDD0004836B /* Alert.swift in Sources */,
 				558F10BB1F7389EF006679CF /* ProfileTableViewCell.swift in Sources */,
 				55AA1DBB1FAA5E0F005922DC /* LeaderboardUserTableViewCell.swift in Sources */,
 				55AA1DB91FAA558A005922DC /* LeaderboardViewController.swift in Sources */,

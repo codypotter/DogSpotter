@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/codypotter/Documents/DogSpotter/DogSpotter/Controller/Alert.swift">
+   </FileRef>
+   <FileRef
       location = "group:DogSpotter.xcodeproj">
    </FileRef>
    <FileRef
